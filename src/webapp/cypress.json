@@ -1,0 +1,8 @@
+{
+  "baseUrl": "http://localhost:8080",
+  "video": false,
+  "chromeWebSecurity": false,
+  "trashAssetsBeforeRuns": true,
+  "defaultCommandTimeout": 10000,
+  "screenshotsFolder": "/tmp"
+}

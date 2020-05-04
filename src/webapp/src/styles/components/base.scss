@@ -1,0 +1,98 @@
+@import "~trix/dist/trix";
+@import "~tippy.js/dist/tippy";
+@import "~animate.css/animate"; // This is to get around a weird bug in parcel https://github.com/parcel-bundler/parcel/issues/1875
+@import "variables";
+@import "common";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+
+tr {
+  th {
+    background-color: grey;
+  }
+}
+
+h3 {
+  color: red;
+}
+
+@import "~bulma/bulma";
+
+body {
+  background-color: #fcfdfc;
+}
+
+.button.is-primary:hover {
+  background-color: $ink-black;
+  transition: background-color 0.2s;
+}
+
+.button.is-secondary {
+  @extend .button, .is-primary;
+
+  background-color: $ink-black !important;
+
+  &:hover {
+    background-color: $primary;
+    transition: background-color 0.2s;
+  }
+}
+
+.current-nav {
+  background-color: $primary !important;
+  color: $off-white !important;
+}
+
+.current-nav:hover {
+  background-color: $primary-dark !important;
+}
+
+.menu-list {
+  a {
+    font-size: 1.1rem;
+  }
+}
+
+.menu-list a:hover {
+  background-color: $ink-black;
+  color: $off-white;
+}
+
+.logo-title {
+  min-height: 3.25rem;
+  padding: 0 1.5rem;
+
+  .title {
+    line-height: 1.5;
+  }
+}
+
+.card {
+  header {
+    padding: 20px;
+  }
+}
+
+p {
+  a {
+    color: $primary;
+    text-underline: $primary;
+  }
+
+  a:hover {
+    color: $link;
+  }
+}
+
+.form-section {
+  padding-bottom: 3rem;
+}
+
+[data-controller="sortable"]:hover {
+  cursor: pointer;
+}
+
+.is-clickable {
+  cursor: pointer;
+  pointer-events: initial !important;
+}

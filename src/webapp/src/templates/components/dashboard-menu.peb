@@ -1,0 +1,20 @@
+<div class="menu">
+    <p class="menu-label">
+        Springboard
+    </p>
+    <ul class="menu-list">
+        <li><a href="/dashboard" data-controller="nav-link">Home</a></li>
+    </ul>
+
+    <p class="menu-label">
+        My Account
+    </p>
+    <ul class="menu-list">
+        <li><a href="/dashboard/user-settings" data-controller="nav-link">Account Settings</a></li>
+        <li>
+            <a href="/dashboard/contact-us" data-controller="nav-link">
+                Get Help
+            </a>
+        </li>
+    </ul>
+</div>

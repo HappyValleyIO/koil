@@ -1,0 +1,26 @@
+{% extends "layouts/dashboard-layout" %}
+{% block title %} Home {% endblock %}
+
+{% block content %}
+<div class="card">
+    <header>
+        <h1 class="title">Welcome to Springboard!</h1>
+        <h3 class="subtitle">Easy SaaS on the JVM</h3>
+    </header>
+    <div class="card-content">
+        <p>
+            Welcome to Springboard! This is the starter template for your project. Everything in the `/dashboard/*` path
+            is protected by authentication.
+        </p>
+
+        <p>
+            Your front end code lives in <strong>src/webapp</strong> and the backend lives as it normally would.
+        </p>
+
+        <p>
+            While running in the <strong>dev</strong> profile in Spring, you can rebuild the project at any time to have
+            your frontend live reload without restarting the JVM.
+        </p>
+    </div>
+</div>
+{% endblock %}

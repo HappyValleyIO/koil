@@ -1,0 +1,54 @@
+{# @pebvariable name="model" type="org.springboard.auth.LoginViewModel" #}
+
+{% extends "layouts/single-form" %}
+{% block title %} Login {% endblock %}
+
+{% block content %}
+<form class="form" action="/auth/login" method="post" data-test="login-form">
+    <h1 class="title is-size-3">Login Here</h1>
+    {% if model.redirect %}
+        <h2 class="subtitle is-danger is-size-5">You need to login to access that page</h2>
+    {% endif %}
+
+    {% if model.badCredentials %}
+        <h2 class="subtitle is-danger is-size-5" data-test="bad-credentials-error">Seems like that login wasn't correct,
+            please try again.</h2>
+    {% endif %}
+
+    {% include 'components/csrf-field' %}
+    <div class="field">
+        <label class="label" for="login-email">Email Address</label>
+        <div class="control has-icons-left">
+            <span class="icon is-small is-left">
+              <i class="fas fa-envelope"></i>
+            </span>
+            <input id="login-email" type="email" name="email" class="input" value="{{ model.email }}"
+                   data-test="login-email-input">
+        </div>
+
+        <p id="email-error" class="help is-danger">{{ model.errors.get("email") }}</p>
+    </div>
+
+    <div class="field" data-controller="password">
+        <label class="label" for="login-password">Password</label>
+        <div class="control has-icons-left has-icons-right">
+            <span class="icon is-small is-left">
+              <i class="fas fa-lock"></i>
+            </span>
+            <span class="icon is-clickable is-small is-right">
+              <i class="fas fa-eye" data-action="click->password#toggleVisibility"></i>
+            </span>
+            <input id="login-password" type="password" name="password" class="input" data-target="password.input"
+                   data-test="login-password-input">
+        </div>
+        <p id="password-error" class="help is-danger">{{ model.errors.get("password") }}</p>
+    </div>
+
+    <div class="buttons is-centered is-fullwidth" id="submit-button">
+        <button class="button is-primary" type="submit" name="login" data-test="login-submit">Login</button>
+        <a class="button is-primary is-light" type="button" href="/auth/request-password-reset" data-controller="tippy"
+           data-tippy-content="Send a password reset email">Password Reset</a>
+    </div>
+    <p class="has-text-centered">Or, create a new account <a href="/auth/register">here</a>.</p>
+</form>
+{% endblock %}

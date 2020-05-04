@@ -1,0 +1,40 @@
+{# @pebvariable name="global" type="org.springboard.view.GlobalViewModel" #}
+
+<nav class="navbar is-transparent" role="navigation" aria-label="main navigation" data-controller="menu">
+    <div class="navbar-brand">
+        <div class="navbar-item logo-title">
+            <a class="title has-text-weight-bold has-text-centered" href="/dashboard">Springboard</a>
+        </div>
+
+        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+           data-target="menu.toggleable" data-action="click->menu#toggle">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div class="navbar-menu">
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <a href="/dashboard/user-settings" class="is-link">@{{ global.user.handle }}</a>
+            </div>
+            <div class="navbar-item">
+                <div class="buttons">
+                    <form method="POST" action="/logout">
+                    {% include 'components/csrf-field' %}
+                        <button class="button is-primary is-light" type="submit">
+                            Log out
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navbar-menu is-hidden-tablet" data-target="menu.toggleable">
+        <div class="navbar-item">
+        {% include 'components/dashboard-menu' %}
+        </div>
+    </div>
+</nav>

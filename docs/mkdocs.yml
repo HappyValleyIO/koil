@@ -1,0 +1,7 @@
+site_name: Springboard
+theme: gitbook
+repo_url: https://github.com/HappyValleyIO/springboard
+site_description: Documentation for the Springboard JVM SAAS starter.
+site_author: Happy Valley IO - https://www.happyvalley.io
+markdown_extensions:
+  - codehilite

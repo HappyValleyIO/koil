@@ -1,0 +1,18 @@
+{# @pebvariable name="isChecked" type="java.lang.Boolean" #}
+{# @pebvariable name="label" type="java.lang.String" #}
+{# @pebvariable name="name" type="java.lang.String" #}
+
+{% macro checkbox(type="checkbox", name, label, isChecked) %}
+<div class="field">
+    <label class="checkbox">
+
+    {% if isChecked %}
+        <input type="checkbox" name="{{ name }}" checked>
+    {% else %}
+        <input type="checkbox" name="{{ name }}">
+    {% endif %}
+
+    {{ label }}
+    </label>
+</div>
+{% endmacro %}

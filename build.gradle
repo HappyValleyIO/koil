@@ -1,0 +1,196 @@
+buildscript {
+  ext.kotlin_version = '1.3.72'
+  ext.jdbiVersion = "3.12.2"
+
+  repositories {
+    maven {
+      url = uri("https://plugins.gradle.org/m2/")
+    }
+  }
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
+}
+
+plugins {
+  id 'org.springframework.boot' version '2.2.4.RELEASE'
+  id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+  id 'org.jetbrains.kotlin.plugin.spring' version "$kotlin_version"
+  id 'org.jetbrains.kotlin.jvm' version "$kotlin_version"
+  id "com.github.node-gradle.node" version "2.2.3"
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'maven'
+apply plugin: 'idea'
+
+group = "org.springframework"
+version = "0.0.1-SNAPSHOT"
+java.sourceCompatibility = JavaVersion.VERSION_11
+
+
+configurations {
+  developmentOnly
+  runtimeClasspath {
+    extendsFrom developmentOnly
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation("org.springframework.boot:spring-boot-starter-actuator")
+  implementation("org.springframework.boot:spring-boot-starter-jdbc")
+  implementation("org.springframework.boot:spring-boot-starter-mail")
+  implementation("org.springframework.boot:spring-boot-starter-security")
+  implementation("org.springframework.boot:spring-boot-starter-web")
+
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+  implementation("org.flywaydb:flyway-core")
+  implementation("io.pebbletemplates:pebble-spring-boot-starter:3.1.2")
+  implementation("org.jetbrains.kotlin:kotlin-reflect")
+  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+  implementation("org.jdbi:jdbi3-core:${jdbiVersion}")
+  implementation("org.jdbi:jdbi3-sqlobject:${jdbiVersion}")
+  implementation("org.jdbi:jdbi3-postgres:${jdbiVersion}")
+  implementation("org.jdbi:jdbi3-spring4:${jdbiVersion}")
+  implementation("org.jdbi:jdbi3-kotlin:${jdbiVersion}")
+  implementation("org.jdbi:jdbi3-kotlin-sqlobject:${jdbiVersion}")
+
+  implementation("io.sentry:sentry-spring:1.7.30")
+  implementation("org.jsoup:jsoup:1.12.2")
+
+  testImplementation("com.konghq:unirest-java:3.4.01")
+
+  implementation("org.springframework.session:spring-session-jdbc")
+  developmentOnly("org.springframework.boot:spring-boot-devtools")
+  developmentOnly("io.github.kilmajster:ngrok-spring-boot-starter:0.1")
+  runtimeOnly("org.postgresql:postgresql")
+  implementation(platform("org.testcontainers:testcontainers-bom:1.12.5"))
+  testImplementation("org.testcontainers:postgresql")
+  testImplementation("org.springframework.boot:spring-boot-starter-test") {
+    exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+  }
+  testImplementation("org.springframework.security:spring-security-test")
+}
+
+test {
+  useJUnitPlatform()
+}
+
+compileKotlin {
+  kotlinOptions {
+    freeCompilerArgs = ["-Xjsr305=strict"]
+    jvmTarget = "1.8"
+  }
+}
+
+sourceSets {
+  webapp {
+    // We add this so that our editor knows how to autocomplete our model hints
+    java {
+      compileClasspath += main.output + test.output
+      runtimeClasspath += main.output + test.output
+      srcDir 'src/webapp'
+    }
+  }
+}
+
+def buildAssetsDir = "${project.buildDir}/webapp"
+
+task copyAssets(type: Copy) {
+  from("$projectDir/src/webapp") {
+    exclude "node_modules"
+    exclude "dist"
+  }
+
+  into buildAssetsDir
+  rename '.peb', '.peb.html'
+
+  // Try to preserve timestamps:
+  def copyDetails = []
+  eachFile { copyDetails << it }
+  doLast {
+    copyDetails.each { FileCopyDetails details ->
+      def target = new File(destinationDir, details.path)
+      if(target.exists()) { target.setLastModified(details.lastModified) }
+    }
+  }
+}
+
+/**
+ * We cache the node installation outside of the build dir. This is so that we don't pull down node + npm whenever we
+ * run a `clean`.
+ */
+def nodeCache = "${projectDir}/.node"
+
+node {
+  version = '10.19.0'
+  npmVersion = '6.13.4'
+  download = true
+  workDir = file("$nodeCache/nodejs")
+  npmWorkDir = file("$nodeCache/npm")
+  nodeModulesDir = file(buildAssetsDir)
+  npmInstallCommand = System.getenv("CI") ? 'ci' : 'install'
+}
+npm_install.dependsOn copyAssets
+
+task buildAssets(type: NpxTask) {
+  dependsOn npmInstall
+  dependsOn copyAssets
+  command = 'parcel'
+  environment = ['NODE_ENV': 'development']
+  args = ['build', './src/**/*.html', '--cache-dir', "$projectDir/.cache", '--no-minify']
+
+  inputs.files(fileTree("$buildAssetsDir/src"))
+  inputs.file("$buildAssetsDir/package.json")
+
+  outputs.dir("$buildAssetsDir/dist")
+}
+
+task copyBundledTemplates(type: Copy) {
+  dependsOn processResources // So that we overwrite the existing
+  from "$buildAssetsDir/dist/templates"
+  into "$buildDir/resources/main/templates"
+  rename '.peb.html', '.peb'
+}
+
+task bundleAssets(type: Copy) {
+  dependsOn buildAssets
+  dependsOn copyBundledTemplates
+  from file("${buildAssetsDir}/dist")
+  into file("$buildDir/resources/main/static")
+}
+
+compileKotlin.dependsOn bundleAssets
+
+task buildProdAssets(type: NpxTask) {
+  dependsOn bundleAssets
+  command = 'parcel'
+  args = ['build', './src/**/*.html', '--cache-dir', "$projectDir/.cache"]
+
+  inputs.files(fileTree("$buildAssetsDir/src"))
+  inputs.file("$buildAssetsDir/package.json")
+
+  outputs.dir("$buildAssetsDir/dist")
+}
+
+task copyBundledProdTemplates(type: Copy) {
+  dependsOn processResources // So that we overwrite the existing
+  from "$buildAssetsDir/dist/templates"
+  into "$buildDir/resources/main/templates"
+  rename '.peb.html', '.peb'
+}
+
+task bundleProdAssets(type: Copy) {
+  dependsOn buildProdAssets
+  dependsOn copyBundledProdTemplates
+  from file("${buildAssetsDir}/dist")
+  into file("$buildDir/resources/main/static")
+}
+
+bootJar.dependsOn(bundleProdAssets)
