@@ -1,0 +1,82 @@
+@import "./components/base";
+@import "./components/variables";
+@import "./components/common";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: $off-white;
+
+  .title,
+  .subtitle,
+  p,
+  li {
+    color: $ink-black;
+  }
+}
+
+.has-dark-background {
+  background: $ink-black;
+
+  .title,
+  .subtitle,
+  p,
+  li {
+    color: $off-white;
+  }
+}
+
+.has-white-background {
+  background: $off-white;
+
+  .title,
+  .subtitle,
+  p,
+  li {
+    color: $ink-black;
+  }
+}
+
+.has-midnight-background {
+  background-image: linear-gradient(to bottom, $midnight-blue, $ink-black);
+
+  .title,
+  .subtitle,
+  p,
+  li {
+    color: $off-white;
+  }
+}
+
+.has-sienna-background {
+  background-image: linear-gradient(to bottom, $sienna, $ink-black);
+
+  .title,
+  .subtitle,
+  p,
+  li {
+    color: $off-white;
+  }
+}
+
+.is-transparent {
+  background: rgba(1, 1, 1, 0);
+}
+
+.navbar-burger {
+  border-radius: 50%;
+  margin: 10px 10px 0 auto;
+  background-color: $primary;
+
+  span {
+    height: 2px;
+    color: $off-white;
+  }
+}
+
+.field.is-centered {
+  justify-content: center;
+}

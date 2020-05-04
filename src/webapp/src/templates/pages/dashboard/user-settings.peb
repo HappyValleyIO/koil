@@ -1,0 +1,124 @@
+{# @pebvariable name="global" type="org.springboard.view.GlobalViewModel" #}
+{# @pebvariable name="model" type="org.springboard.user.UserSettingsViewModel" #}
+{% extends "layouts/dashboard-layout" %}
+{% block title %} User Settings {% endblock %}
+{% block content %}
+<div class="card">
+    <header class="has-background-black">
+        <h3 class="title has-text-white is-size-3">User Settings</h3>
+        <h5 class="subtitle has-text-white is-size-5">All the settings that you can customize</h5>
+    </header>
+    <div class="card-content">
+        <form>
+            <div class="form-section">
+                <h5 class="title is-size-4">Author Profile</h5>
+                <h6 class="subtitle is-size-6">How you appear to other people</h6>
+
+                <div class="field">
+                    <label class="label" for="handle-input">Handle</label>
+                    <div class="control">
+                        <input id="handle-input" class="input" minlength="4" maxlength="16" name="handle" type="text"
+                               value="{{ global.user.handle }}">
+                    </div>
+                    <p class="help is-danger"></p>
+                </div>
+
+                <div class="field">
+                    <label class="label">Bio</label>
+                    <div class="control">
+                        <input id="x" type="hidden" name="bio" value="{{ model.bio }}" required>
+                        <trix-editor input="x"></trix-editor>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Profile picture:</label>
+                    <div class="file">
+                        <label class="file-label">
+                            <input class="file-input" type="file" name="profile-pic">
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    Choose a file…
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="columns is-multiline">
+                <div class="column is-6">
+                    <h5 class="title is-size-4">Account Settings</h5>
+                    <h6 class="subtitle is-size-6">Contact Details</h6>
+
+                    <div class="field has-padding-bottom">
+                        <label class="label" for="email-input">Email Address</label>
+                        <div class="control has-icons-left">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input id="email-input" class="input" name="email" type="email" value="{{ model.email }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-6">
+                    <h5 class="title is-size-4">Notification Settings</h5>
+                    <h6 class="subtitle is-size-6">What notifications are you interested in?</h6>
+
+                    {% import 'components/form/checkbox' %}
+                    {{ checkbox(name="weekly-summary", label="Send me a weekly activity summary", isChecked=model.notificationSettings.weeklyActivity) }}
+                    {{ checkbox(name="update-on-message", label="Send me an update when I receive a message", isChecked=model.notificationSettings.updateOnMessage) }}
+                    {{ checkbox(name="reminder-email", label="Send me reminders when I'm due to complete a retrospective", isChecked=model.notificationSettings.reminderEmail) }}
+                </div>
+
+                <div class="column is-6">
+                    <h6 class="title is-size-4">Change Password</h6>
+
+                    <label class="label" for="old-password">Old Password</label>
+                    <div class="field">
+                        <div class="control has-icons-left">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input id="old-password" class="input" name="current-password" type="password"
+                                   placeholder="Current password">
+                        </div>
+                    </div>
+
+                    <div class="columns">
+                        <div class="field column">
+                            <label for="new-password" class="label">New Password</label>
+                            <div class="control ">
+                                <input id="new-password" class="input" name="new-password" type="password">
+                            </div>
+                        </div>
+
+                        <div class="field column">
+                            <label for="confirm-password" class="label">Confirm New Password</label>
+                            <div class="control">
+                                <input id="confirm-password" class="input" name="confirm-password" type="password">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-section">
+                <div class="field is-grouped is-grouped-right">
+                    <div class="control">
+                        <button type="submit" class="button is-primary">Save Changes</button>
+                    </div>
+                    <div class="control">
+                        <button type="reset" class="button is-primary is-light">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

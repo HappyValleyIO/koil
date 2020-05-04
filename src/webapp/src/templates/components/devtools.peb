@@ -1,0 +1,10 @@
+{# @pebvariable name="dev" type="java.lang.Boolean" #}
+
+{% if dev %}
+{# Adds the live reload functionality when the application is running in the dev profile #}
+<script>
+    if (location.host.includes('localhost')) {
+        document.write('<script src="//' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>');
+    }
+</script>
+{% endif %}

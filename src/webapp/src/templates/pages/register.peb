@@ -1,0 +1,61 @@
+{# @pebvariable name="model" type="org.springboard.auth.RegistrationViewModel" #}
+
+{% extends "layouts/single-form" %}
+{% block title %} Login {% endblock %}
+
+{% block content %}
+<form class="form" action="/auth/register" method="post" data-test="register-form">
+    <h1 class="title is-size-3">Register Here</h1>
+    {% include 'components/csrf-field' %}
+
+    <div class="field">
+        <label class="label" for="name-input">Name</label>
+        <div class="control">
+            <input id="name-input" type="text" name="name" class="input" value="{{ model.attempt.name }}"
+                   data-test="name-input">
+        </div>
+        <p class="help">This isn't shown publicly. We use it for account recovery.</p>
+        <p id="name-error" class="help is-danger">{{ model.errors.get("name") }}</p>
+    </div>
+
+    <div class="field">
+        <label class="label" for="handle-input">
+            Account Handle
+            <span class="icon" data-controller="tippy" data-tippy-content="Your public handle.">
+                <i class="fas fa-info-circle"></i>
+            </span>
+        </label>
+        <div class="control">
+            <input type="text" id="handle-input" name="handle" maxlength="16" minlength="4" class="input"
+                   value="{{ model.attempt.handle }}" data-test="handle-input">
+        </div>
+        <p id="name-error" class="help is-danger">{{ model.errors.get("handle") }}</p>
+    </div>
+
+    <div class="field">
+        <label class="label" for="email-input">Email Address</label>
+        <div class="control">
+            <input id="email-input" type="email" name="email" class="input" value="{{ model.attempt.email }}"
+                   data-test="email-input">
+        </div>
+
+        <p id="email-error" class="help is-danger">{{ model.errors.get("email") }}</p>
+    </div>
+
+    <div class="field">
+        <label class="label" for="password-input">Password</label>
+        <div class="control">
+            <input id="password-input" type="password" name="password" value="{{ model.attempt.password }}"
+                   class="input" data-test="password-input">
+        </div>
+        <p id="password-error" class="help is-danger">{{ model.errors.get("password") }}</p>
+    </div>
+
+    <div class="actions buttons is-centered" id="submit-button">
+        <button class="button is-medium is-primary" type="submit" name="login" data-test="submit-button">Create
+            Account
+        </button>
+    </div>
+    <p class="has-text-centered">Or, login <a href="/auth/login">here</a>.</p>
+</form>
+{% endblock %}

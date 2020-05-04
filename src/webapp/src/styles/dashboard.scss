@@ -1,0 +1,68 @@
+@import "./components/base";
+@import "./components/common";
+@import "~choices.js/public/assets/styles/choices";
+
+html {
+  overflow: hidden;
+}
+
+.base-layout {
+  display: grid;
+  grid-template-columns: minmax(auto, max-content) auto;
+  grid-template-rows: min-content auto;
+  height: 100vh;
+  margin-right: 0;
+  position: relative;
+  overflow: hidden;
+  grid-template-areas: "navbar navbar" "side-bar content";
+
+  @media screen and (max-width: 768px) {
+    display: block;
+    height: 100vh;
+    overflow: hidden;
+
+    aside {
+      display: none;
+    }
+
+    main {
+      height: 100%;
+      padding: 1rem;
+    }
+  }
+}
+
+nav {
+  grid-area: navbar;
+  background-color: black;
+  color: white;
+}
+
+aside {
+  grid-area: side-bar;
+  padding: 2rem;
+  border-right: rgba(1, 1, 1, 0.2) solid 1px;
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
+
+@media screen and (min-width: 1600px) {
+  nav {
+    padding-left: 10vw;
+  }
+
+  aside {
+    padding-left: 10vw;
+  }
+}
+
+main {
+  grid-area: content;
+  overflow-y: auto;
+  width: 100%;
+  padding: 3rem;
+}
+
+.content-container {
+  padding-bottom: 100px;
+}

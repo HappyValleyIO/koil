@@ -1,0 +1,13 @@
+version: '3'
+services:
+  dev_db:
+    image: postgres:11.3-alpine
+    volumes:
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
+    environment:
+      - POSTGRES_PASSWORD=SomePassword123!
+      - POSTGRES_USER=root
+      - POSTGRES_DB=springboard
+    ports:
+      - 5432:5432
