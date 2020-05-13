@@ -1,0 +1,643 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the Springboard JVM SAAS starter.">
+      
+      
+      
+        <meta name="author" content="Happy Valley IO - https://www.happyvalley.io">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.1, mkdocs-material-5.1.6">
+    
+    
+      
+        <title>How to add a static page</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.4b9ffd7b.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#adding-a-static-ish-page" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../.." title="Springboard" class="md-header-nav__button md-logo" aria-label="Springboard">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Springboard
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              How to add a static page
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/HappyValleyIO/springboard/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Springboard" class="md-nav__button md-logo" aria-label="Springboard">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Springboard
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/HappyValleyIO/springboard/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Welcome to Springboard" class="md-nav__link">
+      Welcome to Springboard
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Tutorials
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Tutorials
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        How to add a static page
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="How to add a static page" class="md-nav__link md-nav__link--active">
+      How to add a static page
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#adding-a-new-template-to-the-project" class="md-nav__link">
+    Adding a new template to the project
+  </a>
+  
+    <nav class="md-nav" aria-label="Adding a new template to the project">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#project-structure" class="md-nav__link">
+    Project structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-page" class="md-nav__link">
+    Adding a new page
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-some-styles" class="md-nav__link">
+    Adding some styles
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-scripts" class="md-nav__link">
+    Custom scripts
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#adding-a-new-template-to-the-project" class="md-nav__link">
+    Adding a new template to the project
+  </a>
+  
+    <nav class="md-nav" aria-label="Adding a new template to the project">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#project-structure" class="md-nav__link">
+    Project structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-page" class="md-nav__link">
+    Adding a new page
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-some-styles" class="md-nav__link">
+    Adding some styles
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-scripts" class="md-nav__link">
+    Custom scripts
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/HappyValleyIO/springboard/edit/master/docs/tutorials/static.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  
+                
+                
+                <h1 id="adding-a-static-ish-page">Adding a static-ish page</h1>
+<p>Springboard has a pretty funky setup. We're using node to build web things that are then rendered/served with Spring Boot. 
+As a result there are two ways to think about adding a static - or mostly static - page.</p>
+<p>We can either:
+* add a document as a fully static document in HTML; or
+* we can add a template that doesn't rely on a model and render it using Spring.</p>
+<p>While the former is a little easier, I'd recommend always going for the latter. It lets you use the same template engine, 
+which means you get to leverage the same layout as the rest of your site. It also allows you to leverage the live reload 
+functionality when working in the <code>dev</code> profile.</p>
+<h2 id="adding-a-new-template-to-the-project">Adding a new template to the project</h2>
+<h3 id="project-structure">Project structure</h3>
+<p>Almost all front-end assets are held in the <code>src/webapp</code> directory. If you dig into that directory you'll see a setup like so:</p>
+<div style="width:80%; margin:0 auto">
+    <img src="/assets/images/webapp-directory.png" alt="image with relative link">
+</div>
+
+<p>So underneath the <code>src/webapp</code> directory we have a pretty standard NodeJs project layout. The <code>src</code> directory inside this 
+project is what we're interested in right now.</p>
+<p>Let's run through what these directories represent:</p>
+<ul>
+<li><strong>scripts:</strong> the javascript and typescript we're using in our project;</li>
+<li><strong>styles:</strong> the CSS/SASS assets for the project;</li>
+<li><strong>templates:</strong> the <a href="https://pebbletemplates.io/">pebble</a> templates that are used by Spring at runtime to render a page.</li>
+</ul>
+<p>We'll loop back around to use the scripts and styles in a little bit, but for now, let's dig in to the templates directory further:</p>
+<div style="width:80%; margin:0 auto">
+    <img src="/assets/images/templates-expanded.png" alt="image with relative link">
+</div>
+
+<p>Inside the <code>templates</code> directory we have some subdirectories. </p>
+<ul>
+<li><strong>layouts:</strong> the core layouts used by our site to share core functionality and - well - layout;</li>
+<li><strong>pages:</strong> by convention, we put standalone pages in the pages directory. We recommend structuring the directories roughly like the URL path these things will end up on, but there's no reason that you have to;</li>
+<li><strong>components:</strong> snippets and pebble macros that are shared across the project. These <em>generally</em> aren't rendered solo, but we do sometimes do so for e.g. a modal;</li>
+<li><strong>errors:</strong> in this directory we put standard templates for Spring to fall back on when it encounters certain HTTP error codes.</li>
+</ul>
+<h3 id="adding-a-new-page">Adding a new page</h3>
+<p>Now that we've walked through where everything lives, let's add a "Hello World" page.</p>
+<p>First we create a <code>hello.peb</code> file in the <code>pages</code> directory, with content:</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;layouts/base&#39;</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="s1">&#39;body&#39;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;h1&gt;Hello World!&lt;/h1&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+</code></pre></div>
+
+
+<p>Here, we're using the <code>layouts/base.peb</code> layout and passing in our title element to the <code>body</code> block. 
+If you go to the base layout you'll see a snippet like this:</p>
+<div class="codehilite"><pre><span></span><code><span class="x">&lt;body&gt;</span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">body</span> <span class="cp">%}{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;/body&gt;</span>
+</code></pre></div>
+
+
+<p>This means that anything that extends the base layout can add a <a href="https://pebbletemplates.io/wiki/tag/block/">block</a> to 
+insert its own content into the layout.</p>
+<p>Now, let's add a Spring Controller endpoint to actually serve this page. In the <code>PublicController</code> class (src/main/kotlin/org/springboard/public/PublicController.kt), 
+add a new controller endpoint that renders this template:</p>
+<div class="codehilite"><pre><span></span><code>  <span class="n">@GetMapping</span><span class="p">(</span><span class="s">&quot;/hello&quot;</span><span class="p">)</span>
+  <span class="k">fun</span> <span class="nf">hello</span><span class="p">():</span> <span class="n">ModelAndView</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">ModelAndView</span><span class="p">(</span><span class="s">&quot;pages/hello&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+</code></pre></div>
+
+
+<p>And navigate to your running application at (http://localhost:8080/hello) to see the page. It works!</p>
+<p>This is all you have to do to have a page load. Next up is some style.</p>
+<h3 id="adding-some-styles">Adding some styles</h3>
+<p>By default, Springboard uses <a href="https://bulma.io/">bulma</a>. Bulma is a css framework that gives a bunch of nice utilities out of the box.</p>
+<p>Let's make use of some of these bulma CSS classes. Our <code>hello.peb</code> file now looks like:</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;layouts/base&#39;</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="s1">&#39;body&#39;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;div class=&quot;container&quot;&gt;</span>
+<span class="x">    &lt;div class=&quot;content&quot;&gt;</span>
+<span class="x">        &lt;h1 class=&quot;title is-size-1 has-text-centered&quot;&gt;Hello World!&lt;/h1&gt;</span>
+<span class="x">    &lt;/div&gt;</span>
+<span class="x">&lt;/div&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+</code></pre></div>
+
+
+<p>If you reload the page you'll see something quite different! Remember, you'll have to rebuild the project for Spring to pick up the template update (Ctrl+F9 in intellij).</p>
+<p>To see how custom styles work, let's take a look at <code>base.peb</code>. We can see in this file that we pull in another stylesheet:</p>
+<div class="codehilite"><pre><span></span><code>    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/styles/dashboard.scss&quot;</span> <span class="na">data-turbolinks-track</span><span class="o">=</span><span class="s">&quot;reload&quot;</span><span class="p">&gt;</span>
+</code></pre></div>
+
+
+<p>Any time we have a href start with "/" in Springboard, it's in references to the base webapp source at <code>src/webapp/src/</code>.</p>
+<p>If we navigates to <code>src/webapp/src/styles/dashboard.scss</code> we'll see that we have a file with a bunch of styles already defined. 
+Let's add our own to the bottom:</p>
+<div class="codehilite"><pre><span></span><code><span class="nc">.hello-title</span> <span class="p">{</span>
+  <span class="nt">color</span><span class="nd">:</span> <span class="nt">red</span> <span class="o">!</span><span class="nt">important</span><span class="o">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>And apply it in our <code>hello.peb</code> file:</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;layouts/base&#39;</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="s1">&#39;body&#39;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;div class=&quot;container&quot;&gt;</span>
+<span class="x">    &lt;div class=&quot;content&quot;&gt;</span>
+<span class="x">        &lt;h1 class=&quot;title hello-title is-size-1 has-text-centered&quot;&gt;Hello World!&lt;/h1&gt;</span>
+<span class="x">    &lt;/div&gt;</span>
+<span class="x">&lt;/div&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+</code></pre></div>
+
+
+<p>You can see we've added the <code>hello-title</code> class to our <code>h1</code> element. And it works! The title is now red. We have the ability to add custom styles.</p>
+<h2 id="custom-scripts">Custom scripts</h2>
+<p>Now let's walk through adding a little javascript. We want to add a button that will change the color of the title between black and red.</p>
+<p>First, let's take a look at <code>base.peb</code> again to see if there's something that helps us here. We notice the line:</p>
+<div class="codehilite"><pre><span></span><code>    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;/scripts/app.js&quot;</span> <span class="na">defer</span> <span class="na">data-turbolinks-track</span><span class="o">=</span><span class="s">&quot;reload&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+
+
+<p>Navigating to this file like before, we see that it's a fairly standard ES5 file pulling in the dependencies we need. the one we're interested in is <code>import './application.js</code>.</p>
+<p>Looking at this file, we'll see a bunch of <code>Controller</code> classes being imported and added to a <a href="https://stimulusjs.org/">StimulusJS</a> application. 
+If you've never used stimulus before then I'd recommend going through their handbook.</p>
+<p>Alright, let's add our own <code>Controller</code> to these. In the <code>controllers</code> directory create a file called <code>hello_controller.js</code>. In this file, we'll add:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">import</span> <span class="p">{</span> <span class="nx">Controller</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&quot;@stimulus/core&quot;</span><span class="p">;</span>
+
+<span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">HelloController</span> <span class="kr">extends</span> <span class="nx">Controller</span> <span class="p">{</span>
+  <span class="kr">static</span> <span class="nx">get</span> <span class="nx">targets</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">];</span>
+  <span class="p">}</span>
+
+  <span class="nx">toggleStyle</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">titleTarget</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">toggle</span><span class="p">(</span><span class="s1">&#39;hello-title&#39;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>And hook it into the application in <code>application.js</code>, by adding an import at the top:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">import</span> <span class="nx">HelloController</span> <span class="nx">from</span> <span class="s2">&quot;./controllers/hello_controller&quot;</span><span class="p">;</span>
+</code></pre></div>
+
+
+<p>And a registration at the bottom:</p>
+<div class="codehilite"><pre><span></span><code><span class="nx">application</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="nx">HelloController</span><span class="p">);</span>
+</code></pre></div>
+
+
+<p>We'll also need to update our <code>hello.peb</code> file to reflect this:</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;layouts/base&#39;</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="s1">&#39;body&#39;</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;div class=&quot;container&quot;&gt;</span>
+<span class="x">    &lt;div class=&quot;content&quot; data-controller=&quot;hello&quot;&gt;</span>
+<span class="x">        &lt;h1 class=&quot;title hello-title is-size-1 has-text-centered&quot; data-target=&quot;hello.title&quot;&gt;Hello World!&lt;/h1&gt;</span>
+<span class="x">        &lt;button type=&quot;button&quot; class=&quot;button&quot; data-action=&quot;click-&gt;hello#toggleStyle&quot;&gt;Toggle&lt;/button&gt;</span>
+<span class="x">    &lt;/div&gt;</span>
+<span class="x">&lt;/div&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span><span class="x"></span>
+</code></pre></div>
+
+
+<p>Re-build the project and... success! When we click the button it toggles the <code>.hello-title</code> style so that it changes colour.</p>
+<h2 id="summary">Summary</h2>
+<p>So we've worked through the process of adding a new page with styles and scripts to the project. In the next tutorial, 
+we'll use add a form to this page and hook it in to the database. </p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../.." title="Welcome to Springboard" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Welcome to Springboard
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.a0c4167b.min.js"></script>
+      <script src="../../assets/javascripts/bundle.fb26dd1d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.37585f48.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>
