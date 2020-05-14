@@ -419,7 +419,7 @@ functionality when working in the <code>dev</code> profile.</p>
 <h3 id="project-structure">Project structure</h3>
 <p>Almost all front-end assets are held in the <code>src/webapp</code> directory. If you dig into that directory you'll see a setup like so:</p>
 <div style="width:80%; margin:0 auto">
-    <img src="/assets/images/webapp-directory.png" alt="image with relative link">
+    <img src="/assets/images/webapp-directory.png" alt="webapp directory overview image">
 </div>
 
 <p>So underneath the <code>src/webapp</code> directory we have a pretty standard NodeJs project layout. The <code>src</code> directory inside this 
@@ -432,7 +432,7 @@ project is what we're interested in right now.</p>
 </ul>
 <p>We'll loop back around to use the scripts and styles in a little bit, but for now, let's dig in to the templates directory further:</p>
 <div style="width:80%; margin:0 auto">
-    <img src="/assets/images/templates-expanded.png" alt="image with relative link">
+    <img src="/assets/images/templates-expanded.png" alt="webapp templates directory image">
 </div>
 
 <p>Inside the <code>templates</code> directory we have some subdirectories. </p>
@@ -489,14 +489,14 @@ add a new controller endpoint that renders this template:</p>
 </code></pre></div>
 
 
-<p>If you reload the page you'll see something quite different! Remember, you'll have to rebuild the project for Spring to pick up the template update (Ctrl+F9 in intellij).</p>
+<p>If you reload the page you'll see something quite different! Remember, you'll have to rebuild the project for Spring to pick up the template update (Ctrl+F9 in IntelliJ).</p>
 <p>To see how custom styles work, let's take a look at <code>base.peb</code>. We can see in this file that we pull in another stylesheet:</p>
 <div class="codehilite"><pre><span></span><code>    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/styles/dashboard.scss&quot;</span> <span class="na">data-turbolinks-track</span><span class="o">=</span><span class="s">&quot;reload&quot;</span><span class="p">&gt;</span>
 </code></pre></div>
 
 
-<p>Any time we have a href start with "/" in Springboard, it's in references to the base webapp source at <code>src/webapp/src/</code>.</p>
-<p>If we navigates to <code>src/webapp/src/styles/dashboard.scss</code> we'll see that we have a file with a bunch of styles already defined. 
+<p>Any time we have a href start with "/" in Springboard, it's in reference to the base webapp source at <code>src/webapp/src/</code>.</p>
+<p>If we navigate to <code>src/webapp/src/styles/dashboard.scss</code> we'll see that we have a file with a bunch of styles already defined. 
 Let's add our own to the bottom:</p>
 <div class="codehilite"><pre><span></span><code><span class="nc">.hello-title</span> <span class="p">{</span>
   <span class="nt">color</span><span class="nd">:</span> <span class="nt">red</span> <span class="o">!</span><span class="nt">important</span><span class="o">;</span>
@@ -525,10 +525,10 @@ Let's add our own to the bottom:</p>
 </code></pre></div>
 
 
-<p>Navigating to this file like before, we see that it's a fairly standard ES5 file pulling in the dependencies we need. the one we're interested in is <code>import './application.js</code>.</p>
+<p>Navigating to this file like before, we see that it's a fairly standard ES5 file pulling in the dependencies we need. The one we're interested in is <code>import './application.js</code>.</p>
 <p>Looking at this file, we'll see a bunch of <code>Controller</code> classes being imported and added to a <a href="https://stimulusjs.org/">StimulusJS</a> application. 
-If you've never used stimulus before then I'd recommend going through their handbook.</p>
-<p>Alright, let's add our own <code>Controller</code> to these. In the <code>controllers</code> directory create a file called <code>hello_controller.js</code>. In this file, we'll add:</p>
+If you've never used stimulus before then I'd recommend going through their <a href="https://stimulusjs.org/handbook/introduction">handbook</a>.</p>
+<p>Alright, let's add our own <code>Controller</code> to these. Create a file called <code>hello_controller.js</code> in the <code>controllers</code> directory. In this file, we'll add:</p>
 <div class="codehilite"><pre><span></span><code><span class="kr">import</span> <span class="p">{</span> <span class="nx">Controller</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&quot;@stimulus/core&quot;</span><span class="p">;</span>
 
 <span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">HelloController</span> <span class="kr">extends</span> <span class="nx">Controller</span> <span class="p">{</span>
@@ -568,9 +568,16 @@ If you've never used stimulus before then I'd recommend going through their hand
 
 
 <p>Re-build the project and... success! When we click the button it toggles the <code>.hello-title</code> style so that it changes colour.</p>
+<p>There are a couple of changes in <code>hello.peb</code> that I'd like to draw your attention to:</p>
+<ul>
+<li>We've added a <code>data-controller="hello"</code> attribute to the <code>div</code> on the second line. This will let Stimulus know that it should create a <code>HelloController</code> instance and connect it to this DOM element.</li>
+<li>We've added a <code>data-target="hello.title"</code> attribute to the <code>h1</code> tag. This tells Stimulus to treat this DOM element as the <code>this.titleTarget</code> field we made use of in our controller.</li>
+<li>We've added a <code>data-action="click-hello#toggleStyle"</code> on our <code>button</code>. This tells Stimulus to listen for a <code>click</code> event on this button and to execute the <code>toggleStyle</code> method in our <code>HelloController</code> when it does. </li>
+</ul>
+<p>Once again, this isn't intended to be a tutorial around Stimulus (we wrote one <a href="https://happyvalley.dev/building-a-simple-static-site-with-parcel-and-stimulus/">here</a>), so we're not going to go into it any further right now.</p>
 <h2 id="summary">Summary</h2>
 <p>So we've worked through the process of adding a new page with styles and scripts to the project. In the next tutorial, 
-we'll use add a form to this page and hook it in to the database. </p>
+we'll add a form to this page and hook it in to the database. </p>
                 
                   
                 
