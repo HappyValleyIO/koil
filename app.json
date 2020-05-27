@@ -2,7 +2,10 @@
   "name": "Springboard Example",
   "description": "A Spring-based SaaS template.",
   "repository": "https://github.com/HappyValleyIO/springboard",
-  "keywords": ["spring", "java"],
+  "keywords": [
+    "spring",
+    "java"
+  ],
   "addons": [
     {
       "plan": "heroku-postgresql",
@@ -10,5 +13,11 @@
         "version": "12"
       }
     }
-  ]
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  }
 }
