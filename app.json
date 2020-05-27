@@ -1,0 +1,14 @@
+{
+  "name": "Springboard Example",
+  "description": "A Spring-based SaaS template.",
+  "repository": "https://github.com/HappyValleyIO/springboard",
+  "keywords": ["spring", "java"],
+  "addons": [
+    {
+      "plan": "heroku-postgresql",
+      "options": {
+        "version": "12"
+      }
+    }
+  ]
+}
