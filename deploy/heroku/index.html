@@ -350,6 +350,33 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#adding-jvm-metrics" class="md-nav__link">
+    Adding JVM metrics
+  </a>
+  
+    <nav class="md-nav" aria-label="Adding JVM metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-adding-the-metrics-to-the-app" class="md-nav__link">
+    Step 1: Adding the metrics to the app
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-viewing-the-metrics" class="md-nav__link">
+    Step 2: Viewing the metrics
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#adding-staging" class="md-nav__link">
     Adding staging
   </a>
@@ -546,6 +573,33 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#adding-jvm-metrics" class="md-nav__link">
+    Adding JVM metrics
+  </a>
+  
+    <nav class="md-nav" aria-label="Adding JVM metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-adding-the-metrics-to-the-app" class="md-nav__link">
+    Step 1: Adding the metrics to the app
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-viewing-the-metrics" class="md-nav__link">
+    Step 2: Viewing the metrics
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#adding-staging" class="md-nav__link">
     Adding staging
   </a>
@@ -709,6 +763,26 @@ we'll send email successfully. If these variables aren't passed at runtime, then
 <code>LoggingMailSender</code> that just logs each message.</p>
 <p>If you decided to use a different mail provider, you'll be able to modify these settings to respect whatever environment variables
 that add-on injects in this file. This is out of the scope of this tutorial.</p>
+<h2 id="adding-jvm-metrics">Adding JVM metrics</h2>
+<p>Heroku offers <a href="https://devcenter.heroku.com/articles/language-runtime-metrics">language specific metrics</a> for applications 
+running on any paid dyno tier (so Hobby and up).  </p>
+<p>This includes JVM specific metrics around things like garbage collection and heap usage. You can read more about the JVM specific metrics 
+on offer <a href="https://devcenter.heroku.com/articles/language-runtime-metrics-jvm">here</a>.</p>
+<h3 id="step-1-adding-the-metrics-to-the-app">Step 1: Adding the metrics to the app</h3>
+<p>We'll be adding the JVM metrics integration to our production app. To enable these metrics, navigate to your app in the 
+terminal and run <code>heroku labs:enable "runtime-heroku-metrics"</code>. This should result in output:</p>
+<p><a href="../images/enable-metrics-cli.png"><img alt="heroku enable jvm metrics output" src="../images/enable-metrics-cli.png" /></a></p>
+<p>Once that's done, you must re-deploy the dynos for the app. You can do this by running the <code>heroku dyno:restart</code> command 
+in the terminal. This will result in output:</p>
+<p><a href="../images/heroku-restart-cli.png"><img alt="heroku restart dyno in cli" src="../images/heroku-restart-cli.png" /></a></p>
+<p>It will take a few minutes for these metrics to show up so feel free to stop here for a cup of coffee.</p>
+<h3 id="step-2-viewing-the-metrics">Step 2: Viewing the metrics</h3>
+<p>Head back to your Heroku app in the browser and open the <code>Metrics</code> tab.</p>
+<p><a href="../images/heroku-metrics-screen.png"><img alt="heroku metrics screen" src="../images/heroku-metrics-screen.png" /></a></p>
+<p>On this page you'll see a bunch of metrics about your app in production. These include metrics around requests per second, 
+request latency and more. If you scroll down then you should see the newly added JVM metrics:</p>
+<p><a href="../images/heroku-jvm-metrics.png"><img alt="heroku jvm metrics screen" src="../images/heroku-jvm-metrics.png" /></a></p>
+<p>And that's it! It's due to this kind of simplicity that we love Heroku.</p>
 <h2 id="adding-staging">Adding staging</h2>
 <p>TODO</p>
 <h2 id="adding-sentry">Adding Sentry</h2>
