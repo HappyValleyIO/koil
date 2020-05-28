@@ -65,30 +65,4 @@ class BeanConfig {
     fun loggingMailSender(): JavaMailSender {
         return LoggingMailSender()
     }
-
-    @Bean
-    @Profile("dev")
-    fun javaMailSender(): JavaMailSender {
-        return object : JavaMailSender {
-            override fun createMimeMessage(): MimeMessage {
-                return JavaMailSenderImpl().createMimeMessage()
-            }
-
-            override fun createMimeMessage(contentStream: InputStream): MimeMessage {
-                return JavaMailSenderImpl().createMimeMessage(contentStream)
-            }
-
-            override fun send(mimeMessage: MimeMessage) {}
-
-            override fun send(vararg mimeMessages: MimeMessage?) {}
-
-            override fun send(mimeMessagePreparator: MimeMessagePreparator) {}
-
-            override fun send(vararg mimeMessagePreparators: MimeMessagePreparator?) {}
-
-            override fun send(simpleMessage: SimpleMailMessage) {}
-
-            override fun send(vararg simpleMessages: SimpleMailMessage?) {}
-        }
-    }
 }

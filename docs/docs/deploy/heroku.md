@@ -161,9 +161,54 @@ This is incredibly powerful. Whether you're working solo or in a team, we think 
 letting a customer get access to them is the way forward. There's more yet to do though! Continue on below to allow your application to send email,
 report errors to sentry and to have a long-lived staging environment for QA.
 
+## Connecting the CLI
+
+So far, everything we've done has made use of the Heroku website. Moving forward, we'll be provisioning extra add-ons using the [CLI](https://devcenter.heroku.com/articles/heroku-cli). This makes simple tasks much easier and gives us access to some more tooling
+ - such as being able to stream logs with `heroku logs --tail`.
+
+Use the [documentation](https://devcenter.heroku.com/articles/heroku-cli) to install and login to the CLI before going forward.
+
+Once you have the CLI installed, navigate to your project in the terminal and run `heroku git:remote -a $MY_PROJECT_NAME` 
+where `$MY_PROJECT_NAME` is the name of your heroku app. You should see output like the image below:
+
+[![heroku cli connected](images/cli-setup.png)](images/cli-setup.png)
+
+And you're set!
+
 ## Adding Mailgun
 
-TODO
+Now we have a live application, we'd like to make use of the other features that Springboard gives us
+out of the box. First up: email. We're using Mailgun here, but since Springboard leverages spring-mail (which in turn just 
+uses SMTP) you can feel free to substitute for your favourite SMTP email provider.
+
+### Step 1: Adding Mailgun to your production application
+
+Navigate to your project on your machine and run the following command:
+
+```bash
+heroku addons:create mailgun:starter 
+```
+
+You'll see output like the following:
+
+[![heroku mailgun added](images/added-mailgun.png)](images/added-mailgun.png)
+
+Looking at this output, we see that the Mailgun add-on has added a bunch of environment variables to our application. 
+We'll need to update our app to reflect this... right?
+
+### Step 2: Updating application to use env variables
+
+Wrong! Head over to `src/main/resources/application.properties` in your editor of choice. You'll see we have some properties 
+that rely on the `MAILGUN_` environment variables we've just configured:
+
+[![mail settings for spring](images/mail-settings.png)](images/mail-settings.png)
+
+Great! This means that we don't have to do anything else to make this work. If there are `MAILGUN_` env variables then 
+we'll send email successfully. If these variables aren't passed at runtime, then Springboard will silently fall back on a 
+`LoggingMailSender` that just logs each message.
+
+If you decided to use a different mail provider, you'll be able to modify these settings to respect whatever environment variables
+that add-on injects in this file. This is out of the scope of this tutorial.
 
 ## Adding staging
 
@@ -174,3 +219,5 @@ TODO
 TODO
 
 ## Adding LogDNA
+
+TODO
