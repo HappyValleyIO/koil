@@ -1,5 +1,6 @@
 site_name: Springboard
-theme: gitbook
+theme:
+  name: material
 repo_url: https://github.com/HappyValleyIO/springboard
 site_description: Documentation for the Springboard JVM SAAS starter.
 site_author: Happy Valley IO - https://www.happyvalley.io
