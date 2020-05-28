@@ -43,7 +43,7 @@ This will take you to the create application page:
 
 [![heroku create a new app page](images/heroku-create-app.png)](images/heroku-create-app.png)
 
-When there fill in the details for your application and hit `Create App`. This will take you on to your new app page:
+When there, fill in the details for your application and hit `Create App`. This will take you on to your new app page:
 
 [![heroku newly created app](images/heroku-created-app.png)](images/heroku-created-app.png)
 
@@ -61,7 +61,7 @@ This will forward you on to the newly created pipeline:
 
 [![heroku newly created pipeline](images/heroku-pipeline-created.png)](images/heroku-pipeline-created.png)
 
-When here, click the prompt to `Connect to Github`. If you don't see this prompt then navigate to the `Settings` tab. Once on this page, search for your GitHub repo then connect.
+When here, click the prompt to `Connect to Github`. If you don't see this prompt, then navigate to the `Settings` tab. Once on this page, search for your GitHub repo then connect.
 
 [![heroku connected pipeline](images/heroku-pipeline-connected.png)](images/heroku-pipeline-connected.png)
 
@@ -99,19 +99,19 @@ create the pull request.
 
 Alright! Now go make a cup of coffee while the CI build runs. Springboard has a longer build than a base Spring Boot project, 
 but we promise it's worth it. Right now GitHub is running unit, integration and feature tests on the back-end and has 
-kicked off Cypress to test your front-end. Once it's done you should see something like this:
+kicked off Cypress to test your front-end. Once it's done, you should see something like this:
 
 [![pull request with deployment](images/github-pull-request-review-created.png)](images/github-pull-request-review-created.png)
 
-Click the `View dpeloyment` button and... Ta-da!
+Click the `View deployment` button and... Ta-da!
 
 [![pull request with deployment](images/review-app-deployed.png)](images/review-app-deployed.png)
 
-Our review app is live! This has it's own Heroku Postgres instance spun up so we can play around with it without impacting a shared database.
+Our review app is live! This has its own Heroku Postgres instance spun up, so we can play around with it without impacting a shared database.
 
 ### Step 5: Merging to master and deploying to production
 
-Now that we've done some QA on our review app, we'll merge the pull request and deploy to production. Normally, this is 
+Now we've done some QA on our review app, we'll merge the pull request and deploy to production. Normally, this is 
 where a teammate would review our change, but for now we can safely click the `Merge` button and carry on solo.
 
 Upon merging the pull request, the review app instance will be spun down - saving us some money/free dyno hours. At this point you can head back to the heroku pipeline to view the deploy logs.
