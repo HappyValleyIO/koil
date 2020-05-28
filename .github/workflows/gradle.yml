@@ -37,3 +37,5 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build --info
+      env:
+        TESTCONTAINERS_RYUK_DISABLED: true
