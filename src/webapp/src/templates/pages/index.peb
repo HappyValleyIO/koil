@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" type="text/css" href="/styles/index.scss">
     {% include 'components/devtools' %}
-    {% include 'compoenents/sentry' %}
+    {% include 'components/sentry' %}
 
     <script type="text/javascript" src="/scripts/app.js" defer></script>
 </head>
