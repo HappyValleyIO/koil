@@ -8,9 +8,9 @@ date: 2020-05-27
 
 # Deploying to Heroku
 
-[Heroku](https://www.heroku.com) is a PaaS product that makes deploying your application easy. With it's generous free tier it's a perfect way to kick off a new project.
+[Heroku](https://www.heroku.com) is a PaaS product that makes deploying your application easy. With its generous free tier it's a perfect way to kick off a new project.
 
-Springboard works pretty well with Heroku and benefits a fair bit from a number of Heroku add-ons:
+It's easy to deploy a Springboard application with Heroku. We can also benefit tremendously from the Heroku add-on ecosystem:
 
 * [mailgun](https://mailgun.com) as an SMTP server to send emails;
 * [sentry](https://sentry.io/welcome/) for error-tracking;
@@ -22,12 +22,12 @@ You can check the other add-ons heroku comes with out of the box [here](https://
 ## Minimum Viable Deployment
 
 There are a couple of ways that we can deploy to Heroku - they maintain excellent docs on this [here](https://devcenter.heroku.com/categories/deployment). 
-The deployment mechanism we'll be focusing on is the github integration. We'll be building out a production-ready pipeline here. 
-We'll connect our app to a springboard based github repo and deploy the application with a database.
+The deployment mechanism we'll be focusing on is the GitHub integration. We'll be building out a production-ready pipeline here. 
+We'll connect our app to a Springboard based GitHub repo and deploy the application with a database.
 
-One of the primary benefits to working in Springboard is simplicity of building/deploying. It's a single, stateless JVM 
+One of the primary benefits to working in Springboard is simplicity of building and deploying. It's a single, stateless JVM 
 instance that's connected to a database. Most of the tricky first-time setup has already been done in the gradle build scripts. 
-As such, anything that can deploy a spring boot project can deploy a springboard project without difficulty. 
+As such, anything that can deploy a Spring Boot project can deploy a Springboard project without difficulty. 
 
 As it happens, Heroku has terrific integration with Spring Boot so deploying a live, production-ready application is pretty simple.   
 
@@ -122,9 +122,15 @@ Give it a couple of minutes to run and your app will be deployed! You can also c
 
 [![github env is pending](images/github-env-pending.png)](images/github-env-pending.png)
 
-Once the app has been deployed this will change to read `Deployed`. 
+Once the app has been deployed, this will change to read `Deployed`. 
 
-Click the `View deployment` button... and it's broken! This is because Heroku doesn't respect the `app.json` file's addons in production. I don't fully understand why they made this choice, but let's fix it.
+Click the `View deployment` button...and it's broken! Why did production break when the review app works? 
+
+Springboard comes with an `app.json` file that acts as a configuration for Heroku review apps. This file contains configuration 
+for our postgres database so that Heroku knows to spin one up for each review app. Unfortunately, the `app.json` file 
+doesn't have any impact on production, so we'll have to do the initial setup manually. This is a one-time thing. 
+Automated provisioning of these resources is out of the scope of this tutorial, but you could checkout the 
+[Heroku docs on Terraform](https://devcenter.heroku.com/articles/using-terraform-with-heroku) if it's something you're interested in.
 
 ### Step 6: Spinning up the production database
 
@@ -151,15 +157,15 @@ To conclude, we now have:
 * on merge deletes the review application automatically; and
 * deploys the change to production.
 
-This is incredibly powerful. Whether you're working solo or in a team, I think having a way to easily review and trial changes before 
+This is incredibly powerful. Whether you're working solo or in a team, we think having a way to easily review and trial changes before 
 letting a customer get access to them is the way forward. There's more yet to do though! Continue on below to allow your application to send email,
 report errors to sentry and to have a long-lived staging environment for QA.
 
-## Adding mailgun
+## Adding Mailgun
 
 TODO
 
-## Adding Staging
+## Adding staging
 
 TODO
 
