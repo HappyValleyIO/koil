@@ -210,6 +210,41 @@ we'll send email successfully. If these variables aren't passed at runtime, then
 If you decided to use a different mail provider, you'll be able to modify these settings to respect whatever environment variables
 that add-on injects in this file. This is out of the scope of this tutorial.
 
+## Adding JVM metrics
+
+Heroku offers [language specific metrics](https://devcenter.heroku.com/articles/language-runtime-metrics) for applications 
+running on any paid dyno tier (so Hobby and up).  
+
+This includes JVM specific metrics around things like garbage collection and heap usage. You can read more about the JVM specific metrics 
+on offer [here](https://devcenter.heroku.com/articles/language-runtime-metrics-jvm).
+
+### Step 1: Adding the metrics to the app
+
+We'll be adding the JVM metrics integration to our production app. To enable these metrics, navigate to your app in the 
+terminal and run `heroku labs:enable "runtime-heroku-metrics"`. This should result in output:
+
+[![heroku enable jvm metrics output](images/enable-metrics-cli.png)](images/enable-metrics-cli.png)
+
+Once that's done, you must re-deploy the dynos for the app. You can do this by running the `heroku dyno:restart` command 
+in the terminal. This will result in output:
+
+[![heroku restart dyno in cli](images/heroku-restart-cli.png)](images/heroku-restart-cli.png)
+
+It will take a few minutes for these metrics to show up so feel free to stop here for a cup of coffee.
+
+### Step 2: Viewing the metrics
+
+Head back to your Heroku app in the browser and open the `Metrics` tab.
+
+[![heroku metrics screen](images/heroku-metrics-screen.png)](images/heroku-metrics-screen.png)
+
+On this page you'll see a bunch of metrics about your app in production. These include metrics around requests per second, 
+request latency and more. If you scroll down then you should see the newly added JVM metrics:
+
+[![heroku jvm metrics screen](images/heroku-jvm-metrics.png)](images/heroku-jvm-metrics.png)
+
+And that's it! It's due to this kind of simplicity that we love Heroku.
+
 ## Adding staging
 
 TODO
