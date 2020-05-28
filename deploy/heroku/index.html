@@ -316,36 +316,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#connecting-the-cli" class="md-nav__link">
-    Connecting the CLI
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#adding-mailgun" class="md-nav__link">
     Adding Mailgun
   </a>
-  
-    <nav class="md-nav" aria-label="Adding Mailgun">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-adding-mailgun-to-your-production-application" class="md-nav__link">
-    Step 1: Adding Mailgun to your production application
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-updating-application-to-use-env-variables" class="md-nav__link">
-    Step 2: Updating application to use env variables
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -512,36 +485,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#connecting-the-cli" class="md-nav__link">
-    Connecting the CLI
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#adding-mailgun" class="md-nav__link">
     Adding Mailgun
   </a>
-  
-    <nav class="md-nav" aria-label="Adding Mailgun">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-adding-mailgun-to-your-production-application" class="md-nav__link">
-    Step 1: Adding Mailgun to your production application
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-updating-application-to-use-env-variables" class="md-nav__link">
-    Step 2: Updating application to use env variables
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -678,43 +624,13 @@ Automated provisioning of these resources is out of the scope of this tutorial, 
 <p>This is incredibly powerful. Whether you're working solo or in a team, we think having a way to easily review and trial changes before 
 letting a customer get access to them is the way forward. There's more yet to do though! Continue on below to allow your application to send email,
 report errors to sentry and to have a long-lived staging environment for QA.</p>
-<h2 id="connecting-the-cli">Connecting the CLI</h2>
-<p>So far, everything we've done has made use of the Heroku website. Moving forward, we'll be provisioning extra add-ons using the <a href="https://devcenter.heroku.com/articles/heroku-cli">CLI</a>. This makes simple tasks much easier and gives us access to some more tooling
- - such as being able to stream logs with <code>heroku logs --tail</code>.</p>
-<p>Use the <a href="https://devcenter.heroku.com/articles/heroku-cli">documentation</a> to install and login to the CLI before going forward.</p>
-<p>Once you have the CLI installed, navigate to your project in the terminal and run <code>heroku git:remote -a $MY_PROJECT_NAME</code> 
-where <code>$MY_PROJECT_NAME</code> is the name of your heroku app. You should see output like the image below:</p>
-<p><a href="../images/cli-setup.png"><img alt="heroku cli connected" src="../images/cli-setup.png" /></a></p>
-<p>And you're set!</p>
 <h2 id="adding-mailgun">Adding Mailgun</h2>
-<p>Now we have a live application, we'd like to make use of the other features that Springboard gives us
-out of the box. First up: email. We're using Mailgun here, but since Springboard leverages spring-mail (which in turn just 
-uses SMTP) you can feel free to substitute for your favourite SMTP email provider.</p>
-<h3 id="step-1-adding-mailgun-to-your-production-application">Step 1: Adding Mailgun to your production application</h3>
-<p>Navigate to your project on your machine and run the following command:</p>
-<div class="codehilite"><pre><span></span><code>heroku addons:create mailgun:starter 
-</code></pre></div>
-
-
-<p>You'll see output like the following:</p>
-<p><a href="../images/added-mailgun.png"><img alt="heroku mailgun added" src="../images/added-mailgun.png" /></a></p>
-<p>Looking at this output, we see that the Mailgun add-on has added a bunch of environment variables to our application. 
-We'll need to update our app to reflect this... right?</p>
-<h3 id="step-2-updating-application-to-use-env-variables">Step 2: Updating application to use env variables</h3>
-<p>Wrong! Head over to <code>src/main/resources/application.properties</code> in your editor of choice. You'll see we have some properties 
-that rely on the <code>MAILGUN_</code> environment variables we've just configured:</p>
-<p><a href="../images/mail-settings.png"><img alt="mail settings for spring" src="../images/mail-settings.png" /></a></p>
-<p>Great! This means that we don't have to do anything else to make this work. If there are <code>MAILGUN_</code> env variables then 
-we'll send email successfully. If these variables aren't passed at runtime, then Springboard will silently fall back on a 
-<code>LoggingMailSender</code> that just logs each message.</p>
-<p>If you decided to use a different mail provider, you'll be able to modify these settings to respect whatever environment variables
-that add-on injects in this file. This is out of the scope of this tutorial.</p>
+<p>TODO</p>
 <h2 id="adding-staging">Adding staging</h2>
 <p>TODO</p>
 <h2 id="adding-sentry">Adding Sentry</h2>
 <p>TODO</p>
 <h2 id="adding-logdna">Adding LogDNA</h2>
-<p>TODO</p>
                 
                   
                 
