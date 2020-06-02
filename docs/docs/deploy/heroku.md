@@ -67,7 +67,7 @@ When here, click the prompt to `Connect to Github`. If you don't see this prompt
 
 While you're here, I'd really recommend enabling [review apps](https://devcenter.heroku.com/articles/github-integration-review-apps). You can see the settings we recommend in the image below:
 
-[![heroku connected pipelione enable review apps](images/heroku-review-settings.png)](images/heroku-review.settings.png)
+[![heroku connected pipelione enable review apps](images/heroku-review-settings.png)](images/heroku-review-settings.png)
 
 They'll give you a great way to interact with pull request changes before merging. Springboard comes with an `app.json` file configured that specifies the required postgres database for your review apps. If you'd like to add other addons for each review app, then you can do so by modifying `app.json`. Heroku will respect the changes on the next deploy.
 
@@ -107,7 +107,8 @@ Click the `View deployment` button and... Ta-da!
 
 [![pull request with deployment](images/review-app-deployed.png)](images/review-app-deployed.png)
 
-Our review app is live! This has its own Heroku Postgres instance spun up, so we can play around with it without impacting a shared database.
+Our review app is live! This has its own Heroku Postgres instance spun up, so we can play around with it without impacting 
+a shared database. Note: we've still not finished the setup for our production app yet - read on to finish the required setup.
 
 ### Step 5: Merging to master and deploying to production
 
@@ -148,7 +149,7 @@ Now click `More` at the top right and `Restart all dynos`. Now - after the resta
 
 Success! Our app is now live in production!
 
-### Step 7: reflect on the result
+### Step 7: Reflect on the result
 
 To conclude, we now have:
 
@@ -315,4 +316,29 @@ doing this for Springboard yet, but you can follow their guidelines [here](https
 
 ## Adding LogDNA
 
-TODO
+[LogDNA](https://logdna.com/) is a log aggregation product that includes a bunch of nice features at a reasonable price. 
+If you'd like to use something else, then feel free! Springboard logs to STDOUT in a JSON format in production, so you should 
+be able to use almost any log aggregation product. 
+
+We'll be using the Heroku add-on to [deploy this](https://elements.heroku.com/addons/logdna).
+
+### Step 1: Enabling the add-on
+
+First, let's run the Heroku CLI command `heroku addons:create logdna:quaco` to enable the free tier of LogDNA:
+
+[![enabling LogDNA in heroku cli](images/heroku-cli-logdna.png)](images/heroku-cli-logdna.png)
+
+Nothing more to see here really.
+
+### Step 2: Opening logdna
+
+Let's use the Heroku CLI to open LogDNA. Run `heroku addons:open logdna` in the terminal in your application directory and 
+you'll be taken to LogDNA:
+
+[![logdna dashboard](images/logdna-dashboard.png)](images/logdna-dashboard.png)
+
+Huzzah! Here we can see everything that's logged by every running dyno for our production application. There are a bunch of features 
+in LogDNA that are worth exploring. You can find out more in their [documentation](https://docs.logdna.com/docs).
+
+Log aggregation doesn't depend on much in the way of application behaviour, so there's nothing specific to Springboard here really.
+
