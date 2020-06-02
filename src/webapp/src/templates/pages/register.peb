@@ -10,7 +10,10 @@
 
     <div class="field">
         <label class="label" for="name-input">Name</label>
-        <div class="control">
+        <div class="control has-icons-left">
+            <span class="icon is-small is-left">
+              <i class="fas fa-user-tie"></i>
+            </span>
             <input id="name-input" type="text" name="name" class="input" value="{{ model.attempt.name }}"
                    data-test="name-input">
         </div>
@@ -25,7 +28,10 @@
                 <i class="fas fa-info-circle"></i>
             </span>
         </label>
-        <div class="control">
+        <div class="control has-icons-left">
+            <span class="icon is-small is-left">
+              <i class="fas fa-user"></i>
+            </span>
             <input type="text" id="handle-input" name="handle" maxlength="16" minlength="4" class="input"
                    value="{{ model.attempt.handle }}" data-test="handle-input">
         </div>
@@ -34,7 +40,10 @@
 
     <div class="field">
         <label class="label" for="email-input">Email Address</label>
-        <div class="control">
+        <div class="control has-icons-left">
+            <span class="icon is-small is-left">
+              <i class="fas fa-envelope"></i>
+            </span>
             <input id="email-input" type="email" name="email" class="input" value="{{ model.attempt.email }}"
                    data-test="email-input">
         </div>
@@ -42,10 +51,16 @@
         <p id="email-error" class="help is-danger">{{ model.errors.get("email") }}</p>
     </div>
 
-    <div class="field">
+    <div class="field" data-controller="password">
         <label class="label" for="password-input">Password</label>
-        <div class="control">
-            <input id="password-input" type="password" name="password" value="{{ model.attempt.password }}"
+        <div class="control has-icons-left has-icons-right">
+            <span class="icon is-small is-left">
+              <i class="fas fa-lock"></i>
+            </span>
+            <span class="icon is-clickable is-small is-right">
+              <i class="fas fa-eye" data-action="click->password#toggleVisibility"></i>
+            </span>
+            <input id="password-input" type="password" name="password" value="{{ model.attempt.password }}" data-target="password.input"
                    class="input" data-test="password-input">
         </div>
         <p id="password-error" class="help is-danger">{{ model.errors.get("password") }}</p>
