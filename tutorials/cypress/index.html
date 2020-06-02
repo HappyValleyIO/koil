@@ -1,0 +1,809 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the Springboard JVM SAAS starter.">
+      
+      
+      
+        <meta name="author" content="Happy Valley IO - https://www.happyvalley.io">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.1, mkdocs-material-5.1.6">
+    
+    
+      
+        <title>Testing the front-end with Cypress</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.4b9ffd7b.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#testing-our-front-end-with-cypress" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../.." title="Springboard" class="md-header-nav__button md-logo" aria-label="Springboard">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Springboard
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Testing the front-end with Cypress
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/HappyValleyIO/springboard/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Springboard" class="md-nav__button md-logo" aria-label="Springboard">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Springboard
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/HappyValleyIO/springboard/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Welcome to Springboard" class="md-nav__link">
+      Welcome to Springboard
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Deploy
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Deploy" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Deploy
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deploy/heroku/" title="Deploy to Heroku" class="md-nav__link">
+      Deploy to Heroku
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Tutorials
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Tutorials
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Testing the front-end with Cypress
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="Testing the front-end with Cypress" class="md-nav__link md-nav__link--active">
+      Testing the front-end with Cypress
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#creating-and-running-a-cypress-test" class="md-nav__link">
+    Creating and running a Cypress test
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating and running a Cypress test">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-0-installing-nodejs" class="md-nav__link">
+    Step 0: Installing Node.js
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#introducing-the-cypress-test-runner" class="md-nav__link">
+    Introducing the Cypress test runner
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-our-test-spec" class="md-nav__link">
+    Creating our test spec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#more-meaningful-test-case" class="md-nav__link">
+    More meaningful test case
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#running-on-more-devices" class="md-nav__link">
+    Running on more devices
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-functionality-that-requires-authentication" class="md-nav__link">
+    Testing functionality that requires authentication
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-test-suite-in-junit" class="md-nav__link">
+    Running the test suite in JUnit
+  </a>
+  
+    <nav class="md-nav" aria-label="Running the test suite in JUnit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caveat" class="md-nav__link">
+    Caveat
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../static/" title="How to add a static page" class="md-nav__link">
+      How to add a static page
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#creating-and-running-a-cypress-test" class="md-nav__link">
+    Creating and running a Cypress test
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating and running a Cypress test">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-0-installing-nodejs" class="md-nav__link">
+    Step 0: Installing Node.js
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#introducing-the-cypress-test-runner" class="md-nav__link">
+    Introducing the Cypress test runner
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-our-test-spec" class="md-nav__link">
+    Creating our test spec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#more-meaningful-test-case" class="md-nav__link">
+    More meaningful test case
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#running-on-more-devices" class="md-nav__link">
+    Running on more devices
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-functionality-that-requires-authentication" class="md-nav__link">
+    Testing functionality that requires authentication
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-test-suite-in-junit" class="md-nav__link">
+    Running the test suite in JUnit
+  </a>
+  
+    <nav class="md-nav" aria-label="Running the test suite in JUnit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caveat" class="md-nav__link">
+    Caveat
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/HappyValleyIO/springboard/edit/master/docs/tutorials/cypress.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  
+                
+                
+                <h1 id="testing-our-front-end-with-cypress">Testing our front-end with Cypress</h1>
+<blockquote>
+<p>"No one shall expel us from the Paradise that Cypress has created."</p>
+<p>-- Me, right now</p>
+</blockquote>
+<p>We love <a href="https://www.cypress.io/">Cypress</a>, and after this tutorial we're sure you will too. </p>
+<p>If you've never encountered Cypress before, it allows us to write fast, functional, front-end tests that run in an actual browser
+using standard js tooling. It has a very gentle learning curve if you're already comfortable writing front-end code, and 
+a moderate one if you are not.</p>
+<p>If you've never used Cypress before, then we recommend reading through <a href="https://docs.cypress.io/guides/getting-started/writing-your-first-test.html#Add-a-test-file">their docs</a>
+as well as this. While we'll cover some basics in this tutorial, we'll really just be skimming the surface to show how Cypress
+fits in to Springboard.</p>
+<h2 id="creating-and-running-a-cypress-test">Creating and running a Cypress test</h2>
+<h3 id="step-0-installing-nodejs">Step 0: Installing Node.js</h3>
+<p>If you already have Node 12, then feel free to skip this.</p>
+<p>Cypress needs Node.js to run. Normally, when you build a Springboard project, gradle will pull down the required node version
+and use it to build your front-end assets. To install Node.js on your machine for use globally, we recommend using the 
+<a href="https://github.com/nvm-sh/nvm">Node Version Manager</a>n to install the latest LTS version of node (<code>nvm install --lts</code>).</p>
+<p>Once that's done, navigate to the <code>src/webapp</code> directory in your Springboard project and run <code>npm ci</code>:</p>
+<p><a href="../images/npm-ci.png"><img alt="npm ci running in webapp dir" src="../images/npm-ci.png" /></a></p>
+<p>This installs the dependencies you need at the same version that we used when creating Springboard. </p>
+<p>While <code>npm install</code> will work, it will also update a bunch of dependencies. In a perfect world, no breaking change would find its way into 
+a minor version update. Alas, we don't live in a perfect world, and so we've found it better to use <code>npm ci</code> unless we're 
+explicitly trying to update. This might be a little slow the first time (you'll also be pulling down the 
+Cypress binaries) it runs, so feel free to stop here to have some punch and pie. </p>
+<h3 id="introducing-the-cypress-test-runner">Introducing the Cypress test runner</h3>
+<p>First up, we'll presume you have a Springboard project ready to go and that you've got a working node environment. 
+In the <code>src/webapp</code> directory, run the <code>npx cypress open</code> command, and you'll be greeted with the Cypress runner:</p>
+<p><a href="../images/cypress-runner.png"><img alt="cypress runner open" src="../images/cypress-runner.png" /></a></p>
+<p>We can see that we have a couple of test specs already here. If you click the button labelled <code>Run all specs</code> at the top right 
+a new window will open, and you'll see some automated UI tests run:</p>
+<p><a href="../images/cypress-initial-run.png"><img alt="cypress initial run" src="../images/cypress-initial-run.png" /></a></p>
+<p>These are some basic tests we've included to verify registration and login flows. This runner window is where we'll be spending most of 
+our time as we write our tests. If we open <code>src/webapp/cypress/integration/login.js</code> we'll see some of the test cases that just
+ran:</p>
+<p><a href="../images/cypress-login-spec.png"><img alt="cypress login spec" src="../images/cypress-login-spec.png" /></a></p>
+<p>There are a couple of things to pay attention to here:</p>
+<ul>
+<li>we're using the <a href="https://mochajs.org/">Mocha</a> test framework which Cypress comes with out of the box;</li>
+<li>we're looping over an array of device names to generate tests for different device sizes;</li>
+<li>we're using a custom command to create a new account in the before each (which you can find in `src/webapp/cypress/support/commands.js); and</li>
+<li>our tests are written in plain ol' javascript.</li>
+</ul>
+<p>You'll be using these techniques going forward to write a specification testing the mobile menu button on the index page.</p>
+<h3 id="creating-our-test-spec">Creating our test spec</h3>
+<p>In the <code>src/webapp/cypress/integration</code> directory, create a new file called <code>mobile_navigation.js</code>. In your favourite editor,
+add some boilerplate code:</p>
+<div class="codehilite"><pre><span></span><code><span class="nx">describe</span><span class="p">(</span><span class="sb">`User can open mobile menu`</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">beforeEach</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+      <span class="nx">cy</span><span class="p">.</span><span class="nx">visit</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+    <span class="p">})</span>
+
+    <span class="nx">it</span><span class="p">(</span><span class="sb">`should show mobile menu on button click`</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">cy</span><span class="p">.</span><span class="nx">pause</span><span class="p">()</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+<p>Now, let's go back to the Cypress Runner. You should see a new spec file is listed:</p>
+<p><a href="../images/runner-with-new-file.png"><img alt="cypress runner with new spec file" src="../images/runner-with-new-file.png" /></a></p>
+<p>Click on the file name <code>mobile_navigation.js</code> and you'll be taken to the running tests:</p>
+<p><a href="../images/runner-paused.png"><img alt="cypress running tests paused" src="../images/runner-paused.png" /></a></p>
+<p>Alright! This test is on the index page and is currently paused. This is because of the <code>cy.pause()</code> statement in our test
+case body (line 7 if you copy-pasted). You can click the play button at the top of the left-pane to resume. Adding some 
+pause lines into tests when debugging is a great way to step through in increments.</p>
+<h3 id="more-meaningful-test-case">More meaningful test case</h3>
+<p>Our test above doesn't really do anything, so let's fix that. First, consider that we're trying to test a bit of functionality 
+on mobile, but the test is running on what looks like a laptop screen size. In the <code>beforeEach</code> of the spec file add a line to change viewport:</p>
+<div class="codehilite"><pre><span></span><code>    <span class="nx">beforeEach</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">cy</span><span class="p">.</span><span class="nx">visit</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+        <span class="nx">cy</span><span class="p">.</span><span class="nx">viewport</span><span class="p">(</span><span class="s1">&#39;iphone-6&#39;</span><span class="p">)</span>
+    <span class="p">})</span>
+</code></pre></div>
+
+
+<p>Now when we run our test we'll see that Cypress is running on a screen with the same resolution as an iPhone 6:</p>
+<p><a href="../images/cypress-viewport-changed.png"><img alt="cypress test with viewport changed" src="../images/cypress-viewport-changed.png" /></a></p>
+<p>Pretty easy! The next thing we'd like to do is to assert that the menu isn't visible when we first arrive on the page. 
+There are a bunch of ways to refer to an element in Cypress (by using normal CSS selectors), but we strongly recommend 
+using <code>data-test</code> attributes as advised <a href="https://docs.cypress.io/guides/references/best-practices.html#Selecting-Elements">here</a>.</p>
+<p>Head on over to the index page template at <code>src/webapp/src/templates/pages/index.peb</code>. You'll see on line 21 that we already 
+have a data-test attribute:</p>
+<div class="codehilite"><pre><span></span><code>            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;navbar-menu is-hidden-tablet&quot;</span> 
+                  <span class="na">data-target</span><span class="o">=</span><span class="s">&quot;menu.toggleable&quot;</span> 
+                  <span class="na">data-test</span><span class="o">=</span><span class="s">&quot;mobile-menu&quot;</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;menu&quot;</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;menu-list&quot;</span><span class="p">&gt;</span>
+                        <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/auth/login&quot;</span><span class="p">&gt;</span>Login<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+                        <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/auth/register&quot;</span><span class="p">&gt;</span>Sign Up<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+                    <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+                <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+
+
+<p>That is, <code>data-test="mobile-menu"</code>. To assert that it's not visible, let's add a line to our test case:</p>
+<div class="codehilite"><pre><span></span><code>    <span class="nx">it</span><span class="p">(</span><span class="sb">`should show mobile menu on button click`</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">cy</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;[data-test=mobile-menu]&#39;</span><span class="p">).</span><span class="nx">should</span><span class="p">(</span><span class="s1">&#39;not.be.visible&#39;</span><span class="p">)</span>
+        <span class="nx">cy</span><span class="p">.</span><span class="nx">pause</span><span class="p">()</span>
+    <span class="p">});</span>
+</code></pre></div>
+
+
+<p>When you save this file, the open runner will re-run the test automatically. You'll see in the left pane that an assertion
+ran before pausing this time:</p>
+<p><a href="../images/cypress-single-assertion.png"><img alt="cypress with a single assertion about visibility" src="../images/cypress-single-assertion.png" /></a></p>
+<p>Neat! Now let's add in a couple more actions for our test to take. We want to click the menu button and assert that a menu is now visible.</p>
+<p>If you return to <code>src/webapp/src/templates/pages/index.peb</code>, you'll see that our menu button already has a test attribute <code>data-test="menu-button"</code>.
+Using this in our test, we get:</p>
+<div class="codehilite"><pre><span></span><code>    <span class="nx">it</span><span class="p">(</span><span class="sb">`should show mobile menu on button click`</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">cy</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;[data-test=mobile-menu]&#39;</span><span class="p">).</span><span class="nx">should</span><span class="p">(</span><span class="s1">&#39;not.be.visible&#39;</span><span class="p">)</span>
+        <span class="nx">cy</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;[data-test=menu-button&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">()</span>
+        <span class="nx">cy</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;[data-test=mobile-menu]&#39;</span><span class="p">).</span><span class="nx">should</span><span class="p">(</span><span class="s1">&#39;be.visible&#39;</span><span class="p">)</span>
+    <span class="p">});</span>
+</code></pre></div>
+
+
+<p>To clarify what's going on here: we're getting the <code>menu-button</code> element and clicking it. Then we're selecting the <code>mobile-menu</code> again and verifying that it's visible.
+To give this a BDD slant, the test would read <code>GIVEN the mobile menu isn't visible WHEN the menu button is clicked THEN the mobile menu is visible</code>.</p>
+<p>And we're done! We can now say with confidence that the menu works on mobile.</p>
+<h3 id="running-on-more-devices">Running on more devices</h3>
+<p>A favourite trick of ours is to run a cypress test for a variety of different viewport sizes. This saves a bunch of time 
+in verifying that our website works across screen sizes without manual QA.</p>
+<p>Add a device array to the top of the file:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">const</span> <span class="nx">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;iphone-6&#39;</span><span class="p">,</span> <span class="s1">&#39;iphone-x&#39;</span><span class="p">,</span> <span class="s1">&#39;ipad-mini&#39;</span><span class="p">];</span>
+</code></pre></div>
+
+
+<p>We'll loop over this array, and add the existing test contents to the inner loop:</p>
+<div class="codehilite"><pre><span></span><code><span class="kr">const</span> <span class="nx">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;iphone-6&#39;</span><span class="p">,</span> <span class="s1">&#39;iphone-x&#39;</span><span class="p">,</span> <span class="s1">&#39;ipad-mini&#39;</span><span class="p">];</span>
+
+<span class="nx">sizes</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">size</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">describe</span><span class="p">(</span><span class="sb">`User can open mobile menu on </span><span class="si">${</span><span class="nx">size</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">beforeEach</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="nx">cy</span><span class="p">.</span><span class="nx">visit</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+            <span class="nx">cy</span><span class="p">.</span><span class="nx">viewport</span><span class="p">(</span><span class="nx">size</span><span class="p">)</span>
+        <span class="p">})</span>
+
+        <span class="nx">it</span><span class="p">(</span><span class="sb">`should show mobile menu on button click`</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="nx">cy</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;[data-test=mobile-menu]&#39;</span><span class="p">).</span><span class="nx">should</span><span class="p">(</span><span class="s1">&#39;not.be.visible&#39;</span><span class="p">)</span>
+            <span class="nx">cy</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;[data-test=menu-button&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">()</span>
+            <span class="nx">cy</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;[data-test=mobile-menu]&#39;</span><span class="p">).</span><span class="nx">should</span><span class="p">(</span><span class="s1">&#39;be.visible&#39;</span><span class="p">)</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">})</span>
+</code></pre></div>
+
+
+<p>Note we've made two other changes here:</p>
+<ul>
+<li>we've added the size parameter to the describe string of our spec; and</li>
+<li>we've modified our <code>beforeEach</code> to call <code>cy.viewport(size)</code>.</li>
+</ul>
+<p>This results in:</p>
+<p><a href="../images/cypress-running-test.png"><img alt="cypress running test multiple viewports" src="../images/cypress-running-test.png" /></a></p>
+<p>Sweet! Note that the test names now include the device preset name. To see more viewport aliases you can add, checkout 
+<a href="https://docs.cypress.io/api/commands/viewport.html#Arguments">this page</a>.</p>
+<h2 id="testing-functionality-that-requires-authentication">Testing functionality that requires authentication</h2>
+<p>Frequently, we need to create a test account, log in as that user, and interact with some functionality only available to authenticated
+users. To help with this, we've created a custom cypress command <code>cy.createRandomAccountAndLogin()</code>. As an example of it in use,
+we''ll be adding another test case to the <code>mobile_navigation.js</code> file:</p>
+<div class="codehilite"><pre><span></span><code>        <span class="nx">it</span><span class="p">(</span><span class="sb">`should show mobile menu on dashboard`</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="nx">cy</span><span class="p">.</span><span class="nx">createRandomAccountAndLogin</span><span class="p">();</span>
+
+            <span class="nx">cy</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;[data-test=mobile-menu]&#39;</span><span class="p">).</span><span class="nx">should</span><span class="p">(</span><span class="s1">&#39;not.be.visible&#39;</span><span class="p">)</span>
+            <span class="nx">cy</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;[data-test=menu-button&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">()</span>
+            <span class="nx">cy</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;[data-test=mobile-menu]&#39;</span><span class="p">).</span><span class="nx">should</span><span class="p">(</span><span class="s1">&#39;be.visible&#39;</span><span class="p">)</span>
+        <span class="p">});</span>
+</code></pre></div>
+
+
+<p>The navbar used on these pages has been given the same attributes that we used before: <code>data-test="mobile-menu"</code> and <code>data-test="menu-button"</code>.</p>
+<p>If you step through this test, you'll see that it makes some <code>POST</code> requests to create the account then navigates to <code>/dashboard</code>.</p>
+<p><a href="../images/cypress-authenticated.png"><img alt="cypress authenticated test with expanded test" src="../images/cypress-authenticated.png" /></a></p>
+<p>This is much preferred to working through these flows as a user would. Doing so slows tests down and couples the underlying 
+logic of authentication too closely to the UI for tests that don't really care what the auth UI looks like.</p>
+<h2 id="running-the-test-suite-in-junit">Running the test suite in JUnit</h2>
+<p>While the Cypress test runner is a great tool, we don't really want to have to open it every time we make a change. Instead,
+we probably just want these tests to run as a part of our normal test suite. Inspired by <a href="https://www.wimdeblauwe.com/blog/2019/2019-06-15-running-cypress-tests-with-testcontainers-for-a-spring-boot-with-thymeleaf-application/">this blog post</a>,
+we've written a JUnit test class that will run our entire suite.</p>
+<blockquote>
+<p>Note: the author of the blog post above has also <a href="https://github.com/wimdeblauwe/testcontainers-cypress/tree/testcontainers-cypress-0.4.0">released a library</a> 
+to do a lot of the work for us. We're working on integrating this with Springboard soon.</p>
+</blockquote>
+<p>You can find this test at <code>src/test/kotlin/org/springboard/CypressIntegrationTest.kt</code></p>
+<p>This test will also be run as a part of a <code>gradle build</code>, making our CI runs super easy. </p>
+<h4 id="caveat">Caveat</h4>
+<p>A fairly natural next step here might be to write test setup code (e.g. create used account) in the JUnit test. We don't recommend this.
+Not only does it make running the test without JUnit very difficult, it also couples us quite tightly to this implementation
+as a Spring-based monolith. One of the primary benefits to Cypress testing in the way we advocate is that our tests are 
+very loosely-coupled to the implementation of our application. We'd be loathe to lose that.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Well there we have it. A browser-based front-end test that runs automatically as a part of our build. As mentioned at the 
+beginning, if you've not used Cypress before then we highly recommend digging in on their <a href="https://www.cypress.io/">website</a>. We think you'll be impressed. </p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../../deploy/heroku/" title="Deploy to Heroku" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Deploy to Heroku
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../static/" title="How to add a static page" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                How to add a static page
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.a0c4167b.min.js"></script>
+      <script src="../../assets/javascripts/bundle.fb26dd1d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.37585f48.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>
