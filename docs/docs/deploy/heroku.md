@@ -67,7 +67,7 @@ When here, click the prompt to `Connect to Github`. If you don't see this prompt
 
 While you're here, I'd really recommend enabling [review apps](https://devcenter.heroku.com/articles/github-integration-review-apps). You can see the settings we recommend in the image below:
 
-[![heroku connected pipelione enable review apps](images/heroku-review-settings.png)](images/heroku-review.settings.png)
+[![heroku connected pipelione enable review apps](images/heroku-review-settings.png)](images/heroku-review-settings.png)
 
 They'll give you a great way to interact with pull request changes before merging. Springboard comes with an `app.json` file configured that specifies the required postgres database for your review apps. If you'd like to add other addons for each review app, then you can do so by modifying `app.json`. Heroku will respect the changes on the next deploy.
 
@@ -107,7 +107,8 @@ Click the `View deployment` button and... Ta-da!
 
 [![pull request with deployment](images/review-app-deployed.png)](images/review-app-deployed.png)
 
-Our review app is live! This has its own Heroku Postgres instance spun up, so we can play around with it without impacting a shared database.
+Our review app is live! This has its own Heroku Postgres instance spun up, so we can play around with it without impacting 
+a shared database. Note: we've still not finished the setup for our production app yet - read on to finish the required setup.
 
 ### Step 5: Merging to master and deploying to production
 
@@ -148,7 +149,7 @@ Now click `More` at the top right and `Restart all dynos`. Now - after the resta
 
 Success! Our app is now live in production!
 
-### Step 7: reflect on the result
+### Step 7: Reflect on the result
 
 To conclude, we now have:
 
@@ -251,8 +252,93 @@ TODO
 
 ## Adding Sentry
 
-TODO
+Production monitoring is a tricky thing to get right. A great starting point in our opinion is enabling Sentry to track 
+errors both on the app server and in the user's browser. Springboard comes with Sentry pre-configured so it's as easy as 
+turning it on!
+
+### Step 1: Enable sentry in Heroku
+
+Heroku has a [Sentry add-on](https://elements.heroku.com/addons/sentry) that works with Springboard out of the box. To 
+enable it, navigate to your project in the terminal and run: `heroku addons:create sentry:f1`. You'll get output:
+
+[![enabling sentry heroku cli](images/enable-sentry-cli.png)](images/enable-sentry-cli.png)
+
+Now let's restart our dyno using the `heroku dyno:restart` command. Go have a cold glass of water. This'll be done by the time you're back.
+
+### Step 2: Viewing our new dashboard
+
+The Heroku CLI gives us a convenient way to access our Sentry instance. Run `heroku addons:open sentry` and be amazed as your 
+browser opens and uses single-sign-on to log you in.
+
+[![sentry empty dashboard](images/sentry-dashboard.png)](images/sentry-dashboard.png)
+
+There won't be any activity here yet. Let's head over to our application and throw an error.
+
+### Step 3: Throwing an error
+
+Springboard integrates with Sentry at two points. It configures Sentry for Spring so that any unhandled exceptions on the server 
+are recorded, and it adds a JS snippet to the rendered page in the browser so that we track any JS errors client-side. Let's leverage the 
+latter to throw an error. Open the developer tools in your favourite browser and throw an error for Sentry:
+
+[![browser throwing error](images/error-thrown.png)](images/error-thrown.png)
+
+And see it appear in the Sentry dashboard:
+
+[![sentry dashboard with error](images/sentry-with-error.png)](images/sentry-with-error.png)
+
+Ta-da!
+
+### Step 4: (Optional) Integrate with Sentry release
+
+By integrating with the Sentry release functionality we can see useful information about which version of our application
+is throwing errors. 
+
+#### Easy option
+We recommend using the [Heroku Labs: Dyno Metadata](https://devcenter.heroku.com/articles/dyno-metadata) functionality in Heroku
+to have the commit SHA env variable available at runtime. We run the command `heroku labs:enable runtime-dyno-metadata`,
+then redeploy the application by making a small change and pushing to GitHub or by using the Manual Deploy button in the 
+application's deploy settings on Heroku itself. Once this is done, you can run the `heroku config` command to see the commit SHA
+being passed as an env variable:
+
+[![heroku config with runtime release env variables](images/heroku-config-release.png)](images/heroku-config-release.png)
+
+By default, Springboard allows source maps in production - see motivation 
+[here](https://m.signalvnoise.com/paying-tribute-to-the-web-with-view-source/) - which makes debugging errors in production a little easier. 
+
+Despite this, we recommend hooking [Sentry up to your GitHub repo](https://docs.sentry.io/workflow/integrations/global-integrations/#github) 
+so that it can show the source code for errors thrown. If you don't use GitHub then there are alternatives with 
+documentation [here](https://docs.sentry.io/workflow/integrations/global-integrations/#issue-management).
+
+#### Harder option
+
+Sentry recommends using GitHub actions to set up Sentry with runtime information and releases. We haven't gotten around to 
+doing this for Springboard yet, but you can follow their guidelines [here](https://blog.sentry.io/2019/12/17/using-github-actions-to-create-sentry-releases).
 
 ## Adding LogDNA
 
-TODO
+[LogDNA](https://logdna.com/) is a log aggregation product that includes a bunch of nice features at a reasonable price. 
+If you'd like to use something else, then feel free! Springboard logs to STDOUT in a JSON format in production, so you should 
+be able to use almost any log aggregation product. 
+
+We'll be using the Heroku add-on to [deploy this](https://elements.heroku.com/addons/logdna).
+
+### Step 1: Enabling the add-on
+
+First, let's run the Heroku CLI command `heroku addons:create logdna:quaco` to enable the free tier of LogDNA:
+
+[![enabling LogDNA in heroku cli](images/heroku-cli-logdna.png)](images/heroku-cli-logdna.png)
+
+Nothing more to see here really.
+
+### Step 2: Opening logdna
+
+Let's use the Heroku CLI to open LogDNA. Run `heroku addons:open logdna` in the terminal in your application directory and 
+you'll be taken to LogDNA:
+
+[![logdna dashboard](images/logdna-dashboard.png)](images/logdna-dashboard.png)
+
+Huzzah! Here we can see everything that's logged by every running dyno for our production application. There are a bunch of features 
+in LogDNA that are worth exploring. You can find out more in their [documentation](https://docs.logdna.com/docs).
+
+Log aggregation doesn't depend on much in the way of application behaviour, so there's nothing specific to Springboard here really.
+
