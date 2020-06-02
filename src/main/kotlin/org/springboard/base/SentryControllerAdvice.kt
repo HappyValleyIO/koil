@@ -9,4 +9,11 @@ class SentryControllerAdvice {
     fun sentryDsn(): String? {
         return System.getenv("SENTRY_DSN")
     }
+
+    @ModelAttribute("sentry_release")
+    fun sentryRelease(): String? {
+        return System.getenv("HEROKU_SLUG_COMMIT")?.let {
+            "springboard@$it"
+        }
+    }
 }
