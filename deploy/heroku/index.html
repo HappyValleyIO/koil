@@ -388,6 +388,60 @@
     Adding Sentry
   </a>
   
+    <nav class="md-nav" aria-label="Adding Sentry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-enable-sentry-in-heroku" class="md-nav__link">
+    Step 1: Enable sentry in Heroku
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-viewing-our-new-dashboard" class="md-nav__link">
+    Step 2: Viewing our new dashboard
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-throwing-an-error" class="md-nav__link">
+    Step 3: Throwing an error
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-optional-integrate-with-sentry-release" class="md-nav__link">
+    Step 4: (Optional) Integrate with Sentry release
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: (Optional) Integrate with Sentry release">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#easy-option" class="md-nav__link">
+    Easy option
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#harder-option" class="md-nav__link">
+    Harder option
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -433,18 +487,6 @@
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../tutorials/cypress/" title="Testing the front-end with Cypress" class="md-nav__link">
-      Testing the front-end with Cypress
-    </a>
-  </li>
-
         
           
           
@@ -623,6 +665,60 @@
     Adding Sentry
   </a>
   
+    <nav class="md-nav" aria-label="Adding Sentry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-enable-sentry-in-heroku" class="md-nav__link">
+    Step 1: Enable sentry in Heroku
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-viewing-our-new-dashboard" class="md-nav__link">
+    Step 2: Viewing our new dashboard
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-throwing-an-error" class="md-nav__link">
+    Step 3: Throwing an error
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-optional-integrate-with-sentry-release" class="md-nav__link">
+    Step 4: (Optional) Integrate with Sentry release
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: (Optional) Integrate with Sentry release">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#easy-option" class="md-nav__link">
+    Easy option
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#harder-option" class="md-nav__link">
+    Harder option
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -798,7 +894,45 @@ request latency and more. If you scroll down then you should see the newly added
 <h2 id="adding-staging">Adding staging</h2>
 <p>TODO</p>
 <h2 id="adding-sentry">Adding Sentry</h2>
-<p>TODO</p>
+<p>Production monitoring is a tricky thing to get right. A great starting point in our opinion is enabling Sentry to track 
+errors both on the app server and in the user's browser. Springboard comes with Sentry pre-configured so it's as easy as 
+turning it on!</p>
+<h3 id="step-1-enable-sentry-in-heroku">Step 1: Enable sentry in Heroku</h3>
+<p>Heroku has a <a href="https://elements.heroku.com/addons/sentry">Sentry add-on</a> that works with Springboard out of the box. To 
+enable it, navigate to your project in the terminal and run: <code>heroku addons:create sentry:f1</code>. You'll get output:</p>
+<p><a href="../images/enable-sentry-cli.png"><img alt="enabling sentry heroku cli" src="../images/enable-sentry-cli.png" /></a></p>
+<p>Now let's restart our dyno using the <code>heroku dyno:restart</code> command. Go have a cold glass of water. This'll be done by the time you're back.</p>
+<h3 id="step-2-viewing-our-new-dashboard">Step 2: Viewing our new dashboard</h3>
+<p>The Heroku CLI gives us a convenient way to access our Sentry instance. Run <code>heroku addons:open sentry</code> and be amazed as your 
+browser opens and uses single-sign-on to log you in.</p>
+<p><a href="../images/sentry-dashboard.png"><img alt="sentry empty dashboard" src="../images/sentry-dashboard.png" /></a></p>
+<p>There won't be any activity here yet. Let's head over to our application and throw an error.</p>
+<h3 id="step-3-throwing-an-error">Step 3: Throwing an error</h3>
+<p>Springboard integrates with Sentry at two points. It configures Sentry for Spring so that any unhandled exceptions on the server 
+are recorded, and it adds a JS snippet to the rendered page in the browser so that we track any JS errors client-side. Let's leverage the 
+latter to throw an error. Open the developer tools in your favourite browser and throw an error for Sentry:</p>
+<p><a href="../images/error-thrown.png"><img alt="browser throwing error" src="../images/error-thrown.png" /></a></p>
+<p>And see it appear in the Sentry dashboard:</p>
+<p><a href="../images/sentry-with-error.png"><img alt="sentry dashboard with error" src="../images/sentry-with-error.png" /></a></p>
+<p>Ta-da!</p>
+<h3 id="step-4-optional-integrate-with-sentry-release">Step 4: (Optional) Integrate with Sentry release</h3>
+<p>By integrating with the Sentry release functionality we can see useful information about which version of our application
+is throwing errors. </p>
+<h4 id="easy-option">Easy option</h4>
+<p>We recommend using the <a href="https://devcenter.heroku.com/articles/dyno-metadata">Heroku Labs: Dyno Metadata</a> functionality in Heroku
+to have the commit SHA env variable available at runtime. We run the command <code>heroku labs:enable runtime-dyno-metadata</code>,
+then redeploy the application by making a small change and pushing to GitHub or by using the Manual Deploy button in the 
+application's deploy settings on Heroku itself. Once this is done, you can run the <code>heroku config</code> command to see the commit SHA
+being passed as an env variable:</p>
+<p><a href="../images/heroku-config-release.png"><img alt="heroku config with runtime release env variables" src="../images/heroku-config-release.png" /></a></p>
+<p>By default, Springboard allows source maps in production - see motivation 
+<a href="https://m.signalvnoise.com/paying-tribute-to-the-web-with-view-source/">here</a> - which makes debugging errors in production a little easier. </p>
+<p>Despite this, we recommend hooking <a href="https://docs.sentry.io/workflow/integrations/global-integrations/#github">Sentry up to your GitHub repo</a> 
+so that it can show the source code for errors thrown. If you don't use GitHub then there are alternatives with 
+documentation <a href="https://docs.sentry.io/workflow/integrations/global-integrations/#issue-management">here</a>.</p>
+<h4 id="harder-option">Harder option</h4>
+<p>Sentry recommends using GitHub actions to set up Sentry with runtime information and releases. We haven't gotten around to 
+doing this for Springboard yet, but you can follow their guidelines <a href="https://blog.sentry.io/2019/12/17/using-github-actions-to-create-sentry-releases">here</a>.</p>
 <h2 id="adding-logdna">Adding LogDNA</h2>
 <p>TODO</p>
                 
@@ -836,13 +970,13 @@ request latency and more. If you scroll down then you should see the newly added
           </a>
         
         
-          <a href="../../tutorials/cypress/" title="Testing the front-end with Cypress" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../tutorials/static/" title="How to add a static page" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Testing the front-end with Cypress
+                How to add a static page
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">
