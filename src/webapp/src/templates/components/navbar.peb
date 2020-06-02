@@ -6,7 +6,7 @@
             <a class="title has-text-weight-bold has-text-centered" href="/dashboard">Springboard</a>
         </div>
 
-        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-test="menu-button"
            data-target="menu.toggleable" data-action="click->menu#toggle">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <div class="navbar-menu is-hidden-tablet" data-target="menu.toggleable">
+    <div class="navbar-menu is-hidden-tablet" data-target="menu.toggleable" data-test="mobile-menu">
         <div class="navbar-item">
         {% include 'components/dashboard-menu' %}
         </div>

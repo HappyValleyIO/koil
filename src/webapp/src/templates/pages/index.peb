@@ -16,9 +16,9 @@
 
 <div class="hero is-fullheight">
     <div class="hero-head">
-        <nav class="navbar is-transparent " role="navigation" aria-label="main navigation">
+        <nav class="navbar is-transparent" role="navigation" aria-label="main navigation" data-controller="menu">
             <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-               data-target="navbarBasicExample" data-js-mobile-menu data-js-show-mobile-menu>
+               data-action="click->menu#toggle" data-target="menu.toggleable" data-test="menu-button">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            <div class="navbar-menu is-hidden-tablet" data-js-mobile-menu>
+            <div class="navbar-menu is-hidden-tablet" data-target="menu.toggleable" data-test="mobile-menu">
                 <div class="menu">
                     <ul class="menu-list">
                         <li><a href="/auth/login">Login</a></li>

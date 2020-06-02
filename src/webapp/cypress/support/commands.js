@@ -74,3 +74,10 @@ Cypress.Commands.add('createRandomAccount', () => {
       }
     }).as('account')
 })
+
+Cypress.Commands.add('createRandomAccountAndLogin', () => {
+    cy.createRandomAccount()
+    cy.get('@account').then(() => {
+        cy.visit('/dashboard')
+    })
+})
