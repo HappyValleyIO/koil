@@ -545,7 +545,7 @@ fits in to Springboard.</p>
 <p>If you already have Node 12, then feel free to skip this.</p>
 <p>Cypress needs Node.js to run. Normally, when you build a Springboard project, gradle will pull down the required node version
 and use it to build your front-end assets. To install Node.js on your machine for use globally, we recommend using the 
-<a href="https://github.com/nvm-sh/nvm">Node Version Manager</a>n to install the latest LTS version of node (<code>nvm install --lts</code>).</p>
+<a href="https://github.com/nvm-sh/nvm">Node Version Manager</a> to install the latest LTS version of node (<code>nvm install --lts</code>).</p>
 <p>Once that's done, navigate to the <code>src/webapp</code> directory in your Springboard project and run <code>npm ci</code>:</p>
 <p><a href="../images/npm-ci.png"><img alt="npm ci running in webapp dir" src="../images/npm-ci.png" /></a></p>
 <p>This installs the dependencies you need at the same version that we used when creating Springboard. </p>
@@ -703,8 +703,10 @@ we''ll be adding another test case to the <code>mobile_navigation.js</code> file
 <p>The navbar used on these pages has been given the same attributes that we used before: <code>data-test="mobile-menu"</code> and <code>data-test="menu-button"</code>.</p>
 <p>If you step through this test, you'll see that it makes some <code>POST</code> requests to create the account then navigates to <code>/dashboard</code>.</p>
 <p><a href="../images/cypress-authenticated.png"><img alt="cypress authenticated test with expanded test" src="../images/cypress-authenticated.png" /></a></p>
-<p>This is much preferred to working through these flows as a user would. Doing so slows tests down and couples the underlying 
-logic of authentication too closely to the UI for tests that don't really care what the auth UI looks like.</p>
+<p>This is much preferred to working through these flows as a user would. We have tests that explicitly verify the authentication 
+already, so any benefit to going through that process every time would be marginal. On the other hand, we'd be paying the 
+cost with slower tests down and tighter coupling between the UI authentication flows and tests that don't really care what 
+the auth UI looks like.</p>
 <h2 id="running-the-test-suite-in-junit">Running the test suite in JUnit</h2>
 <p>While the Cypress test runner is a great tool, we don't really want to have to open it every time we make a change. Instead,
 we probably just want these tests to run as a part of our normal test suite. Inspired by <a href="https://www.wimdeblauwe.com/blog/2019/2019-06-15-running-cypress-tests-with-testcontainers-for-a-spring-boot-with-thymeleaf-application/">this blog post</a>,
