@@ -324,21 +324,21 @@ We'll be using the Heroku add-on to [deploy this](https://elements.heroku.com/ad
 
 ### Step 1: Enabling the add-on
 
-First, let's run the Heroku CLI command `heroku addons:create logdna:quaco` to enable the free tier of logdna:
+First, let's run the Heroku CLI command `heroku addons:create logdna:quaco` to enable the free tier of LogDNA:
 
-[![enabling logdna in heroku cli](images/heroku-cli-logdna.png)](images/heroku-cli-logdna.png)
+[![enabling LogDNA in heroku cli](images/heroku-cli-logdna.png)](images/heroku-cli-logdna.png)
 
 Nothing more to see here really.
 
 ### Step 2: Opening logdna
 
-Let's use the Heroku CLI to open logdna. Run `heroku addons:open logdna` in the terminal in your application directory and 
-you'll be taken to logdna:
+Let's use the Heroku CLI to open LogDNA. Run `heroku addons:open logdna` in the terminal in your application directory and 
+you'll be taken to LogDNA:
 
 [![logdna dashboard](images/logdna-dashboard.png)](images/logdna-dashboard.png)
 
 Huzzah! Here we can see everything that's logged by every running dyno for our production application. There are a bunch of features 
-in logdna that are worth exploring. You can find out more in their [documentation](https://docs.logdna.com/docs).
+in LogDNA that are worth exploring. You can find out more in their [documentation](https://docs.logdna.com/docs).
 
 Log aggregation doesn't depend on much in the way of application behaviour, so there's nothing specific to Springboard here really.
 
