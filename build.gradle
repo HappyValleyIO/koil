@@ -135,7 +135,8 @@ node {
   workDir = file("$nodeCache/nodejs")
   npmWorkDir = file("$nodeCache/npm")
   nodeModulesDir = file(buildAssetsDir)
-  npmInstallCommand = System.getenv("CI") ? 'ci' : 'install'
+  npmInstallCommand = 'ci'
+  npmInstall.args = ['--only', 'production']
 }
 npm_install.dependsOn copyAssets
 
