@@ -251,7 +251,67 @@ TODO
 
 ## Adding Sentry
 
-TODO
+Production monitoring is a tricky thing to get right. A great starting point in our opinion is enabling Sentry to track 
+errors both on the app server and in the user's browser. Springboard comes with Sentry pre-configured so it's as easy as 
+turning it on!
+
+### Step 1: Enable sentry in Heroku
+
+Heroku has a [Sentry add-on](https://elements.heroku.com/addons/sentry) that works with Springboard out of the box. To 
+enable it, navigate to your project in the terminal and run: `heroku addons:create sentry:f1`. You'll get output:
+
+[![enabling sentry heroku cli](images/enable-sentry-cli.png)](images/enable-sentry-cli.png)
+
+Now let's restart our dyno using the `heroku dyno:restart` command. Go have a cold glass of water. This'll be done by the time you're back.
+
+### Step 2: Viewing our new dashboard
+
+The Heroku CLI gives us a convenient way to access our Sentry instance. Run `heroku addons:open sentry` and be amazed as your 
+browser opens and uses single-sign-on to log you in.
+
+[![sentry empty dashboard](images/sentry-dashboard.png)](images/sentry-dashboard.png)
+
+There won't be any activity here yet. Let's head over to our application and throw an error.
+
+### Step 3: Throwing an error
+
+Springboard integrates with Sentry at two points. It configures Sentry for Spring so that any unhandled exceptions on the server 
+are recorded, and it adds a JS snippet to the rendered page in the browser so that we track any JS errors client-side. Let's leverage the 
+latter to throw an error. Open the developer tools in your favourite browser and throw an error for Sentry:
+
+[![browser throwing error](images/error-thrown.png)](images/error-thrown.png)
+
+And see it appear in the Sentry dashboard:
+
+[![sentry dashboard with error](images/sentry-with-error.png)](images/sentry-with-error.png)
+
+Ta-da!
+
+### Step 4: (Optional) Integrate with Sentry release
+
+By integrating with the Sentry release functionality we can see useful information about which version of our application
+is throwing errors. 
+
+#### Easy option
+We recommend using the [Heroku Labs: Dyno Metadata](https://devcenter.heroku.com/articles/dyno-metadata) functionality in Heroku
+to have the commit SHA env variable available at runtime. We run the command `heroku labs:enable runtime-dyno-metadata`,
+then redeploy the application by making a small change and pushing to GitHub or by using the Manual Deploy button in the 
+application's deploy settings on Heroku itself. Once this is done, you can run the `heroku config` command to see the commit SHA
+being passed as an env variable:
+
+[![heroku config with runtime release env variables](images/heroku-config-release.png)](images/heroku-config-release.png)
+
+By default, Springboard allows source maps in production - see motivation 
+[here](https://m.signalvnoise.com/paying-tribute-to-the-web-with-view-source/) - which makes debugging errors in production a little easier. 
+
+Despite this, we recommend hooking [Sentry up to your GitHub repo](https://docs.sentry.io/workflow/integrations/global-integrations/#github) 
+so that it can show the source code for errors thrown. If you don't use GitHub then there are alternatives with 
+documentation [here](https://docs.sentry.io/workflow/integrations/global-integrations/#issue-management).
+
+#### Harder option
+
+Sentry recommends using GitHub actions to set up Sentry with runtime information and releases. We haven't gotten around to 
+doing this for Springboard yet, but you can follow their guidelines [here](https://blog.sentry.io/2019/12/17/using-github-actions-to-create-sentry-releases).
 
 ## Adding LogDNA
 
