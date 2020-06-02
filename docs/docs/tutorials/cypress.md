@@ -30,7 +30,7 @@ If you already have Node 12, then feel free to skip this.
 
 Cypress needs Node.js to run. Normally, when you build a Springboard project, gradle will pull down the required node version
 and use it to build your front-end assets. To install Node.js on your machine for use globally, we recommend using the 
-[Node Version Manager](https://github.com/nvm-sh/nvm)n to install the latest LTS version of node (`nvm install --lts`).
+[Node Version Manager](https://github.com/nvm-sh/nvm) to install the latest LTS version of node (`nvm install --lts`).
 
 Once that's done, navigate to the `src/webapp` directory in your Springboard project and run `npm ci`:
 
@@ -234,8 +234,10 @@ If you step through this test, you'll see that it makes some `POST` requests to 
 
 [![cypress authenticated test with expanded test](images/cypress-authenticated.png)](images/cypress-authenticated.png)
 
-This is much preferred to working through these flows as a user would. Doing so slows tests down and couples the underlying 
-logic of authentication too closely to the UI for tests that don't really care what the auth UI looks like.
+This is much preferred to working through these flows as a user would. We have tests that explicitly verify the authentication 
+already, so any benefit to going through that process every time would be marginal. On the other hand, we'd be paying the 
+cost with slower tests down and tighter coupling between the UI authentication flows and tests that don't really care what 
+the auth UI looks like.
 
 ## Running the test suite in JUnit
 
