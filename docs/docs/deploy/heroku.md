@@ -246,10 +246,6 @@ request latency and more. If you scroll down then you should see the newly added
 
 And that's it! It's due to this kind of simplicity that we love Heroku.
 
-## Adding staging
-
-TODO
-
 ## Adding Sentry
 
 Production monitoring is a tricky thing to get right. A great starting point in our opinion is enabling Sentry to track 
@@ -341,4 +337,3 @@ Huzzah! Here we can see everything that's logged by every running dyno for our p
 in LogDNA that are worth exploring. You can find out more in their [documentation](https://docs.logdna.com/docs).
 
 Log aggregation doesn't depend on much in the way of application behaviour, so there's nothing specific to Springboard here really.
-
