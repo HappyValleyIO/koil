@@ -305,7 +305,7 @@
         
           <li class="md-nav__item">
   <a href="#step-7-reflect-on-the-result" class="md-nav__link">
-    Step 7: reflect on the result
+    Step 7: Reflect on the result
   </a>
   
 </li>
@@ -448,6 +448,26 @@
   <a href="#adding-logdna" class="md-nav__link">
     Adding LogDNA
   </a>
+  
+    <nav class="md-nav" aria-label="Adding LogDNA">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-enabling-the-add-on" class="md-nav__link">
+    Step 1: Enabling the add-on
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-opening-logdna" class="md-nav__link">
+    Step 2: Opening logdna
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -582,7 +602,7 @@
         
           <li class="md-nav__item">
   <a href="#step-7-reflect-on-the-result" class="md-nav__link">
-    Step 7: reflect on the result
+    Step 7: Reflect on the result
   </a>
   
 </li>
@@ -726,6 +746,26 @@
     Adding LogDNA
   </a>
   
+    <nav class="md-nav" aria-label="Adding LogDNA">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-enabling-the-add-on" class="md-nav__link">
+    Step 1: Enabling the add-on
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-opening-logdna" class="md-nav__link">
+    Step 2: Opening logdna
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -784,7 +824,7 @@ As such, anything that can deploy a Spring Boot project can deploy a Springboard
 <p>When here, click the prompt to <code>Connect to Github</code>. If you don't see this prompt, then navigate to the <code>Settings</code> tab. Once on this page, search for your GitHub repo then connect.</p>
 <p><a href="../images/heroku-pipeline-connected.png"><img alt="heroku connected pipeline" src="../images/heroku-pipeline-connected.png" /></a></p>
 <p>While you're here, I'd really recommend enabling <a href="https://devcenter.heroku.com/articles/github-integration-review-apps">review apps</a>. You can see the settings we recommend in the image below:</p>
-<p><a href="images/heroku-review.settings.png"><img alt="heroku connected pipelione enable review apps" src="../images/heroku-review-settings.png" /></a></p>
+<p><a href="../images/heroku-review-settings.png"><img alt="heroku connected pipelione enable review apps" src="../images/heroku-review-settings.png" /></a></p>
 <p>They'll give you a great way to interact with pull request changes before merging. Springboard comes with an <code>app.json</code> file configured that specifies the required postgres database for your review apps. If you'd like to add other addons for each review app, then you can do so by modifying <code>app.json</code>. Heroku will respect the changes on the next deploy.</p>
 <h3 id="step-3-enable-automatic-deploys">Step 3: Enable automatic deploys</h3>
 <p>Navigate back to the <code>Pipeline</code> tab to see the new setup.</p>
@@ -806,7 +846,8 @@ kicked off Cypress to test your front-end. Once it's done, you should see someth
 <p><a href="../images/github-pull-request-review-created.png"><img alt="pull request with deployment" src="../images/github-pull-request-review-created.png" /></a></p>
 <p>Click the <code>View deployment</code> button and... Ta-da!</p>
 <p><a href="../images/review-app-deployed.png"><img alt="pull request with deployment" src="../images/review-app-deployed.png" /></a></p>
-<p>Our review app is live! This has its own Heroku Postgres instance spun up, so we can play around with it without impacting a shared database.</p>
+<p>Our review app is live! This has its own Heroku Postgres instance spun up, so we can play around with it without impacting 
+a shared database. Note: we've still not finished the setup for our production app yet - read on to finish the required setup.</p>
 <h3 id="step-5-merging-to-master-and-deploying-to-production">Step 5: Merging to master and deploying to production</h3>
 <p>Now we've done some QA on our review app, we'll merge the pull request and deploy to production. Normally, this is 
 where a teammate would review our change, but for now we can safely click the <code>Merge</code> button and carry on solo.</p>
@@ -829,7 +870,7 @@ Automated provisioning of these resources is out of the scope of this tutorial, 
 <p>Now click <code>More</code> at the top right and <code>Restart all dynos</code>. Now - after the restart completes - we can try clicking <code>Open App</code> again...</p>
 <p><a href="../images/deploy-success.png"><img alt="Deployment was successful" src="../images/deploy-success.png" /></a></p>
 <p>Success! Our app is now live in production!</p>
-<h3 id="step-7-reflect-on-the-result">Step 7: reflect on the result</h3>
+<h3 id="step-7-reflect-on-the-result">Step 7: Reflect on the result</h3>
 <p>To conclude, we now have:</p>
 <ul>
 <li>an automated process that runs all of our tests for a pull request;</li>
@@ -934,7 +975,21 @@ documentation <a href="https://docs.sentry.io/workflow/integrations/global-integ
 <p>Sentry recommends using GitHub actions to set up Sentry with runtime information and releases. We haven't gotten around to 
 doing this for Springboard yet, but you can follow their guidelines <a href="https://blog.sentry.io/2019/12/17/using-github-actions-to-create-sentry-releases">here</a>.</p>
 <h2 id="adding-logdna">Adding LogDNA</h2>
-<p>TODO</p>
+<p><a href="https://logdna.com/">LogDNA</a> is a log aggregation product that includes a bunch of nice features at a reasonable price. 
+If you'd like to use something else, then feel free! Springboard logs to STDOUT in a JSON format in production, so you should 
+be able to use almost any log aggregation product. </p>
+<p>We'll be using the Heroku add-on to <a href="https://elements.heroku.com/addons/logdna">deploy this</a>.</p>
+<h3 id="step-1-enabling-the-add-on">Step 1: Enabling the add-on</h3>
+<p>First, let's run the Heroku CLI command <code>heroku addons:create logdna:quaco</code> to enable the free tier of logdna:</p>
+<p><a href="../images/heroku-cli-logdna.png"><img alt="enabling logdna in heroku cli" src="../images/heroku-cli-logdna.png" /></a></p>
+<p>Nothing more to see here really.</p>
+<h3 id="step-2-opening-logdna">Step 2: Opening logdna</h3>
+<p>Let's use the Heroku CLI to open logdna. Run <code>heroku addons:open logdna</code> in the terminal in your application directory and 
+you'll be taken to logdna:</p>
+<p><a href="../images/logdna-dashboard.png"><img alt="logdna dashboard" src="../images/logdna-dashboard.png" /></a></p>
+<p>Huzzah! Here we can see everything that's logged by every running dyno for our production application. There are a bunch of features 
+in logdna that are worth exploring. You can find out more in their <a href="https://docs.logdna.com/docs">documentation</a>.</p>
+<p>Log aggregation doesn't depend on much in the way of application behaviour, so there's nothing specific to Springboard here really.</p>
                 
                   
                 
