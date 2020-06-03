@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <div class="navbar-menu is-hidden-tablet" data-target="menu.toggleable" data-test="mobile-menu">
+    <div class="navbar-menu is-hidden-desktop" data-target="menu.toggleable" data-test="mobile-menu">
         <div class="navbar-item">
         {% include 'components/dashboard-menu' %}
         </div>
