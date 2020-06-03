@@ -48,6 +48,7 @@ html {
   .form-layout {
     display: flex;
     flex-direction: column;
+    overflow: scroll;
   }
 
   .has-centered-content {
