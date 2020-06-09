@@ -26,7 +26,7 @@ Springboard comes out-of-the-box with everything you need to launch your rich we
 If there's something you think we're missing, then open an issue on the github.
 
 ## Who is this for?
-When starting https://www.happyvalley.io/ there were definite gaps in our knowledge. Coming from corporate backgrounds, we hadn't really needed to deal with a bunch of the fixed up-front setup that working on a small team (or as a solo developer) requires. I mean, how often do you have to re-build the password reset emails?
+When starting [Happy Valley IO](https://www.happyvalley.io/) there were definite gaps in our knowledge. Coming from corporate backgrounds, we hadn't really needed to deal with a bunch of the fixed up-front setup that working on a small team (or as a solo developer) requires. I mean, how often do you have to re-build the password reset emails?
 
 We based the tech choices we've made in Springboard around our imagined typical JVM developer who's trying to launch a SaaS product in their spare time, or starting their own company. A developer who is very comfortable working in a standard Spring Boot setup and knows enough front-end to build a great user experience without necessarily being an expert in how modern front-end build pipelines work. That's not to say that it won't work well in a larger org, but we're not building with them in mind.
 
