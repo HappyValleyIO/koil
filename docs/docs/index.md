@@ -12,13 +12,13 @@ date: 2020-06-09
 ## What is it?
 Springboard is an opinionated, full-stack template for building server-rendered applications in Kotlin without sacrificing the developer experience provided by modern front-end tooling. 
 
-Springboard comes with everything out-of-the-box to allow you to launch a rich web application in hours rather than weeks. We include:
+Springboard comes out-of-the-box with everything you need to launch your rich web application in hours rather than weeks. We include:
 
 * authentication workflows (including password reset emails, registration and more);
 * live-reload in development; 
 * CSS pre-processors;
 * Typescript;
-* a bunch of StimulusJS controllers to give you a base of interactivity;
+* a core set of common StimulusJS controllers required for basic reactivity;
 * rich example-driven documentation (everything from making a change, to writing the test, to running in production);
 * production deployment niceties (including caching of static assets with hashed names);
 * and more. 
@@ -49,4 +49,4 @@ What's more, there no reason that you can't use these frameworks in Springboard.
 ## Why are you releasing this for free?
 Through open source all things are possible - so jot that down. We've benefited tremendously from open source, and we want to give back.
 
-From a business perspective, we're hoping to benefit through this as a marketing exercise, offering professional support and to figure out a premium version that we'll release in parallel at some point. 
+From a business perspective, we will only benefit from marketing of our core consulting business with the free version but we are planning on releasing a premium licensed version with additional features later this year.
