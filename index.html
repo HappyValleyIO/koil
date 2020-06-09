@@ -19,7 +19,7 @@
     
     
       
-        <title>Springboard</title>
+        <title>Welcome to SpringBoard</title>
       
     
     
@@ -80,7 +80,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              Welcome to Springboard
+              Welcome to SpringBoard
             
           </span>
         </div>
@@ -188,9 +188,63 @@
       
     
     
-    <a href="." title="Welcome to Springboard" class="md-nav__link md-nav__link--active">
-      Welcome to Springboard
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Welcome to SpringBoard
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="." title="Welcome to SpringBoard" class="md-nav__link md-nav__link--active">
+      Welcome to SpringBoard
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-it" class="md-nav__link">
+    What is it?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#who-is-this-for" class="md-nav__link">
+    Who is this for?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-is-it-better-than-the-alternatives" class="md-nav__link">
+    Why is it better than the alternatives?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-are-you-releasing-this-for-free" class="md-nav__link">
+    Why are you releasing this for free?
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -308,6 +362,44 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-it" class="md-nav__link">
+    What is it?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#who-is-this-for" class="md-nav__link">
+    Who is this for?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-is-it-better-than-the-alternatives" class="md-nav__link">
+    Why is it better than the alternatives?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-are-you-releasing-this-for-free" class="md-nav__link">
+    Why are you releasing this for free?
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -327,8 +419,39 @@
                 
                 
                 <h1 id="welcome-to-springboard">Welcome to Springboard</h1>
-<p>These docs are very much a work in progress. You can contribute by going to the repo at <a href="https://github.com/HappyValleyIO/springboard">the github repo</a>
-For full documentation visit <a href="http://mkdocs.org">mkdocs.org</a>.</p>
+<h2 id="what-is-it">What is it?</h2>
+<p>Springboard is an opinionated, full-stack template for building server-rendered applications in Kotlin without sacrificing the developer experience provided by modern front-end tooling. </p>
+<p>Springboard comes with everything out-of-the-box to allow you to launch a rich web application in hours rather than weeks. We include:</p>
+<ul>
+<li>authentication workflows (including password reset emails, registration and more);</li>
+<li>live-reload in development; </li>
+<li>CSS pre-processors;</li>
+<li>Typescript;</li>
+<li>a bunch of StimulusJS controllers to give you a base of interactivity;</li>
+<li>rich example-driven documentation (everything from making a change, to writing the test, to running in production);</li>
+<li>production deployment niceties (including caching of static assets with hashed names);</li>
+<li>and more. </li>
+</ul>
+<p>If there's something you think we're missing, then open an issue on the github.</p>
+<h2 id="who-is-this-for">Who is this for?</h2>
+<p>When starting https://www.happyvalley.io/ there were definite gaps in our knowledge. Coming from corporate backgrounds, we hadn't really needed to deal with a bunch of the fixed up-front setup that working on a small team (or as a solo developer) requires. I mean, how often do you have to re-build the password reset emails?</p>
+<p>We based the tech choices we've made in Springboard around our imagined typical JVM developer who's trying to launch a SaaS product in their spare time, or starting their own company. A developer who is very comfortable working in a standard Spring Boot setup and knows enough front-end to build a great user experience without necessarily being an expert in how modern front-end build pipelines work. That's not to say that it won't work well in a larger org, but we're not building with them in mind.</p>
+<p>This is a tool for users who love Spring Boot, who love working on the JVM, who love simple production infrastructure, and who want to deploy their product now. This is a tool for Java/Kotlin developer who look at Ruby on Rails devs with a little bit of envy. We're optimizing not for technical purity here, but for Getting Shit Done.</p>
+<p>Effectively, this is what we wish we'd had available when we left corporate life.</p>
+<h2 id="why-is-it-better-than-the-alternatives">Why is it better than the alternatives?</h2>
+<p>While we've historically embraced the vogue in tech (spinning up JSON API's that powered SPA front-ends), we've come to the conclusion that we can do something simpler without giving up user or developer experience. To be honest, we've found it's easier to have fast, bug-free front-end code without large javascript bundles.</p>
+<p>We believe that we've cherry-picking the best of two worlds in Springboard:</p>
+<ul>
+<li>we have the JVM as our main runtime platform, giving us great performance, great stability and a terrific eco-system to leverage;</li>
+<li>we  have a Node.js based build pipeline for our front-end, allowing us to leverage great tools like Typescript, SASS and best-in-class asset bundling to have the best developer experience possible.</li>
+</ul>
+<p>In this way, we can take advantage of the best parts of building a traditional monolithic MPA (initial load performance, amazing editor integration for view-models, easy deployment, etc.) without sacrificing the awesome tools that we've loved using while working on SPA's in Vue or React.</p>
+<p>What's more, there no reason that you can't use these frameworks in Springboard. We just think you'll be happy to kick things off without them :).</p>
+<h2 id="why-are-you-releasing-this-for-free">Why are you releasing this for free?</h2>
+<p>Through open source all things are possible - so jot that down. We've benefited tremendously from open source, and we want to give back.</p>
+<p>From a business perspective, we're hoping to benefit through this as a marketing exercise, offering professional support and to figure out a premium version that we'll release in parallel at some point. </p>
+                
+                  
                 
               
               
