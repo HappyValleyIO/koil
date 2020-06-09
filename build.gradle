@@ -109,7 +109,6 @@ task copyAssets(type: Copy) {
   }
 
   into buildAssetsDir
-  rename '.peb', '.peb.html'
 
   // Try to preserve timestamps:
   def copyDetails = []
@@ -145,7 +144,7 @@ task buildAssets(type: NpxTask) {
   dependsOn copyAssets
   command = 'parcel'
   environment = ['NODE_ENV': 'development']
-  args = ['build', './src/**/*.html', '--cache-dir', "$projectDir/.cache", '--no-minify']
+  args = ['build', './src/**/*.peb', '--cache-dir', "$projectDir/.cache", '--no-minify']
 
   inputs.files(fileTree("$buildAssetsDir/src"))
   inputs.file("$buildAssetsDir/package.json")
@@ -157,7 +156,6 @@ task copyBundledTemplates(type: Copy) {
   dependsOn processResources // So that we overwrite the existing
   from "$buildAssetsDir/dist/templates"
   into "$buildDir/resources/main/templates"
-  rename '.peb.html', '.peb'
 }
 
 task bundleAssets(type: Copy) {
@@ -172,7 +170,7 @@ compileKotlin.dependsOn bundleAssets
 task buildProdAssets(type: NpxTask) {
   dependsOn bundleAssets
   command = 'parcel'
-  args = ['build', './src/**/*.html', '--cache-dir', "$projectDir/.cache"]
+  args = ['build', './src/**/*.peb', '--cache-dir', "$projectDir/.cache"]
 
   inputs.files(fileTree("$buildAssetsDir/src"))
   inputs.file("$buildAssetsDir/package.json")
@@ -184,7 +182,6 @@ task copyBundledProdTemplates(type: Copy) {
   dependsOn processResources // So that we overwrite the existing
   from "$buildAssetsDir/dist/templates"
   into "$buildDir/resources/main/templates"
-  rename '.peb.html', '.peb'
 }
 
 task bundleProdAssets(type: Copy) {
