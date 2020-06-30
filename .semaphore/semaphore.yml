@@ -13,3 +13,12 @@ blocks:
             - sem-version java 1.8
             - checkout
             - ./gradlew build
+      prologue:
+        commands:
+          - cache restore gradle-node .node
+          - cache restore node-modules ./build/webapp/node_modules
+      epilogue:
+        always:
+          commands:
+            - cache store gradle-node .node
+            - cache store node-modules ./build/webapp/node_modules
