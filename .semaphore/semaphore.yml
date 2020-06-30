@@ -15,8 +15,8 @@ blocks:
             - ./gradlew build
       prologue:
         commands:
-          - cache restore gradle-node .node
-          - cache restore node-modules ./build/webapp/node_modules
+          - cache restore gradle-node
+          - cache restore node-modules
       epilogue:
         always:
           commands:
