@@ -12,7 +12,7 @@ blocks:
           commands:
             - sem-version java 1.8
             - checkout
-            - ./gradlew build
+            - ./gradlew build --info
       prologue:
         commands:
           - cache restore gradle-node
