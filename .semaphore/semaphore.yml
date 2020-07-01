@@ -23,4 +23,4 @@ blocks:
           commands:
             - cache store gradle-node .node
             - cache store node-modules ./build/webapp/node_modules
-            - 'cache store gradle-cache ${GRADLE_USER_HOME}'
+            - cache store gradle-cache ~/.gradle
