@@ -1,0 +1,667 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the Springboard JVM SAAS starter.">
+      
+      
+      
+        <meta name="author" content="Happy Valley IO - https://www.happyvalley.io">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.1, mkdocs-material-5.1.6">
+    
+    
+      
+        <title>Gettingstarted - Springboard</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.4b9ffd7b.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#getting-started-with-springboard" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../.." title="Springboard" class="md-header-nav__button md-logo" aria-label="Springboard">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Springboard
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Gettingstarted
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/HappyValleyIO/springboard/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Springboard" class="md-nav__button md-logo" aria-label="Springboard">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Springboard
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/HappyValleyIO/springboard/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Welcome to SpringBoard" class="md-nav__link">
+      Welcome to SpringBoard
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Deploy
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Deploy" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Deploy
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../deploy/heroku/" title="Deploy to Heroku" class="md-nav__link">
+      Deploy to Heroku
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Tutorials
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Tutorials
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../cypress/" title="Testing the front-end with Cypress" class="md-nav__link">
+      Testing the front-end with Cypress
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Gettingstarted
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="Gettingstarted" class="md-nav__link md-nav__link--active">
+      Gettingstarted
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pulling-the-project-form-github" class="md-nav__link">
+    Pulling the Project form GitHub
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-it-to-run-short-version" class="md-nav__link">
+    Getting it to Run (Short Version)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-it-to-run-long-version" class="md-nav__link">
+    Getting it to Run (Long Version)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customize-the-project-database-name" class="md-nav__link">
+    Customize the Project - Database Name
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customize-the-project-change-the-applications-primary-color" class="md-nav__link">
+    Customize the Project - Change the Applications Primary Color
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../static/" title="How to add a static page" class="md-nav__link">
+      How to add a static page
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pulling-the-project-form-github" class="md-nav__link">
+    Pulling the Project form GitHub
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-it-to-run-short-version" class="md-nav__link">
+    Getting it to Run (Short Version)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-it-to-run-long-version" class="md-nav__link">
+    Getting it to Run (Long Version)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customize-the-project-database-name" class="md-nav__link">
+    Customize the Project - Database Name
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customize-the-project-change-the-applications-primary-color" class="md-nav__link">
+    Customize the Project - Change the Applications Primary Color
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/HappyValleyIO/springboard/edit/master/docs/tutorials/gettingstarted.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  
+                
+                
+                <hr />
+<p>title: Getting Started with Springboard
+summary: A walkthrough of how to pull down the Springboard project, get it running for the first time in Intellij and 
+start customizing a few pieces of the project.
+authors:
+    - Hilary Fairchild-Carbonell
+date: 2020-06-02</p>
+<hr />
+<h1 id="getting-started-with-springboard">Getting Started with Springboard</h1>
+<p>This is a guide to actually starting your first project with Springboard- step by step instructions from pulling the
+project down, getting it running for the first time and a few ways to start customizing it to be your own project.</p>
+<p>We use IntelliJ as our IDE so the instructions given below assume you have IntelliJ as well. If you want a tutorial
+using another IDE, let us know and we can add it!</p>
+<p>This tutorial intentionally goes step-by-step through common errors or mistakes someone might make while trying to get the project running.
+If you are an experienced developer- some of it might seem obvious and unnecessary to you.</p>
+<h2 id="pulling-the-project-form-github">Pulling the Project form GitHub</h2>
+<p>This might be an obvious one- but use the git clone command to pull down the Springboard Project.</p>
+<div class="codehilite"><pre><span></span><code>git clone git@github.com:HappyValleyIO/springboard.git rvroger
+</code></pre></div>
+
+
+<h2 id="getting-it-to-run-short-version">Getting it to Run (Short Version)</h2>
+<p>This is the quick version to get Springboard to run successfully for the first time. If you want a bit more of an
+explanation of possible errors or why you are making changes - checkout the long version <a href="#getting-it-to-run-long-version">here</a></p>
+<ul>
+<li>Run the docker-compose up -d command in the folder that you've cloned the project into</li>
+<li>Open the project in Intellij. Wait for it to import the Gradle project. (2 minutes on a beefy computer)</li>
+<li>Run the SpringbootApplication</li>
+<li>Edit the Run Configuration while it builds the project (the initial build took just under 3 minutes on a beefy computer). You need to add the environment variable for running in Spring DEV (SPRING_PROFILES_ACTIVE=dev) to the configuration.</li>
+<li>Once the build finishes, the initial SpringBootApplication run will have failed. Now re-run it with your newly saved environment variables</li>
+<li>You should now be able to go to localhost:8080 and see the project running successfully.</li>
+</ul>
+<h2 id="getting-it-to-run-long-version">Getting it to Run (Long Version)</h2>
+<p>Now we have pulled down the Springboard project, let's open it in your favorite IDE. I'm going to be using IntelliJ.</p>
+<ul>
+<li>Open IntelliJ</li>
+<li>File -&gt; Open -&gt; rvroger</li>
+</ul>
+<p>This is going to import the "rvroger" Gradle project. It can take a few minutes to pull in all the dependencies.
+ It's tempting to click "Background" on the task and start changing things, but go make a cup of tea or coffee and 
+ just let it finish. (It took 2 minutes and 19 seconds for my computer to finish getting everything setup)</p>
+<p>Now let's run the application and see what we have. If you open "src/main/kotlin/org.springboard" and right click
+ SpringboardApplication.kt, the "Run" option should be available in the menu (or if you are a shortcut wizard -
+  "CTRL + SHIFT + F10"). Since this is the first time you will have built the project, it is going to take a bit of 
+  time to run. The "buildAssets" step in particular will take up the majority of this time. Mine took another 2 
+  minutes and 46 seconds to finish the build.</p>
+<p>Now IntelliJ has finished the build- it's going to start running our application!</p>
+<p>Anddd we get a horrible error blowup:</p>
+<p><a href="../images/getting-started-missing-dev.png"><img alt="Error Logs for Initially Starting IntelliJ Without DEV Spring Profile" src="../images/getting-started-missing-dev.png" /></a></p>
+<p>If we drill down and read the stack trace- we see the root cause here: </p>
+<div class="codehilite"><pre><span></span><code>Driver org.postgresql.Driver claims to not accept jdbcUrl, jdbc:postgresql://<span class="cp">${</span><span class="n">DB_SERVER</span><span class="cp">}</span>:<span class="cp">${</span><span class="n">DB_PORT</span><span class="cp">}</span>/<span class="cp">${</span><span class="n">DB_NAME</span><span class="cp">}</span>
+</code></pre></div>
+
+
+<p>Take a look at our main resources- we have application.properties and application-dev.properties. By default, Spring
+ is going to pick up application.properties, which, if we open it, expects to find environment variables for the 
+ database configuration. </p>
+<p><a href="../images/getting-started-application-properties.png"><img alt="Initial Application Properties File" src="../images/getting-started-application-properties.png" /></a></p>
+<p>We are just trying to run a development instance here- so looking at application-dev.properties, it's already 
+configured some test database properties. </p>
+<p><a href="../images/getting-started-dev-application-properties.png"><img alt="Initial DEV Application Properties File" src="../images/getting-started-dev-application-properties.png" /></a></p>
+<p>Since the DEV application properties file contains everything we need to run a local development instance of our 
+application, we need to make sure that this is the file being picked up when we run. Let's edit the Run Configuration 
+for SpringboardApplication so that it uses the DEV spring profile. Since we tried  to run this already- 
+IntelliJ has a Run Configuration setup for us if we "Edit Configurations" from the run configuration menu.</p>
+<p>We need to add an environment variable:</p>
+<div class="codehilite"><pre><span></span><code><span class="err">SPRING_PROFILES_ACTIVE=dev</span>
+</code></pre></div>
+
+
+<p><a href="../images/getting-started-run-configuration.png"><img alt="Initial Run Configuration" src="../images/getting-started-run-configuration.png" /></a></p>
+<p>Save and let's try running with the new configuration changes.</p>
+<p>Again! Horrible errors:</p>
+<p><a href="../images/getting-started-dev-profile-db-down.png"><img alt="Errors Running after DEV Active Profile Update" src="../images/getting-started-dev-profile-db-down.png" /></a></p>
+<p>Looking at the error messages, the root error here is:</p>
+<p><code>Unable to obtain connection from database: FATAL: password authentication failed for user "root"</code></p>
+<p>We forgot to start the database- so it's unable to connect when trying to login. The database runs in a docker-container
+ that we can start up using docker-compose. </p>
+<p>Using the terminal, go to the main project directory (rvroger in my case) then run the following command to bring
+ up the database:</p>
+<p><a href="../images/getting-started-docker-startup.png"><img alt="Docker Compose Commands" src="../images/getting-started-docker-startup.png" /></a></p>
+<p>Now we have the database up and running, let's finally start our application. Going back to Intellij, we re-run our 
+SpringboardApplication with the edited configuration to pickup the dev credentials - and now we have the actual 
+application started successfully.</p>
+<p><a href="../images/getting-started-application-start-successful.png"><img alt="Logs of Application Starting Successfully" src="../images/getting-started-application-start-successful.png" /></a></p>
+<p>Now open "http://localhost:8080" in your browser and you can see we have the Springboard starter running! We can even 
+create a new account and login.</p>
+<p><a href="../images/getting-started-initial-website-landing-page.png"><img alt="Website Landing Page" src="../images/getting-started-initial-website-landing-page.png" /></a></p>
+<p><a href="../images/getting-started-initial-register-page.png"><img alt="Website Register Page" src="../images/getting-started-initial-register-page.png" /></a></p>
+<p><a href="../images/getting-started-initial-logged-in-page.png"><img alt="Logged in Homepage" src="../images/getting-started-initial-logged-in-page.png" /></a></p>
+<p>That's it! You have a basic application with a website homepage, account registration and a basic dashboard upon logging in.</p>
+<p>Now we have the project running, let's customize the project a bit, so it isn't just a basic Springboard Template.</p>
+<h2 id="customize-the-project-database-name">Customize the Project - Database Name</h2>
+<p>I started my career as a database developer - so I'm going to start with the dev database setup. Let's rename it from 
+"springboard" to our project name (rvroger in my case)</p>
+<p>Open docker-compose.yml and on line 11 the database name is specified.</p>
+<p><a href="../images/customize-database-name.png"><img alt="Docker Compose Configuration File" src="../images/customize-database-name.png" /></a></p>
+<p>I'm going to replace the db name from "springboard" to "rvroger" and then we will need to restart our database.</p>
+<p>In the main project directory in the terminal- bring down the current docker stack:</p>
+<div class="codehilite"><pre><span></span><code><span class="err">docker-compose down</span>
+</code></pre></div>
+
+
+<p>Then bring it back up with</p>
+<div class="codehilite"><pre><span></span><code><span class="err">docker-compose up -d</span>
+</code></pre></div>
+
+
+<p><a href="../images/customize-database-name-docker-commands.png"><img alt="Docker Compose Command Line Operations" src="../images/customize-database-name-docker-commands.png" /></a></p>
+<p>Now, we have to tell the application dev setup to use the new database name. This is done by editing the 
+application-dev.properties file. The datasource url needs to be updated to use the new database name.</p>
+<p><a href="../images/customize-database-name-dev-properties.png"><img alt="Dev Application Properties - Database Name Configuration" src="../images/customize-database-name-dev-properties.png" /></a></p>
+<p>Now we can rebuild the project, either with the IntelliJ run buttons or "CTRL+F9" and we are back up and running, with a 
+newly named Dev database.</p>
+<h2 id="customize-the-project-change-the-applications-primary-color">Customize the Project - Change the Applications Primary Color</h2>
+<p>This is a bit of a silly change- but it's important to make your application feel like it is yours. So we are going to 
+change the primary color used by all the UI for the project.</p>
+<p>The variables used by all the SCSS in this project are within the "src/webapp/src/styles/components" directory in the 
+"variables.scss" file.</p>
+<p><a href="../images/scss-variables.png"><img alt="SCSS Project Variables Location" src="../images/scss-variables.png" /></a></p>
+<p>If you open the variables.scss file, we can see that there are a number of color variables listed.</p>
+<p><a href="../images/variables-scss-file.png"><img alt="SCSS Project Variables Location" src="../images/variables-scss-file.png" /></a></p>
+<p>We are just going to change one right now- the $primary variable. This variable controls the color of all attributes on 
+the project marked as "primary". With the basic existing Springboard project, this is mainly going to affect things like 
+button colors and backgrounds.</p>
+<p>Before we make this change- make sure you have an instance of SpringboardApplication up and running. We want to see 
+this change happen live.</p>
+<p>Initially- your website is going to look like this:</p>
+<p><a href="../images/getting-started-initial-website-landing-page.png"><img alt="Website Landing Page" src="../images/getting-started-initial-website-landing-page.png" /></a></p>
+<p>I've created a new variable for this project called "rvroger-blue". This gives me the option of referencing this color 
+for things other than primary classes in the future. Then I set the $primary variable to my new $rvroger-blue variable.</p>
+<p><a href="../images/updated-variables.png"><img alt="Website Landing Page" src="../images/updated-variables.png" /></a></p>
+<p>Hit 'CTRL + F9' to rebuild the project - and watch the browser change from the Springboard maroon/red to our new primary blue color.</p>
+<p><a href="../images/updated-primary-variable-landing-page.png"><img alt="Website Landing Page" src="../images/updated-primary-variable-landing-page.png" /></a></p>
+<p>That's just a starting point- but it lets you see how easily you can start to customize Springboard to get your 
+application moving quickly. Changing something as simple as the primary project color starts to make the project feel 
+like <em>your</em> application, not just the template.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../cypress/" title="Testing the front-end with Cypress" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Testing the front-end with Cypress
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../static/" title="How to add a static page" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                How to add a static page
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.a0c4167b.min.js"></script>
+      <script src="../../assets/javascripts/bundle.fb26dd1d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.37585f48.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>
