@@ -1,7 +1,6 @@
 ---
 title: Getting Started with Springboard
-summary: A walkthrough of how to pull down the Springboard project, get it running for the first time in Intellij and 
-start customizing a few pieces of the project.
+summary: A walkthrough of how to pull down the Springboard project, get it running for the first time in Intellij and start customizing a few pieces of the project.
 authors:
     - Hilary Fairchild-Carbonell
 date: 2020-06-02
@@ -194,4 +193,8 @@ Hit 'CTRL + F9' to rebuild the project - and watch the browser change from the S
 
 That's just a starting point- but it lets you see how easily you can start to customize Springboard to get your 
 application moving quickly. Changing something as simple as the primary project color starts to make the project feel 
-like *your* application, not just the template.
+like *your* application, not just a template.
+
+
+# Next Steps
+Now that you've got things going, why not learn [how to write a cypress test](cypress.md) or [how to deploy to production with heroku](../deploy/heroku.md)?
