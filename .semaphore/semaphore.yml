@@ -12,15 +12,4 @@ blocks:
           commands:
             - sem-version java 1.8
             - checkout
-            - ./gradlew build --info
-      prologue:
-        commands:
-          - cache restore gradle-node
-          - cache restore node-modules
-          - cache restore gradle-cache
-      epilogue:
-        always:
-          commands:
-            - cache store gradle-node .node
-            - cache store node-modules ./build/webapp/node_modules
-            - cache store gradle-cache ~/.gradle
+            - ./gradlew build
