@@ -1,5 +1,11 @@
 name: github pages
-on: [push]
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-18.04
