@@ -25,7 +25,7 @@ class CypressIntegrationTest {
   var port = 0
 
   private fun createCypressContainer(): KGenericContainer? {
-    val result: KGenericContainer = KGenericContainer("cypress/included:4.5.0")
+    val result: KGenericContainer = KGenericContainer("cypress/included:5.3.0")
       .withCommand("run")
       .withLogConsumer(Slf4jLogConsumer(LOGGER))
       .withSharedMemorySize(1024L * 1024 * 1024 * 4) // Chrome chews through memory. This is a hacky way to stop it from dying
