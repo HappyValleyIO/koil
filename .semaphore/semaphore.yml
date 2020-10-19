@@ -13,3 +13,8 @@ blocks:
             - sem-version java 11
             - checkout
             - ./gradlew build
+      secrets:
+        - name: Docker Hub Login
+      prologue:
+        commands:
+          - echo $DOCKER_PASSWORD | docker login --username "$DOCKER_USERNAME" --password-stdin
