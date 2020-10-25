@@ -1,7 +1,7 @@
 package org.springboard.admin
 
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertTrue
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springboard.user.UserCreationResult
@@ -24,9 +24,11 @@ class AdminServiceTest {
     @Test
     fun `GIVEN no existing admin user WHEN attempting to create admin THEN return success`() {
         val email = "user+${Random().nextInt()}@getspringboard.dev"
-        val result = adminService.createAdminFromEmail(email)
+        val result = adminService.createAdminFromEmail(email, "SomePass123!")
 
-        assertTrue("Admin was successfully created", result is UserCreationResult.CreatedUser)
+        assertTrue(result is UserCreationResult.CreatedUser) {
+            "Admin was successfully created"
+        }
 
         assertEquals(listOf("ADMIN"), userDetails.loadUserByUsername(email)!!.authorities.map { it.authority })
     }
@@ -34,10 +36,12 @@ class AdminServiceTest {
     @Test
     fun `GIVEN an admin user exists WHEN attempting to create admin THEN fail`() {
         val email = "user+${Random().nextInt()}@getspringboard.dev"
-        adminService.createAdminFromEmail(email)
-        val result = adminService.createAdminFromEmail(email)
+        adminService.createAdminFromEmail(email, "SomePass123!")
+        val result = adminService.createAdminFromEmail(email, "SomePass123!")
 
-        assertTrue("Admin already exists", result is UserCreationResult.UserAlreadyExists)
+        assertTrue(result is UserCreationResult.UserAlreadyExists) {
+            "Admin already exists"
+        }
     }
 
 }

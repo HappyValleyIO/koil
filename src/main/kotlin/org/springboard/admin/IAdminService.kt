@@ -6,35 +6,39 @@ import org.springboard.auth.AuthAuthority
 import org.springboard.user.UserCreationRequest
 import org.springboard.user.UserCreationResult
 import org.springboard.user.UserService
-import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.ApplicationListener
+import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Component
-import java.util.*
 
 interface IAdminService {
-    fun createAdminFromEmail(adminEmail: String): UserCreationResult
+    fun createAdminFromEmail(email: String, password: String): UserCreationResult
 }
 
 @Component
 class AdminServiceImpl(private val userService: UserService,
-                       @Value("\${admin-user.email:}") private val adminEmailFromEnv: String?) : IAdminService, InitializingBean {
+                       @Value("\${admin-user.email:}") private val adminEmailFromEnv: String,
+                       @Value("\${admin-user.password:}") private val adminPasswordFromEnv: String
+) : IAdminService, ApplicationListener<ContextRefreshedEvent> {
 
     companion object {
-        val LOGGER: Logger = LoggerFactory.getLogger(AdminServiceImpl::class.java)
+        private val LOGGER: Logger = LoggerFactory.getLogger(AdminServiceImpl::class.java)
     }
 
-    override fun afterPropertiesSet() {
-        adminEmailFromEnv?.takeIf { it.trim() != "" }?.let { email -> createAdminFromEmail(email) }
+    override fun onApplicationEvent(event: ContextRefreshedEvent) {
+        if (adminEmailFromEnv.isNotEmpty() && adminPasswordFromEnv.isNotEmpty()) {
+            createAdminFromEmail(adminEmailFromEnv, adminPasswordFromEnv)
+        }
     }
 
-    override fun createAdminFromEmail(adminEmail: String): UserCreationResult {
+    override fun createAdminFromEmail(email: String, password: String): UserCreationResult {
         return userService.createUser(UserCreationRequest("Default Admin",
-                adminEmail,
-                "RandomPass!${Random().nextInt()}",
+                email,
+                password,
                 "DefaultAdmin",
                 listOf(AuthAuthority.ADMIN))).also {
             if (it is UserCreationResult.CreatedUser) {
-                LOGGER.info("Created an admin account with email {}", adminEmail)
+                LOGGER.info("Created an admin account with email {}", email)
             }
         }
     }

@@ -1,3 +1,5 @@
+{# @pebvariable name="isAdmin" type="java.lang.Boolean" #}
+
 <div class="menu">
     <p class="menu-label">
         Springboard
@@ -17,4 +19,12 @@
             </a>
         </li>
     </ul>
+    {% if isAdmin %}
+        <p class="menu-label">
+            Admin
+        </p>
+        <ul class="menu-list">
+            <li><a href="/admin" data-test="dashboard-menu-admin-link">Admin Panel</a></li>
+        </ul>
+    {% endif %}
 </div>
