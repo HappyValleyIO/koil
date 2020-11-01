@@ -4,6 +4,8 @@ import com.mitchellbosecke.pebble.spring.servlet.PebbleViewResolver
 import org.jsoup.Jsoup
 import org.springboard.auth.AuthAuthority
 import org.springboard.user.EnrichedUserDetails
+import org.springboard.user.InternalUser
+import org.springboard.user.UserQueryResult
 import org.springframework.core.io.ClassPathResource
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
@@ -13,6 +15,7 @@ import org.springframework.test.util.AssertionErrors
 import org.springframework.web.servlet.ModelAndView
 import org.testcontainers.containers.GenericContainer
 import java.io.PrintWriter
+import java.time.Instant
 import java.util.*
 
 class KGenericContainer(imageName: String) : GenericContainer<KGenericContainer>(imageName)
@@ -75,4 +78,9 @@ fun PebbleViewResolver.regressionTestTemplate(
             throw e
         }
     }
+}
+
+fun internalTestUser(authorities: List<AuthAuthority> = listOf(AuthAuthority.ADMIN)): InternalUser {
+    return UserQueryResult(0, "test@example.com", "SomePass123!", Instant.now(),
+            "Test User", "user", null, authorities, UUID.randomUUID())
 }

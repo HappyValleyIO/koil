@@ -11,8 +11,22 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
+import java.util.*
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty
+
+interface InternalUser {
+    fun isAdmin(): Boolean = authorities.contains(AuthAuthority.ADMIN)
+
+    fun toAccount(): Account = Account(accountId, fullName, email, handle, publicId)
+
+    val accountId: Long
+    val email: String
+    val fullName: String
+    val handle: String
+    val publicId: UUID
+    val authorities: List<AuthAuthority>
+}
 
 data class UserCreationRequest(
         @get:NotEmpty val fullName: String,
@@ -22,7 +36,14 @@ data class UserCreationRequest(
         val authorities: List<AuthAuthority> = listOf(AuthAuthority.USER)
 )
 
-data class Account(val accountId: Long, val email: String, val handle: String)
+data class Account(val accountId: Long, val fullName: String, val email: String, val handle: String, val publicId: UUID) {
+    companion object {
+        fun fromUser(user: InternalUser): Account =
+                with(user) {
+                    Account(accountId, fullName, email, handle, publicId)
+                }
+    }
+}
 
 data class AccountCreationEvent(val src: Any, val account: Account) : ApplicationEvent(src)
 
@@ -34,7 +55,6 @@ sealed class UserCreationResult {
 }
 
 interface UserService {
-//    fun login(email: String, password: String): Account?
     fun createUser(request: UserCreationRequest): UserCreationResult
 }
 
@@ -48,7 +68,7 @@ class UserServiceImpl(
         return if (persistence.getUserByEmail(request.email) == null) {
             val encoded = request.copy(password = encoder.encode(request.password))
             val user = persistence.createUser(encoded)
-            val account = Account(user.accountId, user.email, user.handle)
+            val account = Account.fromUser(user)
 
             publisher.publishEvent(AccountCreationEvent(this, account))
 

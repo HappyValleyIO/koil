@@ -3,9 +3,7 @@ package org.springboard.admin
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springboard.auth.AuthAuthority
-import org.springboard.user.UserCreationRequest
-import org.springboard.user.UserCreationResult
-import org.springboard.user.UserService
+import org.springboard.user.*
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
@@ -13,12 +11,16 @@ import org.springframework.stereotype.Component
 
 interface IAdminService {
     fun createAdminFromEmail(email: String, password: String): UserCreationResult
+
+    fun getAccounts(queryingAsAccount: Long): List<Account>
 }
 
 @Component
 class AdminServiceImpl(private val userService: UserService,
                        @Value("\${admin-user.email:}") private val adminEmailFromEnv: String,
-                       @Value("\${admin-user.password:}") private val adminPasswordFromEnv: String
+                       @Value("\${admin-user.password:}") private val adminPasswordFromEnv: String,
+                       private val persistence: IAdminPersistence,
+                       private val userPersistence: UserPersistence
 ) : IAdminService, ApplicationListener<ContextRefreshedEvent> {
 
     companion object {
@@ -43,4 +45,13 @@ class AdminServiceImpl(private val userService: UserService,
         }
     }
 
+    override fun getAccounts(queryingAsAccount: Long): List<Account> {
+        val isAdmin = userPersistence.getUserByAccount(queryingAsAccount)?.isAdmin() ?: false
+
+        require(isAdmin) {
+            "Attempting to retrieve account as a non-admin user!"
+        }
+
+        return persistence.getAllAccounts()
+    }
 }
