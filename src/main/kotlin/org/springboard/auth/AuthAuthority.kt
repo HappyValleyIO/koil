@@ -16,3 +16,7 @@ enum class AuthAuthority(val ref: String) {
         }
     }
 }
+
+enum class AuthRole(val ref: String) {
+    ADMIN_IMPERSONATING_USER("ADMIN_IMPERSONATING_USER");
+}

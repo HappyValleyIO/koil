@@ -1,3 +1,4 @@
+/**
 {% macro hint(content) %}
 <span class="icon" data-controller="tippy" data-tippy-content="{{ content }}">
     <i class="fas fa-info-circle"></i>

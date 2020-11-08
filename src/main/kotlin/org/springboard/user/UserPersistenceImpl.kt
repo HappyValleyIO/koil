@@ -14,12 +14,20 @@ import java.util.*
 interface UserPersistence {
     fun getUserByEmail(email: String): UserQueryResult?
     fun getUserByAccount(accountId: Long): InternalUser?
-    fun createUser(request: UserCreationRequest): InternalUser
+    fun createUser(request: UserToStore): InternalUser
 }
 
 interface InternalUserPersistence {
     fun getUsers(email: String? = null, queryByAccountId: Long? = null): List<UserQueryResult>
 }
+
+data class UserToStore(
+        val fullName: String,
+        val email: String,
+        val password: String,
+        val handle: String,
+        val authorities: List<AuthAuthority> = listOf(AuthAuthority.USER)
+)
 
 data class UserQueryResult(
         override val accountId: Long,
@@ -44,7 +52,7 @@ class UserPersistenceImpl(private val jdbi: Jdbi) : UserPersistence, InternalUse
         return getUser(queryByAccountId = accountId)
     }
 
-    override fun createUser(request: UserCreationRequest): UserQueryResult {
+    override fun createUser(request: UserToStore): UserQueryResult {
         return jdbi.withHandle<UserQueryResult, RuntimeException> { handle ->
             val accountId = handle.createQuery(
                     """

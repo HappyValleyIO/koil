@@ -61,5 +61,29 @@ sizes.forEach(size => {
         })
       })
     })
+
+    it('should allow an admin to impersonate another user', () => {
+      cy.loginAsAdmin()
+      cy.get('@account').then(account => {
+        cy.get(`[data-test="account-row-${account.email}"]`)
+          .within(() => {
+            cy.get('[data-test=impersonate]').click()
+          })
+        if (size === 'macbook-13') {
+          cy.get('[data-test=user-handle]').contains(`@${account.username}`)
+          cy.get('[data-test=end-impersonation]').should('be.visible').click()
+          cy.get('[data-test=user-handle]').contains(`@DefaultAdmin`)
+        } else {
+          cy.get('[data-test=menu-button]').click()
+          cy.get('[data-test=user-handle-mobile]').contains(`@${account.username}`)
+          cy.get('[data-test=mobile-menu]').within(() => {
+            cy.get('[data-test=end-impersonation-mobile]').should('be.visible').click()
+          })
+
+          cy.get('[data-test=menu-button]').click()
+          cy.get('[data-test=user-handle-mobile]').contains('@DefaultAdmin')
+        }
+      })
+    })
   })
 });

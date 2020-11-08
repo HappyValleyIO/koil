@@ -1,6 +1,5 @@
 package org.springboard.auth
 
-import org.springboard.user.EnrichedUserDetails
 import org.springboard.user.UserServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -11,21 +10,19 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.web.csrf.CsrfToken
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor
+import org.springframework.security.web.authentication.switchuser.SwitchUserFilter
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository
-import org.springframework.web.bind.annotation.ControllerAdvice
-import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import java.util.concurrent.TimeUnit
-import javax.servlet.http.HttpServletRequest
-
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(@Autowired val userDetailsService: UserServiceImpl, val passwordEncoder: PasswordEncoder) :
+class SecurityConfig(private val userDetailsService: UserServiceImpl,
+                     private val passwordEncoder: PasswordEncoder,
+                     private val switchUserFilter: SwitchUserFilter) :
         WebSecurityConfigurerAdapter() {
 
     @Autowired
@@ -39,7 +36,9 @@ class SecurityConfig(@Autowired val userDetailsService: UserServiceImpl, val pas
         http.csrf()
                 .csrfTokenRepository(HttpSessionCsrfTokenRepository())
                 .and()
+                .addFilterAfter(switchUserFilter, FilterSecurityInterceptor::class.java)
                 .authorizeRequests()
+                .antMatchers("/admin/impersonation/logout").hasAuthority(AuthRole.ADMIN_IMPERSONATING_USER.name)
                 .antMatchers("/admin/**").hasAuthority(AuthAuthority.ADMIN.name)
                 .antMatchers("/dashboard/**").authenticated()
                 .anyRequest().permitAll()
@@ -61,26 +60,6 @@ class SecurityConfig(@Autowired val userDetailsService: UserServiceImpl, val pas
     @Bean
     override fun authenticationManager(): AuthenticationManager {
         return super.authenticationManager()
-    }
-}
-
-@ControllerAdvice
-class CsrfControllerAdvice {
-    @Autowired
-    private val request: HttpServletRequest? = null
-
-    @ModelAttribute("_csrf")
-    fun appendCSRFToken(): CsrfToken {
-        return request!!.getAttribute(CsrfToken::class.java.name) as CsrfToken
-    }
-}
-
-
-@ControllerAdvice
-class AdminControllerAdvice {
-    @ModelAttribute("isAdmin")
-    fun isAdmin(@AuthenticationPrincipal details: EnrichedUserDetails?): Boolean {
-        return details?.authorities?.contains(AuthAuthority.ADMIN.grantedAuthority) ?: false
     }
 }
 

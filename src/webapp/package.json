@@ -4,7 +4,8 @@
   "description": "An opinionated way to build monolithic spring-based web apps.",
   "private": true,
   "scripts": {
-    "build": "parcel build ./src/**/*.html"
+    "build": "parcel build ./src/**/*.html",
+    "cy:open": "cypress open"
   },
   "repository": {
     "type": "git",

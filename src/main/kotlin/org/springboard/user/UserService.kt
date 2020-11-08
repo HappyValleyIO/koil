@@ -2,52 +2,25 @@ package org.springboard.user
 
 import org.hibernate.validator.constraints.Length
 import org.springboard.auth.AuthAuthority
-import org.springframework.context.ApplicationEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
-import java.util.*
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty
-
-interface InternalUser {
-    fun isAdmin(): Boolean = authorities.contains(AuthAuthority.ADMIN)
-
-    fun toAccount(): Account = Account(accountId, fullName, email, handle, publicId)
-
-    val accountId: Long
-    val email: String
-    val fullName: String
-    val handle: String
-    val publicId: UUID
-    val authorities: List<AuthAuthority>
-}
 
 data class UserCreationRequest(
         @get:NotEmpty val fullName: String,
         @get:Email val email: String,
-        @get:Length(min = 8) val password: String,
+        @field:Length(min = 8) private val password: String,
         val handle: String,
         val authorities: List<AuthAuthority> = listOf(AuthAuthority.USER)
-)
-
-data class Account(val accountId: Long, val fullName: String, val email: String, val handle: String, val publicId: UUID) {
-    companion object {
-        fun fromUser(user: InternalUser): Account =
-                with(user) {
-                    Account(accountId, fullName, email, handle, publicId)
-                }
-    }
+) {
+    fun getPassword(encoder: PasswordEncoder): String = encoder.encode(password)
 }
-
-data class AccountCreationEvent(val src: Any, val account: Account) : ApplicationEvent(src)
-
-data class EnrichedUserDetails(val details: UserDetails, val accountId: Long, val handle: String) : UserDetails by details
 
 sealed class UserCreationResult {
     data class CreatedUser(val account: Account) : UserCreationResult()
@@ -66,8 +39,7 @@ class UserServiceImpl(
 ) : UserService, UserDetailsService {
     override fun createUser(request: UserCreationRequest): UserCreationResult {
         return if (persistence.getUserByEmail(request.email) == null) {
-            val encoded = request.copy(password = encoder.encode(request.password))
-            val user = persistence.createUser(encoded)
+            val user = persistence.createUser(UserToStore(request.fullName, request.email, request.getPassword(encoder), request.handle, request.authorities))
             val account = Account.fromUser(user)
 
             publisher.publishEvent(AccountCreationEvent(this, account))

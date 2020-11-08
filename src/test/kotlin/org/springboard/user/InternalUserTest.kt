@@ -6,7 +6,9 @@ import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
 import org.springboard.auth.AuthAuthority
-import org.springboard.internalTestUser
+import java.time.Instant
+import java.util.*
+
 
 class InternalUserTest {
 
@@ -41,5 +43,10 @@ class InternalUserTest {
                 email = user.email,
                 handle = user.handle,
                 publicId = user.publicId))
+    }
+
+    private fun internalTestUser(authorities: List<AuthAuthority> = listOf(AuthAuthority.ADMIN)): InternalUser {
+        return UserQueryResult(0, "test@example.com", "SomePass123!", Instant.now(),
+                "Test User", "user", null, authorities, UUID.randomUUID())
     }
 }

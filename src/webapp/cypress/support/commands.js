@@ -35,10 +35,6 @@ function loadPageForCSRF(url) {
 Cypress.Commands.add('createAccount', (name, username, email, passwd) => {
   loadPageForCSRF('/auth/register')
     .then(csrf => {
-      const slug = Math.random()
-        .toString(36)
-        .substring(7)
-
       cy.request({
         url: '/auth/register',
         form: true,
@@ -76,8 +72,16 @@ Cypress.Commands.add('createRandomAccount', () => {
 })
 
 Cypress.Commands.add('createRandomAccountAndLogin', () => {
-    cy.createRandomAccount()
-    cy.get('@account').then(() => {
-        cy.visit('/dashboard')
-    })
+  cy.createRandomAccount()
+  cy.get('@account').then(() => {
+    cy.visit('/dashboard')
+  })
+})
+
+Cypress.Commands.add('loginAsAdmin', () => {
+  cy.visit('/auth/login')
+  cy.get('[data-test=login-email-input]').type('admin@getspringboard.dev')
+  cy.get('[data-test=login-password-input]').type('SecurePass123!')
+  cy.get('[data-test=login-submit]').click()
+  cy.visit('/admin')
 })
