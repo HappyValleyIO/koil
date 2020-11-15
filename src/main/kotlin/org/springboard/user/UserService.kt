@@ -1,8 +1,10 @@
 package org.springboard.user
 
 import org.hibernate.validator.constraints.Length
+import org.springboard.auth.AuthAuthority
 import org.springframework.context.ApplicationEvent
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -16,7 +18,8 @@ data class UserCreationRequest(
         @get:NotEmpty val fullName: String,
         @get:Email val email: String,
         @get:Length(min = 8) val password: String,
-        val handle: String
+        val handle: String,
+        val authorities: List<AuthAuthority> = listOf(AuthAuthority.USER)
 )
 
 data class Account(val accountId: Long, val email: String, val handle: String)
@@ -31,7 +34,7 @@ sealed class UserCreationResult {
 }
 
 interface UserService {
-    fun login(email: String, password: String): Account?
+//    fun login(email: String, password: String): Account?
     fun createUser(request: UserCreationRequest): UserCreationResult
 }
 
@@ -41,14 +44,6 @@ class UserServiceImpl(
         private val encoder: PasswordEncoder,
         private val publisher: ApplicationEventPublisher
 ) : UserService, UserDetailsService {
-    override fun login(email: String, password: String): Account? {
-        val user = persistence.getUserByEmail(email)
-        if (user != null && encoder.matches(password, user.password)) {
-            return Account(user.accountId, user.email, user.handle)
-        }
-        return null
-    }
-
     override fun createUser(request: UserCreationRequest): UserCreationResult {
         return if (persistence.getUserByEmail(request.email) == null) {
             val encoded = request.copy(password = encoder.encode(request.password))
@@ -67,7 +62,11 @@ class UserServiceImpl(
         val user = if (email != null) persistence.getUserByEmail(email) else null
         if (user !== null) {
             return EnrichedUserDetails(
-                    User.builder().username(user.email).password(user.password).authorities("USER").build(), user.accountId, user.handle
+                    User.builder()
+                            .username(user.email)
+                            .password(user.password)
+                            .authorities(user.authorities.map { SimpleGrantedAuthority(it.name) })
+                            .build(), user.accountId, user.handle
             )
         } else {
             throw UsernameNotFoundException("Could not find user $email")

@@ -1,0 +1,8 @@
+{# @pebvariable name="model" type="org.springboard.admin.AdminIndexViewModel" #}
+{% extends "layouts/admin-layout" %}
+{% block title %} Home {% endblock %}
+
+{% block content %}
+<h1>Welcome to the admin panel</h1>
+    <p>You're logged in as {{ model.userName }}</p>
+{% endblock %}

@@ -1,0 +1,9 @@
+<div class="menu">
+    <p class="menu-label">
+        Springboard
+    </p>
+    <ul class="menu-list">
+        <li><a href="/dashboard" data-controller="nav-link">Home</a></li>
+    </ul>
+
+</div>

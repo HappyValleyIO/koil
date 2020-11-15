@@ -5,7 +5,6 @@ import org.jdbi.v3.core.kotlin.mapTo
 import org.springboard.notifications.NotificationService
 import org.springboard.user.Account
 import org.springboard.user.UserPersistence
-import org.springboard.user.UserQueryResult
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
@@ -69,7 +68,7 @@ class AuthServiceImpl(
 }
 
 @Component
-class AuthPersistenceImpl(@Autowired private val jdbi: Jdbi) : AuthPersistence {
+class AuthPersistenceImpl(@Autowired private val jdbi: Jdbi, private val userPersistence: UserPersistence) : AuthPersistence {
 
     override fun persistPasswordResetCode(account: Long, code: UUID?, expires: ZonedDateTime) {
         return jdbi.useHandle<RuntimeException> {
@@ -89,21 +88,22 @@ class AuthPersistenceImpl(@Autowired private val jdbi: Jdbi) : AuthPersistence {
     }
 
     override fun getUserByCode(code: UUID): Account? {
-        return jdbi.withHandle<Account?, RuntimeException> {
-            it.createQuery(
+        return jdbi.withHandle<Account?, RuntimeException> { handle ->
+            handle.createQuery(
                     """
-                SELECT a.*, ac.email_address, ac.password FROM account_password_reset apr
-                    JOIN accounts a ON apr.account_id = a.account_id
+                SELECT a.account_id
+                    FROM accounts a 
+                    JOIN account_password_reset apr on a.account_id = apr.account_id
                     JOIN account_credentials ac ON apr.account_id = ac.account_id
                     WHERE apr.reset_code = :code
                     AND apr.expires_at > NOW()
-            """.trimIndent()
+            """
             )
                     .bind("code", code)
-                    .mapTo<UserQueryResult>()
-                    .findFirst()
-                    .map { Account(it.accountId, it.email, it.handle) }
-                    .orElse(null)
+                    .mapTo<Long>()
+                    .firstOrNull()
+                    ?.let { userPersistence.getUserByAccount(it) }
+                    ?.let { Account(it.accountId, it.email, it.handle) }
         }
     }
 
