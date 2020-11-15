@@ -103,7 +103,7 @@ class AuthPersistenceImpl(@Autowired private val jdbi: Jdbi, private val userPer
                     .mapTo<Long>()
                     .firstOrNull()
                     ?.let { userPersistence.getUserByAccount(it) }
-                    ?.let { Account(it.accountId, it.email, it.handle) }
+                    ?.let { it.toAccount() }
         }
     }
 

@@ -1,4 +1,5 @@
 {# @pebvariable name="isAdmin" type="java.lang.Boolean" #}
+{# @pebvariable name="isImpersonatingUser" type="java.lang.Boolean" #}
 
 <div class="menu">
     <p class="menu-label">
@@ -27,4 +28,32 @@
             <li><a href="/admin" data-test="dashboard-menu-admin-link">Admin Panel</a></li>
         </ul>
     {% endif %}
+    <ul class="menu-list is-hidden-tablet">
+        <p class="menu-label">
+            User
+        </p>
+        <li>
+            <a href="/dashboard/user-settings" class="is-link"
+               data-test="user-handle-mobile">@{{ global.user.handle }}</a>
+        </li>
+        {% if isImpersonatingUser %}
+            <li>
+                <form method="POST" action="/admin/impersonation/logout">
+                    {% include 'components/csrf-field' %}
+                    <button class="button is-primary is-light" type="submit" data-test="end-impersonation-mobile">
+                        End Impersonation
+                    </button>
+                </form>
+            </li>
+        {% else %}
+            <li>
+                <form method="POST" action="/logout">
+                    {% include 'components/csrf-field' %}
+                    <button class="button is-primary is-light" type="submit">
+                        Log out
+                    </button>
+                </form>
+            </li>
+        {% endif %}
+    </ul>
 </div>

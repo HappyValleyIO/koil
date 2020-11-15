@@ -3,19 +3,16 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE accounts
 (
     account_id        BIGSERIAL PRIMARY KEY,
-    start_date        TIMESTAMP   NOT NULL DEFAULT NOW(),
-    full_name         varchar(64) NOT NULL,
-    handle            VARCHAR(16) NOT NULL,
-    public_account_id UUID UNIQUE NOT NULL DEFAULT uuid_generate_v4(),
+    start_date        TIMESTAMP    NOT NULL DEFAULT NOW(),
+    full_name         varchar(64)  NOT NULL,
+    handle            VARCHAR(16)  NOT NULL,
+    public_account_id UUID UNIQUE  NOT NULL DEFAULT uuid_generate_v4(),
+    email_address     varchar(254) NOT NULL UNIQUE,
+    password          varchar(254) NOT NULL,
     stop_date         TIMESTAMP
 );
 
-CREATE TABLE account_credentials
-(
-    account_id    BIGINT PRIMARY KEY NOT NULL REFERENCES accounts (account_id) ON DELETE CASCADE,
-    email_address varchar(254)       NOT NULL UNIQUE,
-    password      varchar(254)       NOT NULL
-);
+CREATE INDEX ON accounts(email_address);
 
 CREATE TABLE account_verification
 (

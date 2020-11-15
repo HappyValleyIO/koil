@@ -2,21 +2,15 @@ package org.springboard
 
 import org.assertj.core.internal.bytebuddy.utility.RandomString
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springboard.auth.AuthAuthority
 import org.springboard.user.EnrichedUserDetails
 import org.springboard.user.UserCreationRequest
 import org.springboard.user.UserCreationResult
-import org.springboard.user.UserService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.util.AssertionErrors.assertEquals
 
-@ExtendWith(SpringExtension::class)
-@SpringBootTest
-class UserServiceIntegrationTest(@Autowired val userService: UserService, @Autowired val userDetails: UserDetailsService) {
+class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService) : BaseIntegrationTest() {
 
     @Test
     fun `GIVEN an existing user WHEN logging in with correct credentials THE return a user result`() {

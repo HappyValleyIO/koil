@@ -4,5 +4,34 @@
 
 {% block content %}
 <h1>Welcome to the admin panel</h1>
-    <p>You're logged in as {{ model.userName }}</p>
+<p>You're logged in as {{ model.userName }}</p>
+
+<table class="table is-striped">
+    <thead>
+    <tr>
+        <th>Full Name</th>
+        <th>Handle</th>
+        <th>Email</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for account in model.accounts %}
+        <tr data-test="account-row-{{ account.email }}">
+            <td>{{ account.fullName }}</td>
+            <td>{{ account.handle }}</td>
+            <td>{{ account.email }}</td>
+            <td>
+                <form action="/admin/impersonation" method="POST">
+                    {% include 'components/csrf-field' %}
+                    <label>
+                        <input class="is-hidden" type="email" name="username" value="{{ account.email }}">
+                    </label>
+                    <button class="link" type="submit" data-test="impersonate">Impersonate</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

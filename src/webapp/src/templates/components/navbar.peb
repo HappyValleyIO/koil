@@ -1,5 +1,6 @@
 {# @pebvariable name="global" type="org.springboard.view.GlobalViewModel" #}
 {# @pebvariable name="isAdmin" type="java.lang.Boolean" #}
+{# @pebvariable name="isImpersonatingUser" type="java.lang.Boolean" #}
 
 <nav class="navbar is-transparent" role="navigation" aria-label="main navigation" data-controller="menu">
     <div class="navbar-brand">
@@ -22,17 +23,27 @@
                     <a href="/admin" class="is-link" data-test="navbar-admin-link">Admin Panel</a>
                 </div>
             {% endif %}
+
             <div class="navbar-item">
-                <a href="/dashboard/user-settings" class="is-link">@{{ global.user.handle }}</a>
+                <a href="/dashboard/user-settings" class="is-link" data-test="user-handle">@{{ global.user.handle }}</a>
             </div>
             <div class="navbar-item">
                 <div class="buttons">
-                    <form method="POST" action="/logout">
-                        {% include 'components/csrf-field' %}
-                        <button class="button is-primary is-light" type="submit">
-                            Log out
-                        </button>
-                    </form>
+                    {% if isImpersonatingUser %}
+                        <form method="POST" action="/admin/impersonation/logout">
+                            {% include 'components/csrf-field' %}
+                            <button class="button is-primary is-light" type="submit" data-test="end-impersonation">
+                                End Impersonation
+                            </button>
+                        </form>
+                    {% else %}
+                        <form method="POST" action="/logout">
+                            {% include 'components/csrf-field' %}
+                            <button class="button is-primary is-light" type="submit">
+                                Log out
+                            </button>
+                        </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
