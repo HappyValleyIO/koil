@@ -9,7 +9,6 @@ import org.springboard.auth.AuthAuthority
 import java.time.Instant
 import java.util.*
 
-
 class InternalUserTest {
 
     @Test

@@ -4,19 +4,15 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.springboard.BaseIntegrationTest
 import org.springboard.auth.AuthAuthority
 import org.springboard.user.UserCreationRequest
 import org.springboard.user.UserCreationResult
 import org.springboard.user.UserServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
 
-@ExtendWith(SpringExtension::class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class AdminServiceTest {
+class AdminServiceTest : BaseIntegrationTest() {
 
     @Autowired
     lateinit var adminService: IAdminService
