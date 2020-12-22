@@ -9,9 +9,9 @@ sizes.forEach(size => {
 
     it(`should pass the user details from the homepage to the signup page`, () => {
       cy.visit("/");
-      cy.get('[data-test=sign-up-email]').type('test@getspringboard.dev{enter}');
+      cy.get('[data-test=sign-up-email]').type('test@getkoil.dev{enter}');
       cy.get('[data-test=register-form]').within(() => {
-        cy.get('[data-test=email-input]').should('have.value', 'test@getspringboard.dev')
+        cy.get('[data-test=email-input]').should('have.value', 'test@getkoil.dev')
       })
     });
 
@@ -21,7 +21,7 @@ sizes.forEach(size => {
       cy.get('[data-test=register-form]').within(() => {
         cy.get('[data-test=name-input]').type('Test User');
         cy.get('[data-test=handle-input]').type(slug);
-        cy.get('[data-test=email-input]').type(`test+${slug}@getspringboard.dev`);
+        cy.get('[data-test=email-input]').type(`test+${slug}@getkoil.dev`);
         cy.get('[data-test=password-input]').type('SomeSecurePass123?!');
 
         cy.get('[data-test=submit-button]').click();

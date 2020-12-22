@@ -20,7 +20,7 @@ a moderate one if you are not.
   
 If you've never used Cypress before, then we recommend reading through [their docs](https://docs.cypress.io/guides/getting-started/writing-your-first-test.html#Add-a-test-file)
 as well as this. While we'll cover some basics in this tutorial, we'll really just be skimming the surface to show how Cypress
-fits in to Springboard.
+fits in to koil.
 
 ## Creating and running a Cypress test
 
@@ -28,15 +28,15 @@ fits in to Springboard.
 
 If you already have Node 12, then feel free to skip this.
 
-Cypress needs Node.js to run. Normally, when you build a Springboard project, gradle will pull down the required node version
+Cypress needs Node.js to run. Normally, when you build a koil project, gradle will pull down the required node version
 and use it to build your front-end assets. To install Node.js on your machine for use globally, we recommend using the 
 [Node Version Manager](https://github.com/nvm-sh/nvm) to install the latest LTS version of node (`nvm install --lts`).
 
-Once that's done, navigate to the `src/webapp` directory in your Springboard project and run `npm ci`:
+Once that's done, navigate to the `src/webapp` directory in your koil project and run `npm ci`:
 
 [![npm ci running in webapp dir](images/npm-ci.png)](images/npm-ci.png)
 
-This installs the dependencies you need at the same version that we used when creating Springboard. 
+This installs the dependencies you need at the same version that we used when creating koil. 
 
 While `npm install` will work, it will also update a bunch of dependencies. In a perfect world, no breaking change would find its way into 
 a minor version update. Alas, we don't live in a perfect world, and so we've found it better to use `npm ci` unless we're 
@@ -45,7 +45,7 @@ Cypress binaries) it runs, so feel free to stop here to have some punch and pie.
 
 ### Introducing the Cypress test runner
 
-First up, we'll presume you have a Springboard project ready to go and that you've got a working node environment. 
+First up, we'll presume you have a koil project ready to go and that you've got a working node environment. 
 In the `src/webapp` directory, run the `npx cypress open` command, and you'll be greeted with the Cypress runner:
 
 [![cypress runner open](images/cypress-runner.png)](images/cypress-runner.png)
@@ -156,7 +156,7 @@ Using this in our test, we get:
 
 ```js
     it(`should show mobile menu on button click`, () => {
-        cy.get('[data-test=mobile-menu]').should('not.be.visible')
+        cy.get('[data-test=mobile-menu]').should('not.exist')
         cy.get('[data-test=menu-button').click()
         cy.get('[data-test=mobile-menu]').should('be.visible')
     });
@@ -222,7 +222,7 @@ we''ll be adding another test case to the `mobile_navigation.js` file:
         it(`should show mobile menu on dashboard`, () => {
             cy.createRandomAccountAndLogin();
 
-            cy.get('[data-test=mobile-menu]').should('not.be.visible')
+            cy.get('[data-test=mobile-menu]').should('not.exist')
             cy.get('[data-test=menu-button').click()
             cy.get('[data-test=mobile-menu]').should('be.visible')
         });
@@ -246,10 +246,10 @@ we probably just want these tests to run as a part of our normal test suite. Ins
 we've written a JUnit test class that will run our entire suite.
 
 > Note: the author of the blog post above has also [released a library](https://github.com/wimdeblauwe/testcontainers-cypress/tree/testcontainers-cypress-0.4.0) 
-> to do a lot of the work for us. We're working on integrating this with Springboard soon.
+> to do a lot of the work for us. We're working on integrating this with koil soon.
 
 
-You can find this test at `src/test/kotlin/org/springboard/CypressIntegrationTest.kt`
+You can find this test at `src/test/kotlin/org/koil/CypressIntegrationTest.kt`
 
 This test will also be run as a part of a `gradle build`, making our CI runs super easy. 
 

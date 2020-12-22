@@ -4,12 +4,12 @@
 {% block content %}
 <div class="card">
     <header>
-        <h1 class="title">Welcome to Springboard!</h1>
+        <h1 class="title">Welcome to koil!</h1>
         <h3 class="subtitle">Easy SaaS on the JVM</h3>
     </header>
     <div class="card-content">
         <p>
-            Welcome to Springboard! This is the starter template for your project. Everything in the `/dashboard/*` path
+            Welcome to koil! This is the starter template for your project. Everything in the `/dashboard/*` path
             is protected by authentication.
         </p>
 

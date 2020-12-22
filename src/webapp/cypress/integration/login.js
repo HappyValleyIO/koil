@@ -22,7 +22,7 @@ describe(`User login flows on ${size}`, () => {
 
     it(`should show failure error message`, () => {
       cy.get('@account').then(account => {
-        cy.get('[data-test=bad-credentials-error]').should('not.be.visible')
+        cy.get('[data-test=bad-credentials-error]').should('not.exist')
         cy.get('[data-test=login-email-input]').type(account.email)
         cy.get('[data-test=login-password-input]').type(account.passwd + 'X')
         cy.get('[data-test=login-submit]').click()

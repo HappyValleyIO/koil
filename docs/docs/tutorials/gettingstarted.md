@@ -1,14 +1,14 @@
 ---
-title: Getting Started with Springboard
-summary: A walkthrough of how to pull down the Springboard project, get it running for the first time in Intellij and start customizing a few pieces of the project.
+title: Getting Started with koil
+summary: A walkthrough of how to pull down the koil project, get it running for the first time in Intellij and start customizing a few pieces of the project.
 authors:
     - Hilary Fairchild-Carbonell
 date: 2020-06-02
 ---
 
-# Getting Started with Springboard
+# Getting Started with koil
 
-This is a guide to actually starting your first project with Springboard- step by step instructions from pulling the
+This is a guide to actually starting your first project with koil- step by step instructions from pulling the
 project down, getting it running for the first time and a few ways to start customizing it to be your own project.
 
 We use IntelliJ as our IDE so the instructions given below assume you have IntelliJ as well. If you want a tutorial
@@ -18,15 +18,15 @@ This tutorial intentionally goes step-by-step through common errors or mistakes 
 If you are an experienced developer- some of it might seem obvious and unnecessary to you.
 
 ## Pulling the Project form GitHub
-This might be an obvious one- but use the git clone command to pull down the Springboard Project.
+This might be an obvious one- but use the git clone command to pull down the koil Project.
 
 ```bash
-git clone git@github.com:HappyValleyIO/springboard.git rvroger
+git clone git@github.com:HappyValleyIO/koil.git rvroger
 ```
 
 ## Getting it to Run (Short Version)
 
-This is the quick version to get Springboard to run successfully for the first time. If you want a bit more of an
+This is the quick version to get koil to run successfully for the first time. If you want a bit more of an
 explanation of possible errors or why you are making changes - checkout the long version [here](#getting-it-to-run-long-version)
 
 - Run the docker-compose up -d command in the folder that you've cloned the project into
@@ -37,7 +37,7 @@ explanation of possible errors or why you are making changes - checkout the long
 - You should now be able to go to localhost:8080 and see the project running successfully.
 
 ## Getting it to Run (Long Version)
-Now we have pulled down the Springboard project, let's open it in your favorite IDE. I'm going to be using IntelliJ.
+Now we have pulled down the koil project, let's open it in your favorite IDE. I'm going to be using IntelliJ.
 
 - Open IntelliJ
 - File -> Open -> rvroger
@@ -46,8 +46,8 @@ This is going to import the "rvroger" Gradle project. It can take a few minutes 
  It's tempting to click "Background" on the task and start changing things, but go make a cup of tea or coffee and 
  just let it finish. (It took 2 minutes and 19 seconds for my computer to finish getting everything setup)
 
-Now let's run the application and see what we have. If you open "src/main/kotlin/org.springboard" and right click
- SpringboardApplication.kt, the "Run" option should be available in the menu (or if you are a shortcut wizard -
+Now let's run the application and see what we have. If you open "src/main/kotlin/org.koil" and right click
+ koilApplication.kt, the "Run" option should be available in the menu (or if you are a shortcut wizard -
   "CTRL + SHIFT + F10"). Since this is the first time you will have built the project, it is going to take a bit of 
   time to run. The "buildAssets" step in particular will take up the majority of this time. Mine took another 2 
   minutes and 46 seconds to finish the build.
@@ -77,7 +77,7 @@ configured some test database properties.
  
 Since the DEV application properties file contains everything we need to run a local development instance of our 
 application, we need to make sure that this is the file being picked up when we run. Let's edit the Run Configuration 
-for SpringboardApplication so that it uses the DEV spring profile. Since we tried  to run this already- 
+for koilApplication so that it uses the DEV spring profile. Since we tried  to run this already- 
 IntelliJ has a Run Configuration setup for us if we "Edit Configurations" from the run configuration menu.
   
 We need to add an environment variable:
@@ -108,13 +108,13 @@ Using the terminal, go to the main project directory (rvroger in my case) then r
 [![Docker Compose Commands](images/getting-started-docker-startup.png)](images/getting-started-docker-startup.png)
 
 Now we have the database up and running, let's finally start our application. Going back to Intellij, we re-run our 
-SpringboardApplication with the edited configuration to pickup the dev credentials - and now we have the actual 
+koilApplication with the edited configuration to pickup the dev credentials - and now we have the actual 
 application started successfully.
 
 
 [![Logs of Application Starting Successfully](images/getting-started-application-start-successful.png)](images/getting-started-application-start-successful.png)
 
-Now open "http://localhost:8080" in your browser and you can see we have the Springboard starter running! We can even 
+Now open "http://localhost:8080" in your browser and you can see we have the koil starter running! We can even 
 create a new account and login.
 
 [![Website Landing Page](images/getting-started-initial-website-landing-page.png)](images/getting-started-initial-website-landing-page.png)
@@ -125,17 +125,17 @@ create a new account and login.
 
 That's it! You have a basic application with a website homepage, account registration and a basic dashboard upon logging in.
 
-Now we have the project running, let's customize the project a bit, so it isn't just a basic Springboard Template.
+Now we have the project running, let's customize the project a bit, so it isn't just a basic koil Template.
 
 ## Customize the Project - Database Name
 I started my career as a database developer - so I'm going to start with the dev database setup. Let's rename it from 
-"springboard" to our project name (rvroger in my case)
+"koil" to our project name (rvroger in my case)
 
 Open docker-compose.yml and on line 11 the database name is specified.
 
 [![Docker Compose Configuration File](images/customize-database-name.png)](images/customize-database-name.png)
 
-I'm going to replace the db name from "springboard" to "rvroger" and then we will need to restart our database.
+I'm going to replace the db name from "koil" to "rvroger" and then we will need to restart our database.
 
 In the main project directory in the terminal- bring down the current docker stack:
 ```
@@ -172,10 +172,10 @@ If you open the variables.scss file, we can see that there are a number of color
 [![SCSS Project Variables Location](images/variables-scss-file.png)](images/variables-scss-file.png)
 
 We are just going to change one right now- the $primary variable. This variable controls the color of all attributes on 
-the project marked as "primary". With the basic existing Springboard project, this is mainly going to affect things like 
+the project marked as "primary". With the basic existing koil project, this is mainly going to affect things like 
 button colors and backgrounds.
 
-Before we make this change- make sure you have an instance of SpringboardApplication up and running. We want to see 
+Before we make this change- make sure you have an instance of koilApplication up and running. We want to see 
 this change happen live.
 
 Initially- your website is going to look like this:
@@ -187,11 +187,11 @@ for things other than primary classes in the future. Then I set the $primary var
 
 [![Website Landing Page](images/updated-variables.png)](images/updated-variables.png)
 
-Hit 'CTRL + F9' to rebuild the project - and watch the browser change from the Springboard maroon/red to our new primary blue color.
+Hit 'CTRL + F9' to rebuild the project - and watch the browser change from the koil maroon/red to our new primary blue color.
 
 [![Website Landing Page](images/updated-primary-variable-landing-page.png)](images/updated-primary-variable-landing-page.png)
 
-That's just a starting point- but it lets you see how easily you can start to customize Springboard to get your 
+That's just a starting point- but it lets you see how easily you can start to customize koil to get your 
 application moving quickly. Changing something as simple as the primary project color starts to make the project feel 
 like *your* application, not just a template.
 

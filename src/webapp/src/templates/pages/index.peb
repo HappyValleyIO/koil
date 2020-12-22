@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Springboard App.</title>
+    <title>koil App.</title>
     <meta name="description"
-          content="Springboard starter app example.">
+          content="koil starter app example.">
 
     <link rel="stylesheet" type="text/css" href="/styles/index.scss">
     {% include 'components/devtools' %}
@@ -54,7 +54,7 @@
     <div class="hero-body">
         <div class="container has-text-centered">
             <h1 class="title is-size-1 ">
-                Springboard App<span class="has-text-primary">.</span>
+                koil App<span class="has-text-primary">.</span>
             </h1>
             <h3 class="subtitle is-size-3">
                 A starter template for Spring-based SaaS

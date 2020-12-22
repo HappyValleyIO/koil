@@ -12,7 +12,7 @@ sizes.forEach(size => {
     })
 
     it('should show the admin links to an admin on the normal dashboard', () => {
-      cy.get('[data-test=login-email-input]').type('admin@getspringboard.dev')
+      cy.get('[data-test=login-email-input]').type('admin@getkoil.dev')
       cy.get('[data-test=login-password-input]').type('SecurePass123!')
       cy.get('[data-test=login-submit]').click()
 
@@ -29,16 +29,16 @@ sizes.forEach(size => {
       cy.createRandomAccountAndLogin()
 
       if (size === 'macbook-13') {
-        cy.get('[data-test=navbar-admin-link]').should('not.be.visible')
-        cy.get('[data-test=dashboard-menu-admin-link]').should('not.be.visible')
+        cy.get('[data-test=navbar-admin-link]').should('not.exist')
+        cy.get('[data-test=dashboard-menu-admin-link]').should('not.exist')
       } else {
         cy.get('[data-test=menu-button]').click()
-        cy.get('[data-test=dashboard-menu-admin-link]').should('not.be.visible')
+        cy.get('[data-test=dashboard-menu-admin-link]').should('not.exist')
       }
     })
 
     it(`should login successfully`, () => {
-      cy.get('[data-test=login-email-input]').type('admin@getspringboard.dev')
+      cy.get('[data-test=login-email-input]').type('admin@getkoil.dev')
       cy.get('[data-test=login-password-input]').type('SecurePass123!')
       cy.get('[data-test=login-submit]').click()
       cy.url().should('include', '/dashboard')

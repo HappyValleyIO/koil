@@ -1,4 +1,4 @@
-{# @pebvariable name="model" type="org.springboard.notifications.AccountCreationNotificationModel" #}
+{# @pebvariable name="model" type="org.koil.notifications.AccountCreationNotificationModel" #}
 
 <!doctype html>
 <html>

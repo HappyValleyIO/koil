@@ -1,4 +1,4 @@
-{# @pebvariable name="global" type="org.springboard.view.GlobalViewModel" #}
+{# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
 
 {% extends 'layouts/base' %}
 {% block layoutStyle %}

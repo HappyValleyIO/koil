@@ -1,1 +1,1 @@
-rootProject.name = "springboard"
+rootProject.name = "koil"
