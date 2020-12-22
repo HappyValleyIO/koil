@@ -1,6 +1,6 @@
-# Springboard
+# koil
 
-![Java CI with Gradle](https://github.com/HappyValleyIO/springboard/workflows/Java%20CI%20with%20Gradle/badge.svg)
+![Java CI with Gradle](https://github.com/HappyValleyIO/koil/workflows/Java%20CI%20with%20Gradle/badge.svg)
 
 This is a starter template for building monolithic Spring based applications using modern web tooling.
 

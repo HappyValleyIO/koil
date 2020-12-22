@@ -1,4 +1,4 @@
-{# @pebvariable name="model" type="org.springboard.auth.LoginViewModel" #}
+{# @pebvariable name="model" type="org.koil.auth.LoginViewModel" #}
 
 {% extends "layouts/single-form" %}
 {% block title %} Login {% endblock %}

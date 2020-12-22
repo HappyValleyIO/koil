@@ -1,4 +1,4 @@
-{# @pebvariable name="global" type="org.springboard.view.GlobalViewModel" #}
+{# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
 
 <nav class="navbar is-transparent" role="navigation" aria-label="main navigation" data-controller="menu">
     <div class="navbar-brand">

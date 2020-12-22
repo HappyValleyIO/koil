@@ -1,4 +1,4 @@
-{# @pebvariable name="model" type="org.springboard.notifications.NotificationAlertSuccessModel" #}
+{# @pebvariable name="model" type="org.koil.notifications.NotificationAlertSuccessModel" #}
 <!doctype html>
 <html>
   <head>

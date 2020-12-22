@@ -12,7 +12,10 @@ blocks:
           commands:
             - sem-version java 11
             - checkout
-            - ./gradlew build
+            - ./gradlew build --info
+      env_vars:
+        - name: TERM
+          value: dumb
       secrets:
         - name: Docker Hub Login
       prologue:

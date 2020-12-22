@@ -10,7 +10,7 @@ date: 2020-05-27
 
 [Heroku](https://www.heroku.com) is a PaaS product that makes deploying your application easy. With its generous free tier it's a perfect way to kick off a new project.
 
-It's easy to deploy a Springboard application with Heroku. We can also benefit tremendously from the Heroku add-on ecosystem:
+It's easy to deploy a koil application with Heroku. We can also benefit tremendously from the Heroku add-on ecosystem:
 
 * [mailgun](https://mailgun.com) as an SMTP server to send emails;
 * [sentry](https://sentry.io/welcome/) for error-tracking;
@@ -23,11 +23,11 @@ You can check the other add-ons heroku comes with out of the box [here](https://
 
 There are a couple of ways that we can deploy to Heroku - they maintain excellent docs on this [here](https://devcenter.heroku.com/categories/deployment). 
 The deployment mechanism we'll be focusing on is the GitHub integration. We'll be building out a production-ready pipeline here. 
-We'll connect our app to a Springboard based GitHub repo and deploy the application with a database.
+We'll connect our app to a koil based GitHub repo and deploy the application with a database.
 
-One of the primary benefits to working in Springboard is simplicity of building and deploying. It's a single, stateless JVM 
+One of the primary benefits to working in koil is simplicity of building and deploying. It's a single, stateless JVM 
 instance that's connected to a database. Most of the tricky first-time setup has already been done in the gradle build scripts. 
-As such, anything that can deploy a Spring Boot project can deploy a Springboard project without difficulty. 
+As such, anything that can deploy a Spring Boot project can deploy a koil project without difficulty. 
 
 As it happens, Heroku has terrific integration with Spring Boot so deploying a live, production-ready application is pretty simple.   
 
@@ -69,21 +69,21 @@ While you're here, I'd really recommend enabling [review apps](https://devcenter
 
 [![heroku connected pipelione enable review apps](images/heroku-review-settings.png)](images/heroku-review-settings.png)
 
-They'll give you a great way to interact with pull request changes before merging. Springboard comes with an `app.json` file configured that specifies the required postgres database for your review apps. If you'd like to add other addons for each review app, then you can do so by modifying `app.json`. Heroku will respect the changes on the next deploy.
+They'll give you a great way to interact with pull request changes before merging. koil comes with an `app.json` file configured that specifies the required postgres database for your review apps. If you'd like to add other addons for each review app, then you can do so by modifying `app.json`. Heroku will respect the changes on the next deploy.
 
 ### Step 3: Enable automatic deploys
 
 Navigate back to the `Pipeline` tab to see the new setup.
 
-[![springboard pipeline with review apps](images/heroku-pipeline-with-review.png)](images/heroku-pipeline-with-review.png)
+[![koil pipeline with review apps](images/heroku-pipeline-with-review.png)](images/heroku-pipeline-with-review.png)
 
 We'll add a staging environment here later. For now, let's enable automatic deploys. Click the menu toggle button on the production app.
 
-[![springboard pipeline with deploy](images/heroku-pipeline-deploy-settings.png)](images/heroku-pipeline-deploy-settings.png)
+[![koil pipeline with deploy](images/heroku-pipeline-deploy-settings.png)](images/heroku-pipeline-deploy-settings.png)
 
 And click `Configure automatic deploys...`. You'll be presented with some options. We recommend deploying master only after CI passes. 
 
-[![springboard pipeline with deploy](images/heroku-automatic-deploys.png)](images/heroku-automatic-deploys.png)
+[![koil pipeline with deploy](images/heroku-automatic-deploys.png)](images/heroku-automatic-deploys.png)
 
 And we're set! This means that the next time we merge into `master` we'll see our application automatically updated!
 
@@ -97,7 +97,7 @@ create the pull request.
 
 [![github pull request with CI running](images/github-pull-request-ci-running.png)](images/github-pull-request-ci-running.png)
 
-Alright! Now go make a cup of coffee while the CI build runs. Springboard has a longer build than a base Spring Boot project, 
+Alright! Now go make a cup of coffee while the CI build runs. koil has a longer build than a base Spring Boot project, 
 but we promise it's worth it. Right now GitHub is running unit, integration and feature tests on the back-end and has 
 kicked off Cypress to test your front-end. Once it's done, you should see something like this:
 
@@ -127,7 +127,7 @@ Once the app has been deployed, this will change to read `Deployed`.
 
 Click the `View deployment` button...and it's broken! Why did production break when the review app works? 
 
-Springboard comes with an `app.json` file that acts as a configuration for Heroku review apps. This file contains configuration 
+koil comes with an `app.json` file that acts as a configuration for Heroku review apps. This file contains configuration 
 for our postgres database so that Heroku knows to spin one up for each review app. Unfortunately, the `app.json` file 
 doesn't have any impact on production, so we'll have to do the initial setup manually. This is a one-time thing. 
 Automated provisioning of these resources is out of the scope of this tutorial, but you could checkout the 
@@ -178,8 +178,8 @@ And you're set!
 
 ## Adding Mailgun
 
-Now we have a live application, we'd like to make use of the other features that Springboard gives us
-out of the box. First up: email. We're using Mailgun here, but since Springboard leverages spring-mail (which in turn just 
+Now we have a live application, we'd like to make use of the other features that koil gives us
+out of the box. First up: email. We're using Mailgun here, but since koil leverages spring-mail (which in turn just 
 uses SMTP) you can feel free to substitute for your favourite SMTP email provider.
 
 ### Step 1: Adding Mailgun to your production application
@@ -205,7 +205,7 @@ that rely on the `MAILGUN_` environment variables we've just configured:
 [![mail settings for spring](images/mail-settings.png)](images/mail-settings.png)
 
 Great! This means that we don't have to do anything else to make this work. If there are `MAILGUN_` env variables then 
-we'll send email successfully. If these variables aren't passed at runtime, then Springboard will silently fall back on a 
+we'll send email successfully. If these variables aren't passed at runtime, then koil will silently fall back on a 
 `LoggingMailSender` that just logs each message.
 
 If you decided to use a different mail provider, you'll be able to modify these settings to respect whatever environment variables
@@ -249,12 +249,12 @@ And that's it! It's due to this kind of simplicity that we love Heroku.
 ## Adding Sentry
 
 Production monitoring is a tricky thing to get right. A great starting point in our opinion is enabling Sentry to track 
-errors both on the app server and in the user's browser. Springboard comes with Sentry pre-configured so it's as easy as 
+errors both on the app server and in the user's browser. koil comes with Sentry pre-configured so it's as easy as 
 turning it on!
 
 ### Step 1: Enable sentry in Heroku
 
-Heroku has a [Sentry add-on](https://elements.heroku.com/addons/sentry) that works with Springboard out of the box. To 
+Heroku has a [Sentry add-on](https://elements.heroku.com/addons/sentry) that works with koil out of the box. To 
 enable it, navigate to your project in the terminal and run: `heroku addons:create sentry:f1`. You'll get output:
 
 [![enabling sentry heroku cli](images/enable-sentry-cli.png)](images/enable-sentry-cli.png)
@@ -272,7 +272,7 @@ There won't be any activity here yet. Let's head over to our application and thr
 
 ### Step 3: Throwing an error
 
-Springboard integrates with Sentry at two points. It configures Sentry for Spring so that any unhandled exceptions on the server 
+koil integrates with Sentry at two points. It configures Sentry for Spring so that any unhandled exceptions on the server 
 are recorded, and it adds a JS snippet to the rendered page in the browser so that we track any JS errors client-side. Let's leverage the 
 latter to throw an error. Open the developer tools in your favourite browser and throw an error for Sentry:
 
@@ -298,7 +298,7 @@ being passed as an env variable:
 
 [![heroku config with runtime release env variables](images/heroku-config-release.png)](images/heroku-config-release.png)
 
-By default, Springboard allows source maps in production - see motivation 
+By default, koil allows source maps in production - see motivation 
 [here](https://m.signalvnoise.com/paying-tribute-to-the-web-with-view-source/) - which makes debugging errors in production a little easier. 
 
 Despite this, we recommend hooking [Sentry up to your GitHub repo](https://docs.sentry.io/workflow/integrations/global-integrations/#github) 
@@ -308,12 +308,12 @@ documentation [here](https://docs.sentry.io/workflow/integrations/global-integra
 #### Harder option
 
 Sentry recommends using GitHub actions to set up Sentry with runtime information and releases. We haven't gotten around to 
-doing this for Springboard yet, but you can follow their guidelines [here](https://blog.sentry.io/2019/12/17/using-github-actions-to-create-sentry-releases).
+doing this for koil yet, but you can follow their guidelines [here](https://blog.sentry.io/2019/12/17/using-github-actions-to-create-sentry-releases).
 
 ## Adding LogDNA
 
 [LogDNA](https://logdna.com/) is a log aggregation product that includes a bunch of nice features at a reasonable price. 
-If you'd like to use something else, then feel free! Springboard logs to STDOUT in a JSON format in production, so you should 
+If you'd like to use something else, then feel free! koil logs to STDOUT in a JSON format in production, so you should 
 be able to use almost any log aggregation product. 
 
 We'll be using the Heroku add-on to [deploy this](https://elements.heroku.com/addons/logdna).
@@ -336,4 +336,4 @@ you'll be taken to LogDNA:
 Huzzah! Here we can see everything that's logged by every running dyno for our production application. There are a bunch of features 
 in LogDNA that are worth exploring. You can find out more in their [documentation](https://docs.logdna.com/docs).
 
-Log aggregation doesn't depend on much in the way of application behaviour, so there's nothing specific to Springboard here really.
+Log aggregation doesn't depend on much in the way of application behaviour, so there's nothing specific to koil here really.

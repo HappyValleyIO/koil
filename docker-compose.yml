@@ -8,6 +8,6 @@ services:
     environment:
       - POSTGRES_PASSWORD=SomePassword123!
       - POSTGRES_USER=root
-      - POSTGRES_DB=springboard
+      - POSTGRES_DB=koil
     ports:
       - 5432:5432

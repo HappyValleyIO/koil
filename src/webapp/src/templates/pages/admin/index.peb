@@ -1,4 +1,4 @@
-{# @pebvariable name="model" type="org.springboard.admin.AdminIndexViewModel" #}
+{# @pebvariable name="model" type="org.koil.admin.AdminIndexViewModel" #}
 {% extends "layouts/admin-layout" %}
 {% block title %} Home {% endblock %}
 

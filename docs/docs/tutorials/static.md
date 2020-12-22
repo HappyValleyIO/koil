@@ -8,7 +8,7 @@ date: 2020-05-13
 
 # Adding a static-ish page
 
-Springboard has a pretty funky setup. We're using node to build web things that are then rendered/served with Spring Boot. 
+koil has a pretty funky setup. We're using node to build web things that are then rendered/served with Spring Boot. 
 As a result there are two ways to think about adding a static - or mostly static - page.
 
 We can either:
@@ -77,7 +77,7 @@ If you go to the base layout you'll see a snippet like this:
 This means that anything that extends the base layout can add a [block](https://pebbletemplates.io/wiki/tag/block/) to 
 insert its own content into the layout.
 
-Now, let's add a Spring Controller endpoint to actually serve this page. In the `PublicController` class (src/main/kotlin/org/springboard/public/PublicController.kt), 
+Now, let's add a Spring Controller endpoint to actually serve this page. In the `PublicController` class (src/main/kotlin/org/koil/public/PublicController.kt), 
 add a new controller endpoint that renders this template:
 
 ```kotlin
@@ -93,7 +93,7 @@ This is all you have to do to have a page load. Next up is some style.
 
 ### Adding some styles
 
-By default, Springboard uses [bulma](https://bulma.io/). Bulma is a css framework that gives a bunch of nice utilities out of the box.
+By default, koil uses [bulma](https://bulma.io/). Bulma is a css framework that gives a bunch of nice utilities out of the box.
 
 Let's make use of some of these bulma CSS classes. Our `hello.peb` file now looks like:
 
@@ -117,7 +117,7 @@ To see how custom styles work, let's take a look at `base.peb`. We can see in th
     <link rel="stylesheet" type="text/css" href="/styles/dashboard.scss" data-turbolinks-track="reload">
 ```
 
-Any time we have a href start with "/" in Springboard, it's in reference to the base webapp source at `src/webapp/src/`.
+Any time we have a href start with "/" in koil, it's in reference to the base webapp source at `src/webapp/src/`.
 
 If we navigate to `src/webapp/src/styles/dashboard.scss` we'll see that we have a file with a bunch of styles already defined. 
 Let's add our own to the bottom:

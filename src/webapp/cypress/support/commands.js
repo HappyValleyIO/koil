@@ -55,7 +55,7 @@ Cypress.Commands.add('createRandomAccount', () => {
     .toString(36)
     .substring(7)
 
-  const email = `test+${slug}@getspringboard.dev`
+  const email = `test+${slug}@getkoil.dev`
   const username = slug
   const passwd = 'SomeSecurePassword123!'
   const name = `Test User ${slug}`
@@ -80,7 +80,7 @@ Cypress.Commands.add('createRandomAccountAndLogin', () => {
 
 Cypress.Commands.add('loginAsAdmin', () => {
   cy.visit('/auth/login')
-  cy.get('[data-test=login-email-input]').type('admin@getspringboard.dev')
+  cy.get('[data-test=login-email-input]').type('admin@getkoil.dev')
   cy.get('[data-test=login-password-input]').type('SecurePass123!')
   cy.get('[data-test=login-submit]').click()
   cy.visit('/admin')

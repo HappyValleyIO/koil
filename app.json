@@ -1,7 +1,7 @@
 {
-  "name": "Springboard Example",
+  "name": "koil Example",
   "description": "A Spring-based SaaS template.",
-  "repository": "https://github.com/HappyValleyIO/springboard",
+  "repository": "https://github.com/HappyValleyIO/koil",
   "keywords": [
     "spring",
     "java"

@@ -1,5 +1,5 @@
-{# @pebvariable name="global" type="org.springboard.view.GlobalViewModel" #}
-{# @pebvariable name="model" type="org.springboard.user.UserSettingsViewModel" #}
+{# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
+{# @pebvariable name="model" type="org.koil.user.UserSettingsViewModel" #}
 {% extends "layouts/dashboard-layout" %}
 {% block title %} User Settings {% endblock %}
 {% block content %}
