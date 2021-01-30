@@ -12,7 +12,7 @@ CREATE TABLE accounts
     stop_date         TIMESTAMP
 );
 
-CREATE INDEX ON accounts(email_address);
+CREATE INDEX ON accounts (email_address);
 
 CREATE TABLE account_verification
 (
@@ -30,24 +30,10 @@ CREATE TABLE account_password_reset
     expires_at TIMESTAMP NOT NULL
 );
 
-CREATE TABLE auth_authorities
-(
-    authority_id      SERIAL PRIMARY KEY NOT NULL,
-    authority_ref     VARCHAR(32)        NOT NULL UNIQUE,
-    authority_created TIMESTAMP          NOT NULL DEFAULT NOW()
-);
-
-INSERT INTO auth_authorities
-    (authority_ref)
-VALUES ('ADMIN');
-
-INSERT INTO auth_authorities
-    (authority_ref)
-VALUES ('USER');
-
 CREATE TABLE account_authorities
 (
-    account_id        BIGINT    NOT NULL REFERENCES accounts (account_id) ON DELETE CASCADE,
-    authority_id      INT       NOT NULL REFERENCES auth_authorities (authority_id),
-    authority_granted TIMESTAMP NOT NULL DEFAULT NOW()
+    account_id        BIGINT      NOT NULL REFERENCES accounts (account_id) ON DELETE CASCADE,
+    accounts_key      BIGINT,
+    authority         VARCHAR(16) NOT NULL,
+    authority_granted TIMESTAMP   NOT NULL DEFAULT NOW()
 );

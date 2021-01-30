@@ -13,8 +13,8 @@ buildscript {
 }
 
 plugins {
-  id 'org.springframework.boot' version '2.3.4.RELEASE'
-  id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+  id 'org.springframework.boot' version '2.4.2'
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
   id 'org.jetbrains.kotlin.plugin.spring' version "$kotlin_version"
   id 'org.jetbrains.kotlin.jvm' version "$kotlin_version"
   id "com.github.node-gradle.node" version "2.2.4"
@@ -51,6 +51,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("org.springframework.boot:spring-boot-starter-jdbc")
   implementation("org.springframework.boot:spring-boot-starter-mail")
+  implementation("org.springframework.data:spring-data-jdbc")
   implementation("org.springframework.boot:spring-boot-starter-security")
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -60,13 +61,6 @@ dependencies {
   implementation("io.pebbletemplates:pebble-spring-boot-starter:3.1.4")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
-  implementation("org.jdbi:jdbi3-core:${jdbiVersion}")
-  implementation("org.jdbi:jdbi3-sqlobject:${jdbiVersion}")
-  implementation("org.jdbi:jdbi3-postgres:${jdbiVersion}")
-  implementation("org.jdbi:jdbi3-spring4:${jdbiVersion}")
-  implementation("org.jdbi:jdbi3-kotlin:${jdbiVersion}")
-  implementation("org.jdbi:jdbi3-kotlin-sqlobject:${jdbiVersion}")
 
   implementation("io.sentry:sentry-spring-boot-starter:3.1.0")
   implementation("org.jsoup:jsoup:1.13.1")

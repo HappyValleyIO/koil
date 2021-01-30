@@ -7,6 +7,7 @@ import org.koil.user.*
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 interface IAdminService {
@@ -20,7 +21,7 @@ class AdminServiceImpl(private val userService: UserService,
                        @Value("\${admin-user.email:}") private val adminEmailFromEnv: String,
                        @Value("\${admin-user.password:}") private val adminPasswordFromEnv: String,
                        private val persistence: IAdminPersistence,
-                       private val userPersistence: UserPersistence
+                       private val accountRepository: AccountRepository
 ) : IAdminService, ApplicationListener<ContextRefreshedEvent> {
 
     companion object {
@@ -46,7 +47,7 @@ class AdminServiceImpl(private val userService: UserService,
     }
 
     override fun getAccounts(queryingAsAccount: Long): List<Account> {
-        val isAdmin = userPersistence.getUserByAccount(queryingAsAccount)?.isAdmin() ?: false
+        val isAdmin = accountRepository.findByIdOrNull(queryingAsAccount)?.isAdmin() ?: false
 
         require(isAdmin) {
             "Attempting to retrieve account as a non-admin user!"

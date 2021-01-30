@@ -59,7 +59,7 @@ class NotificationService(
                 footer = "Get in touch if you have any trouble!"
         )
 
-        sendMessage(views.renderWelcomeMessage(model), account.email, model.title)
+        sendMessage(views.renderWelcomeMessage(model), account.emailAddress, model.title)
     }
 
     fun sendPasswordResetEmail(email: String, code: UUID?) {

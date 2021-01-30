@@ -1,9 +1,5 @@
 package org.koil
 
-import org.jdbi.v3.core.Jdbi
-import org.jdbi.v3.core.kotlin.KotlinPlugin
-import org.jdbi.v3.sqlobject.SqlObjectPlugin
-import org.jdbi.v3.sqlobject.kotlin.KotlinSqlObjectPlugin
 import org.koil.auth.AuthRole
 import org.koil.notifications.LoggingMailSender
 import org.koil.user.UserServiceImpl
@@ -17,7 +13,6 @@ import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.switchuser.SwitchUserFilter
-import javax.sql.DataSource
 
 @SpringBootApplication
 class KoilApplication
@@ -29,15 +24,6 @@ fun main(args: Array<String>) {
 @Configuration
 @EnableAsync
 class BeanConfig {
-    @Bean
-    fun jdbi(ds: DataSource): Jdbi {
-        val jdbi = Jdbi.create(ds)
-        jdbi.installPlugin(KotlinPlugin())
-        jdbi.installPlugin(KotlinSqlObjectPlugin())
-        jdbi.installPlugin(SqlObjectPlugin())
-        return jdbi
-    }
-
     @Bean
     fun passwordEncoder(): PasswordEncoder {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder()
