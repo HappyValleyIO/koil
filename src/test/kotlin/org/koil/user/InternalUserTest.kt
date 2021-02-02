@@ -36,16 +36,20 @@ class InternalUserTest {
     fun `GIVEN a test user WHEN retrieving account THEN ensure fields correctly set`() {
         val user = internalTestUser()
 
-        assertThat(user.toAccount()).isEqualTo(Account(
+        assertThat(user).isEqualTo(Account(
                 accountId = user.accountId,
                 fullName = user.fullName,
-                email = user.email,
+                emailAddress = user.emailAddress,
                 handle = user.handle,
-                publicId = user.publicId))
+                publicAccountId = user.publicAccountId,
+                startDate = user.startDate,
+                stopDate = user.stopDate,
+                authorities = user.authorities,
+                password = user.password))
     }
 
-    private fun internalTestUser(authorities: List<AuthAuthority> = listOf(AuthAuthority.ADMIN)): InternalUser {
-        return UserQueryResult(0, "test@example.com", "SomePass123!", Instant.now(),
-                "Test User", "user", null, authorities, UUID.randomUUID())
+    private fun internalTestUser(authorities: List<AuthAuthority> = listOf(AuthAuthority.ADMIN)): Account {
+        return Account(0, Instant.now(), "Test User", "stepbeek", UUID.randomUUID(), "test@example.com",
+                "SomePAss123!", null, authorities.map { AccountAuthority(it, Instant.now()) })
     }
 }

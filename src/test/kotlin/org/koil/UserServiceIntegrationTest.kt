@@ -22,7 +22,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
 
         assertEquals("Assert logged in user is same as created user", created.account.accountId, queried.accountId)
         assertEquals("Assert logged in user is same as created user", created.account.handle, queried.handle)
-        assertEquals("Assert logged in user is same as created user", created.account.email, queried.username)
+        assertEquals("Assert logged in user is same as created user", created.account.emailAddress, queried.username)
     }
 
     @Test

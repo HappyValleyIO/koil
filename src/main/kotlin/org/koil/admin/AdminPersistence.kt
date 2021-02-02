@@ -1,7 +1,7 @@
 package org.koil.admin
 
 import org.koil.user.Account
-import org.koil.user.InternalUserPersistence
+import org.koil.user.AccountRepository
 import org.springframework.stereotype.Component
 
 interface IAdminPersistence {
@@ -9,11 +9,8 @@ interface IAdminPersistence {
 }
 
 @Component
-class AdminPersistence(private val userPersistence: InternalUserPersistence) : IAdminPersistence {
+class AdminPersistence(private val accountRepository: AccountRepository) : IAdminPersistence {
     override fun getAllAccounts(): List<Account> {
-        return userPersistence.getUsers()
-                .map {
-                    it.toAccount()
-                }
+        return accountRepository.findAll().toList()
     }
 }

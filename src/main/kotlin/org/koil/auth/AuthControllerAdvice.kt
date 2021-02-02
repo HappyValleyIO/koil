@@ -24,7 +24,7 @@ class CsrfControllerAdvice {
     fun isImpersonatingUser(): Boolean {
         val auth = SecurityContextHolder.getContext().authentication
         return auth?.let {
-            auth.authorities.map { it.authority }.contains(AuthRole.ADMIN_IMPERSONATING_USER.ref)
+            auth.authorities.map { it.authority }.contains(AuthRole.ADMIN_IMPERSONATING_USER.name)
         } ?: false
     }
 }

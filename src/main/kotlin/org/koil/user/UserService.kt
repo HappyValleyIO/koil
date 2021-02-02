@@ -3,12 +3,13 @@ package org.koil.user
 import org.hibernate.validator.constraints.Length
 import org.koil.auth.AuthAuthority
 import org.springframework.context.ApplicationEventPublisher
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
+import java.time.Instant
+import java.util.*
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty
 
@@ -33,32 +34,34 @@ interface UserService {
 
 @Component
 class UserServiceImpl(
-        private val persistence: UserPersistence,
+        private val repository: AccountRepository,
         private val encoder: PasswordEncoder,
         private val publisher: ApplicationEventPublisher
 ) : UserService, UserDetailsService {
     override fun createUser(request: UserCreationRequest): UserCreationResult {
-        return if (persistence.getUserByEmail(request.email) == null) {
-            val user = persistence.createUser(UserToStore(request.fullName, request.email, request.getPassword(encoder), request.handle, request.authorities))
-            val account = Account.fromUser(user)
+        return if (repository.findAccountByEmailAddress(request.email) == null) {
+            val authorities = request.authorities.map { AccountAuthority(it, Instant.now()) }
+            val account = Account(null, Instant.now(), request.fullName, request.handle, UUID.randomUUID(), request.email, request.getPassword(encoder), null,
+                    authorities)
+            val saved = repository.save(account)
 
             publisher.publishEvent(AccountCreationEvent(this, account))
 
-            UserCreationResult.CreatedUser(account)
+            UserCreationResult.CreatedUser(saved)
         } else {
             UserCreationResult.UserAlreadyExists
         }
     }
 
     override fun loadUserByUsername(email: String?): EnrichedUserDetails? {
-        val user = if (email != null) persistence.getUserByEmail(email) else null
-        if (user !== null) {
+        val account = if (email != null) repository.findAccountByEmailAddress(email) else null
+        if (account !== null && account.accountId !== null) {
             return EnrichedUserDetails(
                     User.builder()
-                            .username(user.email)
-                            .password(user.password)
-                            .authorities(user.authorities.map { SimpleGrantedAuthority(it.name) })
-                            .build(), user.accountId, user.handle
+                            .username(account.emailAddress)
+                            .password(account.password)
+                            .authorities(account.authorities.map { it.authority.grantedAuthority })
+                            .build(), account.accountId, account.handle
             )
         } else {
             throw UsernameNotFoundException("Could not find user $email")

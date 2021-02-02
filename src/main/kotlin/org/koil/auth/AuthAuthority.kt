@@ -2,21 +2,13 @@ package org.koil.auth
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 
-enum class AuthAuthority(val ref: String) {
-    ADMIN("ADMIN"),
-    USER("USER");
+enum class AuthAuthority {
+    ADMIN,
+    USER;
 
-    val grantedAuthority: SimpleGrantedAuthority = SimpleGrantedAuthority(ref)
-
-    companion object {
-        fun fromRef(ref: String): AuthAuthority {
-            return values().first {
-                it.ref == ref
-            }
-        }
-    }
+    val grantedAuthority: SimpleGrantedAuthority = SimpleGrantedAuthority(name)
 }
 
-enum class AuthRole(val ref: String) {
-    ADMIN_IMPERSONATING_USER("ADMIN_IMPERSONATING_USER");
+enum class AuthRole {
+    ADMIN_IMPERSONATING_USER;
 }
