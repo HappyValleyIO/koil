@@ -114,7 +114,7 @@ sourceSets {
 def buildAssetsDir = "${project.buildDir}/webapp"
 
 task copyAssets(type: Copy) {
-  from("$projectDir/src/webapp") {
+  from(buildAssetsDir) {
     exclude "node_modules"
     exclude "dist"
   }
@@ -153,9 +153,9 @@ npm_install.dependsOn copyAssets
 task buildAssets(type: NpxTask) {
   dependsOn npmInstall
   dependsOn copyAssets
-  command = 'parcel'
+  command = 'snowpack'
   environment = ['NODE_ENV': 'development']
-  args = ['build', './src/**/*.peb', '--cache-dir', "$projectDir/.cache", '--no-minify']
+  args = ['build']
 
   inputs.files(fileTree("$buildAssetsDir/src"))
   inputs.file("$buildAssetsDir/package.json")

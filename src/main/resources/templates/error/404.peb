@@ -3,13 +3,6 @@
 {% block meta %}
 <meta name="turbolinks-visit-control" content="reload">
 {% endblock %}
-{% block scripts %}
-<script>
-    function goBack() {
-        window.history.back()
-    }
-</script>
-{% endblock %}
 {% block content %}
 
 <div class="card">

@@ -1,0 +1,73 @@
+@import "./components/base.css";
+@import "./components/variables.css";
+@import "./components/common.css";
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    background-color: var(--off-white);
+}
+
+.title,
+.subtitle,
+p,
+li {
+    color: var(--ink-black);
+}
+
+.has-dark-background {
+    background: var(--ink-black);
+}
+
+.has-dark-background .title,
+.has-dark-background .subtitle,
+.has-dark-background p,
+.has-dark-background li {
+    color: var(--off-white);
+}
+
+
+.has-midnight-background {
+    background-image: linear-gradient(to bottom, var(--midnight-blue), var(--ink-black));
+}
+
+.has-midnight-background .title,
+.has-midnight-background .subtitle,
+.has-midnight-background p,
+.has-midnight-background li {
+    color: var(--off-white);
+}
+
+.has-sienna-background {
+    background-image: linear-gradient(to bottom, var(--sienna), var(--ink-black));
+}
+
+.has-sienna-background .title,
+.has-sienna-background .subtitle,
+.has-sienna-background p,
+.has-sienna-background li {
+    color: var(--off-white);
+}
+
+
+.is-transparent {
+    background: rgba(1, 1, 1, 0);
+}
+
+.navbar-burger {
+    border-radius: 50%;
+    margin: 10px 10px 0 auto;
+    background-color: var(--primary);
+}
+
+.navbar-burger span {
+    height: 2px;
+    color: var(--off-white);
+}
+
+.field.is-centered {
+    justify-content: center;
+}

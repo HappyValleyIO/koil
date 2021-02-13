@@ -34,11 +34,11 @@ project is what we're interested in right now.
 
 Let's run through what these directories represent:
 
-* **scripts:** the javascript and typescript we're using in our project;
+* **js:** the javascript and typescript we're using in our project;
 * **styles:** the CSS/SASS assets for the project;
 * **templates:** the [pebble](https://pebbletemplates.io/) templates that are used by Spring at runtime to render a page.
 
-We'll loop back around to use the scripts and styles in a little bit, but for now, let's dig in to the templates directory further:
+We'll loop back around to use the js and styles in a little bit, but for now, let's dig in to the templates directory further:
 
 <div style="width:80%; margin:0 auto">
     <img src="/assets/images/templates-expanded.png" alt="webapp templates directory image">
@@ -144,14 +144,14 @@ And apply it in our `hello.peb` file:
 
 You can see we've added the `hello-title` class to our `h1` element. And it works! The title is now red. We have the ability to add custom styles.
 
-## Custom scripts
+## Custom js
 
 Now let's walk through adding a little javascript. We want to add a button that will change the color of the title between black and red.
 
 First, let's take a look at `base.peb` again to see if there's something that helps us here. We notice the line:
 
 ```html
-    <script type="text/javascript" src="/scripts/app.js" defer data-turbolinks-track="reload"></script>
+    <script type="text/javascript" src="/js/index.js" defer data-turbolinks-track="reload"></script>
 ```
 
 Navigating to this file like before, we see that it's a fairly standard ES5 file pulling in the dependencies we need. The one we're interested in is `import './application.js`.
@@ -214,5 +214,5 @@ Once again, this isn't intended to be a tutorial around Stimulus (we wrote one [
  
 ## Summary
 
-So we've worked through the process of adding a new page with styles and scripts to the project. In the next tutorial, 
+So we've worked through the process of adding a new page with styles and js to the project. In the next tutorial, 
 we'll add a form to this page and hook it in to the database. 

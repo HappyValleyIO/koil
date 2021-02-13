@@ -26,7 +26,7 @@ The deployment mechanism we'll be focusing on is the GitHub integration. We'll b
 We'll connect our app to a koil based GitHub repo and deploy the application with a database.
 
 One of the primary benefits to working in koil is simplicity of building and deploying. It's a single, stateless JVM 
-instance that's connected to a database. Most of the tricky first-time setup has already been done in the gradle build scripts. 
+instance that's connected to a database. Most of the tricky first-time setup has already been done in the gradle build js. 
 As such, anything that can deploy a Spring Boot project can deploy a koil project without difficulty. 
 
 As it happens, Heroku has terrific integration with Spring Boot so deploying a live, production-ready application is pretty simple.   
