@@ -2,7 +2,7 @@
 
 {% extends 'layouts/base' %}
 {% block layoutStyle %}
-<link rel="stylesheet" type="text/css" href="/styles/dashboard.scss">
+<link rel="stylesheet" type="text/css" href="/assets/css/dashboard.css">
 {% endblock %}
 
 {% block body %}

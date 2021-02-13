@@ -1,6 +1,6 @@
-@import "components/base.css";
-@import "components/variables.css";
-@import "components/common.css";
+@import "./components/base.css";
+@import "./components/variables.css";
+@import "./components/common.css";
 
 html {
   overflow: hidden;
@@ -26,15 +26,17 @@ html {
 .logo {
   grid-area: logo;
   flex-direction: column;
-  background-color: $primary;
-
-  .title, .subtitle {
-    color: white;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+  background-color: var(--primary);
 }
+
+.logo .title, .logo .subtitle {
+  color: white;
+}
+
+
+.logo .title:hover, .logo .subtitle:hover {
+   text-decoration: underline;
+ }
 
 .form-container {
   grid-area: form-container;

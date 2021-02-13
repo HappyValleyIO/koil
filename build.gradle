@@ -114,9 +114,9 @@ sourceSets {
 def buildAssetsDir = "${project.buildDir}/webapp"
 
 task copyAssets(type: Copy) {
-  from(buildAssetsDir) {
+  from("$projectDir/src/webapp") {
     exclude "node_modules"
-    exclude "dist"
+    exclude "build"
   }
 
   into buildAssetsDir
@@ -136,7 +136,7 @@ task copyAssets(type: Copy) {
  * We cache the node installation outside of the build dir. This is so that we don't pull down node + npm whenever we
  * run a `clean`.
  */
-def nodeCache = "${projectDir}/.node"
+def nodeCache = "${project.buildDir}/.node"
 
 node {
   version = '12.19.0'
@@ -157,23 +157,20 @@ task buildAssets(type: NpxTask) {
   environment = ['NODE_ENV': 'development']
   args = ['build']
 
-  inputs.files(fileTree("$buildAssetsDir/src"))
+  inputs.files(fileTree("$buildAssetsDir/js"))
+  inputs.files(fileTree("$buildAssetsDir/css"))
+  inputs.files("$buildAssetsDir/snowpack.config.js")
+  inputs.file("$buildAssetsDir/index.html")
   inputs.file("$buildAssetsDir/package.json")
+  inputs.file("$buildAssetsDir/package-lock.json")
 
-  outputs.dir("$buildAssetsDir/dist")
-}
-
-task copyBundledTemplates(type: Copy) {
-  dependsOn processResources // So that we overwrite the existing
-  from "$buildAssetsDir/dist/templates"
-  into "$buildDir/resources/main/templates"
+  outputs.dir("$buildAssetsDir/build")
 }
 
 task bundleAssets(type: Copy) {
   dependsOn buildAssets
-  dependsOn copyBundledTemplates
-  from file("${buildAssetsDir}/dist")
-  into file("$buildDir/resources/main/static")
+  from file("${buildAssetsDir}/build")
+  into file("$buildDir/resources/main/static/assets")
 }
 
 compileKotlin.dependsOn bundleAssets

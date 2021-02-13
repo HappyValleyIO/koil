@@ -4,25 +4,21 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% block meta %}{% endblock %}
-    <title>koil | {% block title %}{% endblock %}</title>
+    <title>Koil | {% block title %}{% endblock %}</title>
     <meta name="description" content="
-{% block description %}
-    In Retrospect is a minimalist tool to enable recording and sharing of individual and team retrospectives.
+    {% block description %}
+        Koil is an integrated web development framework focused on productivity.
     {% endblock %}
 ">
-
-    <link rel="stylesheet" type="text/css" href="/styles/dashboard.scss" data-turbolinks-track="reload">
+    <link rel="stylesheet" type="text/css" href="/assets/css/index.css">
+    {% include 'components/devtools' %}
     {% block layoutStyle %}{% endblock %}
     {% block pageStyle %}{% endblock %}
-
-    {% include 'components/devtools' %}
-    <script type="text/javascript" src="/scripts/index.js" defer data-turbolinks-track="reload"></script>
+    <script type="module" src="/assets/js/application.js" defer></script>
 
     {% include 'components/sentry' %}
     {% block scripts %}{% endblock %}
 </head>
 <body>
-
-{% block body %}{% endblock %}
-
+    {% block body %}{% endblock %}
 </body>
