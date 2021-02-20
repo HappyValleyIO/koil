@@ -17,7 +17,7 @@ body {
 }
 
 .button.is-secondary {
-@extend . button, . is-primary;
+/*@extend . button, . is-primary;*/
 
     background-color: var(--ink-black) !important;
 }

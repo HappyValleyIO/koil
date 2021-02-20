@@ -162,7 +162,7 @@ If you've never used stimulus before then I'd recommend going through their [han
 Alright, let's add our own `Controller` to these. Create a file called `hello_controller.js` in the `controllers` directory. In this file, we'll add:
 
 ```js
-import { Controller } from "@stimulus/core";
+import { Controller } from "stimulus";
 
 export default class HelloController extends Controller {
   static get targets() {

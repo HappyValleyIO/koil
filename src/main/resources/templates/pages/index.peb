@@ -6,11 +6,11 @@
     <meta name="description"
           content="koil starter app example.">
 
-    <link rel="stylesheet" type="text/css" href="/assets/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/packs/index.css">
     {% include 'components/devtools' %}
     {% include 'components/sentry' %}
 
-    <script type="module" src="/assets/js/application.js" defer></script>
+    <script type="module" src="/assets/js/packs/application.js" defer></script>
 </head>
 <body>
 

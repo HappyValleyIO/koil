@@ -1,4 +1,4 @@
-import { Controller } from "@stimulus/core";
+import { Controller } from "stimulus";
 
 export default class MobileMenuController extends Controller {
   static get targets() {

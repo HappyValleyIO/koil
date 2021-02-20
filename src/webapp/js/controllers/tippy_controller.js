@@ -1,4 +1,4 @@
-import { Controller } from "@stimulus/core";
+import { Controller } from "stimulus";
 import tippy from "tippy.js";
 
 export default class TippyController extends Controller {

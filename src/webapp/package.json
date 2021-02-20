@@ -4,7 +4,8 @@
   "description": "An opinionated way to build monolithic spring-based web apps.",
   "private": true,
   "scripts": {
-    "build": "snowpack build",
+    "dev": "mix",
+    "prod": "mix --production",
     "cy:open": "cypress open"
   },
   "repository": {
@@ -14,23 +15,14 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@rollup/plugin-multi-entry": "^4.0.0",
-    "@snowpack/plugin-webpack": "^2.3.0",
+    "autoprefixer": "^9.0.0",
+    "css-loader": "^5.0.2",
     "cypress": "^6.2.0",
+    "glob": "^7.1.6",
     "husky": "^4.3.6",
+    "laravel-mix": "^6.0.11",
     "lint-staged": "^10.5.3",
-    "postcss": "^8.2.6",
-    "postcss-cli": "^8.3.1",
-    "prettier": "2.0.4",
-    "rollup": "^2.39.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-css-porter": "^1.0.2",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-postcss": "^4.0.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "snowpack": "^3.0.11",
-    "snowpack-plugin-rollup-bundle": "^0.4.4"
+    "prettier": "2.0.4"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",

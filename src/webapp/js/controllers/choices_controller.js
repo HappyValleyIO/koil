@@ -1,5 +1,5 @@
 import Choices from "choices.js";
-import { Controller } from "@stimulus/core";
+import { Controller } from "stimulus";
 
 export default class ChoicesController extends Controller {
   static get targets() {

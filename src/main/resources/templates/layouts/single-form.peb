@@ -1,6 +1,6 @@
 {% extends 'layouts/base' %}
 {% block layoutStyle %}
-<link rel="stylesheet" type="text/css" href="/assets/css/single-form.css">
+<link rel="stylesheet" type="text/css" href="/assets/css/packs/single-form.css">
 {% endblock %}
 
 {% block body %}

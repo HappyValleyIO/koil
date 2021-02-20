@@ -113,10 +113,21 @@ sourceSets {
 
 def buildAssetsDir = "${project.buildDir}/webapp"
 
+task copyDependencyDetails(type: Copy) {
+  from("$projectDir/src/webapp") {
+    include "package.json"
+    include "package-lock.json"
+  }
+
+  into buildAssetsDir
+}
+
 task copyAssets(type: Copy) {
   from("$projectDir/src/webapp") {
     exclude "node_modules"
-    exclude "build"
+    exclude "dist"
+    exclde "package.json"
+    exlucde "package-lock.json"
   }
 
   into buildAssetsDir
@@ -140,63 +151,58 @@ def nodeCache = "${project.buildDir}/.node"
 
 node {
   version = '12.19.0'
-  npmVersion = '6.14.8'
+  npmVersion = '7.5.4'
   download = true
   workDir = file("$nodeCache/nodejs")
   npmWorkDir = file("$nodeCache/npm")
   nodeModulesDir = file(buildAssetsDir)
   npmInstallCommand = 'ci'
-  npmInstall.args = ['--only', 'production']
 }
-npm_install.dependsOn copyAssets
+npm_install.dependsOn copyDependencyDetails
 
-task buildAssets(type: NpxTask) {
+task buildAssets(type: NpmTask) {
   dependsOn npmInstall
   dependsOn copyAssets
-  command = 'snowpack'
-  environment = ['NODE_ENV': 'development']
-  args = ['build']
+  // Run the dev build for front-end assets
+  args = ['run', 'dev']
 
   inputs.files(fileTree("$buildAssetsDir/js"))
   inputs.files(fileTree("$buildAssetsDir/css"))
-  inputs.files("$buildAssetsDir/snowpack.config.js")
-  inputs.file("$buildAssetsDir/index.html")
+  inputs.file("$buildAssetsDir/postcss.config.js")
+  inputs.file("$buildAssetsDir/webpack.mix.js")
   inputs.file("$buildAssetsDir/package.json")
   inputs.file("$buildAssetsDir/package-lock.json")
 
-  outputs.dir("$buildAssetsDir/build")
+  outputs.dir("$buildAssetsDir/dist")
 }
 
 task bundleAssets(type: Copy) {
   dependsOn buildAssets
-  from file("${buildAssetsDir}/build")
+  from file("$buildAssetsDir/dist")
   into file("$buildDir/resources/main/static/assets")
 }
 
 compileKotlin.dependsOn bundleAssets
 
-task buildProdAssets(type: NpxTask) {
-  dependsOn bundleAssets
-  command = 'parcel'
-  args = ['build', './src/**/*.peb', '--cache-dir', "$projectDir/.cache"]
+task buildProdAssets(type: NpmTask) {
+    dependsOn bundleAssets
+    // Run the production build for front-end assets
+    args = ['run', 'prod']
 
-  inputs.files(fileTree("$buildAssetsDir/src"))
-  inputs.file("$buildAssetsDir/package.json")
+    inputs.files(fileTree("$buildAssetsDir/js"))
+    inputs.files(fileTree("$buildAssetsDir/css"))
+    inputs.file("$buildAssetsDir/postcss.config.js")
+    inputs.file("$buildAssetsDir/webpack.mix.js")
+    inputs.file("$buildAssetsDir/package.json")
+    inputs.file("$buildAssetsDir/package-lock.json")
 
-  outputs.dir("$buildAssetsDir/dist")
-}
-
-task copyBundledProdTemplates(type: Copy) {
-  dependsOn processResources // So that we overwrite the existing
-  from "$buildAssetsDir/dist/templates"
-  into "$buildDir/resources/main/templates"
+    outputs.dir("$buildAssetsDir/dist")
 }
 
 task bundleProdAssets(type: Copy) {
   dependsOn buildProdAssets
-  dependsOn copyBundledProdTemplates
   from file("${buildAssetsDir}/dist")
-  into file("$buildDir/resources/main/static")
+  into file("$buildDir/resources/main/static/assets")
 }
 
 bootJar.dependsOn(bundleProdAssets)
