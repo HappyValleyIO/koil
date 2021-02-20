@@ -116,6 +116,7 @@ task copyAssets(type: Copy) {
     from("$projectDir/src/webapp") {
         exclude "node_modules"
         exclude "dist"
+        exclude ".temp_cache"
     }
 
     into buildAssetsDir
