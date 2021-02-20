@@ -23,7 +23,4 @@ mix.webpackConfig({
   },
 });
 
-// // apply versioning only in production
-if (mix.inProduction()) {
-  mix.version()
-}
+mix.version()

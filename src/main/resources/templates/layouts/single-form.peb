@@ -1,19 +1,19 @@
-{% extends 'layouts/base' %}
-{% block layoutStyle %}
-<link rel="stylesheet" type="text/css" href="/assets/css/packs/single-form.css">
-{% endblock %}
+    {% extends 'layouts/base' %}
+        {% block layoutStyle %}
+        <link rel="stylesheet" type="text/css" href="{{ mix("/css/packs/single-form.css") }}">
+        {% endblock %}
 
-{% block body %}
+    {% block body %}
 
-<div class="form-layout">
-    <div class="logo has-centered-content">
-        <a class="title is-size-1" href="/">koil.</a>
-        <a class="subtitle is-size-3" href="/">A Spring-based SaaS starter.</a>
+    <div class="form-layout">
+        <div class="logo has-centered-content">
+            <a class="title is-size-1" href="/">koil.</a>
+            <a class="subtitle is-size-3" href="/">A Spring-based SaaS starter.</a>
+        </div>
+        <div class="form-container has-centered-content">
+                {% block content %}{% endblock %}
+        </div>
     </div>
-    <div class="form-container has-centered-content">
-    {% block content %}{% endblock %}
-    </div>
-</div>
-{% endblock %}
+    {% endblock %}
 
 
