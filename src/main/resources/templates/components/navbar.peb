@@ -2,14 +2,14 @@
 {# @pebvariable name="isAdmin" type="java.lang.Boolean" #}
 {# @pebvariable name="isImpersonatingUser" type="java.lang.Boolean" #}
 
-<nav class="navbar is-transparent" role="navigation" aria-label="main navigation" data-controller="menu">
+<nav class="navbar is-transparent" role="navigation" aria-label="main navigation" data-controller="toggle">
     <div class="navbar-brand">
         <div class="navbar-item logo-title">
             <a class="title has-text-weight-bold has-text-centered" href="/dashboard">koil</a>
         </div>
 
         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-test="menu-button"
-           data-target="menu.toggleable" data-action="click->menu#toggle">
+           data-target="toggle.toggleable" data-action="click->toggle#toggle">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <div class="navbar-menu is-hidden-desktop" data-target="menu.toggleable" data-test="mobile-menu">
+    <div class="navbar-menu is-hidden-desktop" data-target="toggle.toggleable" data-test="mobile-menu">
         <div class="navbar-item">
             {% include 'components/dashboard-menu' %}
         </div>

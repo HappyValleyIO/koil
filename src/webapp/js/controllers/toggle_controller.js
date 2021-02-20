@@ -1,6 +1,6 @@
 import { Controller } from "stimulus";
 
-export default class MobileMenuController extends Controller {
+export default class ToggleController extends Controller {
   static get targets() {
     return ["toggleable"];
   }

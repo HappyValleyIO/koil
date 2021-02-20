@@ -1,6 +1,5 @@
 buildscript {
   ext.kotlin_version = '1.4.10'
-  ext.jdbiVersion = "3.16.0"
 
   repositories {
     maven {
@@ -126,8 +125,8 @@ task copyAssets(type: Copy) {
   from("$projectDir/src/webapp") {
     exclude "node_modules"
     exclude "dist"
-    exclde "package.json"
-    exlucde "package-lock.json"
+    exclude "package.json"
+    exclude "package-lock.json"
   }
 
   into buildAssetsDir

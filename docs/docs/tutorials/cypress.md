@@ -124,7 +124,7 @@ have a data-test attribute:
 
 ```html
             <div class="navbar-menu is-hidden-tablet" 
-                  data-target="menu.toggleable" 
+                  data-target="toggle.toggleable" 
                   data-test="mobile-menu">
                 <div class="menu">
                     <ul class="menu-list">
