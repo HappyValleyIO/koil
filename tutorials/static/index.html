@@ -354,8 +354,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#custom-js" class="md-nav__link">
-    Custom js
+  <a href="#custom-scripts" class="md-nav__link">
+    Custom scripts
   </a>
   
 </li>
@@ -439,8 +439,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#custom-js" class="md-nav__link">
-    Custom js
+  <a href="#custom-scripts" class="md-nav__link">
+    Custom scripts
   </a>
   
 </li>
@@ -492,11 +492,11 @@ functionality when working in the <code>dev</code> profile.</p>
 project is what we're interested in right now.</p>
 <p>Let's run through what these directories represent:</p>
 <ul>
-<li><strong>js:</strong> the javascript and typescript we're using in our project;</li>
+<li><strong>scripts:</strong> the javascript and typescript we're using in our project;</li>
 <li><strong>styles:</strong> the CSS/SASS assets for the project;</li>
 <li><strong>templates:</strong> the <a href="https://pebbletemplates.io/">pebble</a> templates that are used by Spring at runtime to render a page.</li>
 </ul>
-<p>We'll loop back around to use the js and styles in a little bit, but for now, let's dig in to the templates directory further:</p>
+<p>We'll loop back around to use the scripts and styles in a little bit, but for now, let's dig in to the templates directory further:</p>
 <div style="width:80%; margin:0 auto">
     <img src="/assets/images/templates-expanded.png" alt="webapp templates directory image">
 </div>
@@ -584,10 +584,10 @@ Let's add our own to the bottom:</p>
 
 
 <p>You can see we've added the <code>hello-title</code> class to our <code>h1</code> element. And it works! The title is now red. We have the ability to add custom styles.</p>
-<h2 id="custom-js">Custom js</h2>
+<h2 id="custom-scripts">Custom scripts</h2>
 <p>Now let's walk through adding a little javascript. We want to add a button that will change the color of the title between black and red.</p>
 <p>First, let's take a look at <code>base.peb</code> again to see if there's something that helps us here. We notice the line:</p>
-<div class="codehilite"><pre><span></span><code>    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;/js/index.js&quot;</span> <span class="na">defer</span> <span class="na">data-turbolinks-track</span><span class="o">=</span><span class="s">&quot;reload&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<div class="codehilite"><pre><span></span><code>    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;/scripts/app.js&quot;</span> <span class="na">defer</span> <span class="na">data-turbolinks-track</span><span class="o">=</span><span class="s">&quot;reload&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </code></pre></div>
 
 
@@ -595,7 +595,7 @@ Let's add our own to the bottom:</p>
 <p>Looking at this file, we'll see a bunch of <code>Controller</code> classes being imported and added to a <a href="https://stimulusjs.org/">StimulusJS</a> application. 
 If you've never used stimulus before then I'd recommend going through their <a href="https://stimulusjs.org/handbook/introduction">handbook</a>.</p>
 <p>Alright, let's add our own <code>Controller</code> to these. Create a file called <code>hello_controller.js</code> in the <code>controllers</code> directory. In this file, we'll add:</p>
-<div class="codehilite"><pre><span></span><code><span class="kr">import</span> <span class="p">{</span> <span class="nx">Controller</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&quot;stimulus&quot;</span><span class="p">;</span>
+<div class="codehilite"><pre><span></span><code><span class="kr">import</span> <span class="p">{</span> <span class="nx">Controller</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&quot;@stimulus/core&quot;</span><span class="p">;</span>
 
 <span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">HelloController</span> <span class="kr">extends</span> <span class="nx">Controller</span> <span class="p">{</span>
   <span class="kr">static</span> <span class="nx">get</span> <span class="nx">targets</span><span class="p">()</span> <span class="p">{</span>
@@ -642,7 +642,7 @@ If you've never used stimulus before then I'd recommend going through their <a h
 </ul>
 <p>Once again, this isn't intended to be a tutorial around Stimulus (we wrote one <a href="https://happyvalley.dev/building-a-simple-static-site-with-parcel-and-stimulus/">here</a>), so we're not going to go into it any further right now.</p>
 <h2 id="summary">Summary</h2>
-<p>So we've worked through the process of adding a new page with styles and js to the project. In the next tutorial, 
+<p>So we've worked through the process of adding a new page with styles and scripts to the project. In the next tutorial, 
 we'll add a form to this page and hook it in to the database. </p>
                 
                   
