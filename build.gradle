@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.springframework.boot' version '2.4.2'
+    id 'org.springframework.boot' version '2.4.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.jetbrains.kotlin.plugin.spring' version "$kotlin_version"
     id 'org.jetbrains.kotlin.jvm' version "$kotlin_version"
@@ -82,6 +82,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
 }
 
 compileKotlin {
@@ -156,7 +157,7 @@ task buildAssets(type: NpmTask) {
     dependsOn npmInstall
     dependsOn copyAssets
     // Run the dev build for front-end assets
-    args = ['run', 'prod']
+    args = ['run', 'dev']
 
     inputs.files(fileTree("$buildAssetsDir/js"))
     inputs.files(fileTree("$buildAssetsDir/css"))

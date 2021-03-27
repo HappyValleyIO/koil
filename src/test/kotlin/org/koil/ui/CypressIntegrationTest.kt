@@ -71,6 +71,7 @@ class CypressContainerOutputFollower(private val countDownLatch: CountDownLatch)
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Execution(ExecutionMode.CONCURRENT)
 class CypressIntegrationTest {
     companion object {
         private val LOGGER: Logger = LoggerFactory.getLogger(CypressIntegrationTest::class.java)
