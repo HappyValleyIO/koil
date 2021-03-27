@@ -34,7 +34,7 @@ abstract class BaseIntegrationTest {
                 email = email,
                 password = password,
                 authorities = authorities,
-                handle = "user$id"
+                handle = id
         )
 
         (userService.createUser(request) as UserCreationResult.CreatedUser)

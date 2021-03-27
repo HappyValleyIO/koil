@@ -1,76 +1,51 @@
 {# @pebvariable name="model" type="org.koil.auth.RegistrationViewModel" #}
 
-{% extends "layouts/single-form" %}
-{% block title %} Login {% endblock %}
+    {% extends "layouts/single-form" %}
+    {% block title %} Login {% endblock %}
 
 {% block content %}
-<form class="form" action="/auth/register" method="post" data-test="register-form">
-    <h1 class="title is-size-3">Register Here</h1>
+<form action="/auth/register" method="post" data-test="register-form">
+    <h3>Register Here</h3>
     {% include 'components/csrf-field' %}
 
-    <div class="field">
-        <label class="label" for="name-input">Name</label>
-        <div class="control has-icons-left">
-            <span class="icon is-small is-left">
-              <i class="fas fa-user-tie"></i>
-            </span>
-            <input id="name-input" type="text" name="name" class="input" value="{{ model.attempt.name }}"
+    <div>
+        <label>
+            <i class="fas fa-user-tie"></i> Name
+            <input type="text" name="name" value="{{ model.attempt.name }}"
                    data-test="name-input">
-        </div>
-        <p class="help">This isn't shown publicly. We use it for account recovery.</p>
-        <p id="name-error" class="help is-danger">{{ model.errors.get("name") }}</p>
-    </div>
 
-    <div class="field">
-        <label class="label" for="handle-input">
-            Account Handle
-            <span class="icon" data-controller="tippy" data-tippy-content="Your public handle.">
-                <i class="fas fa-info-circle"></i>
-            </span>
+            <small class="warning">{{ model.errors.get("name") }}</small>
+            <small>This isn't shown publicly. We use it for account recovery.</small>
         </label>
-        <div class="control has-icons-left">
-            <span class="icon is-small is-left">
-              <i class="fas fa-user"></i>
-            </span>
-            <input type="text" id="handle-input" name="handle" maxlength="16" minlength="4" class="input"
+
+        <label>
+            <i class="fas fa-user"></i> Account Handle
+            <input type="text" name="handle" maxlength="16" minlength="4"
                    value="{{ model.attempt.handle }}" data-test="handle-input">
-        </div>
-        <p id="name-error" class="help is-danger">{{ model.errors.get("handle") }}</p>
-    </div>
 
-    <div class="field">
-        <label class="label" for="email-input">Email Address</label>
-        <div class="control has-icons-left">
-            <span class="icon is-small is-left">
-              <i class="fas fa-envelope"></i>
-            </span>
-            <input id="email-input" type="email" name="email" class="input" value="{{ model.attempt.email }}"
+            <small id="name-error" class="help is-danger">{{ model.errors.get("handle") }}</small>
+        </label>
+
+        <label>
+            <i class="fas fa-envelope"></i> Email Address
+            <input type="email" name="email" value="{{ model.attempt.email }}"
                    data-test="email-input">
-        </div>
 
-        <p id="email-error" class="help is-danger">{{ model.errors.get("email") }}</p>
-    </div>
+            <small class="help is-danger">{{ model.errors.get("email") }}</small>
+        </label>
 
-    <div class="field" data-controller="password">
-        <label class="label" for="password-input">Password</label>
-        <div class="control has-icons-left has-icons-right">
-            <span class="icon is-small is-left">
-              <i class="fas fa-lock"></i>
-            </span>
-            <span class="icon is-clickable is-small is-right">
-              <i class="fas fa-eye" data-action="click->password#toggleVisibility"></i>
-            </span>
-            <input id="password-input" type="password" name="password" value="{{ model.attempt.password }}" data-target="password.input"
-                   class="input" data-test="password-input">
-        </div>
-        <p id="password-error" class="help is-danger">{{ model.errors.get("password") }}</p>
-    </div>
 
-    <div class="actions buttons is-centered" id="submit-button">
-        <button class="button is-medium is-primary" type="submit" name="login" data-test="submit-button">Create
-            Account
-        </button>
+        <label data-controller="password">
+            <i class="fas fa-lock"></i> Password
+            <input type="password" name="password" value="{{ model.attempt.password }}" class="input"
+                   data-target="password.input" data-test="password-input">
+
+            <small><a data-action="click->password#toggleVisibility">Toggle show/hide password</a></small>
+            <small class="warning">{{ model.errors.get("password") }}</small>
+        </label>
+
+        <button type="submit" data-test="submit-button">Create Account</button>
+        <p>Or, login <a href="/auth/login">here</a>.</p>
     </div>
-    <p class="has-text-centered">Or, login <a href="/auth/login">here</a>.</p>
 </form>
 {% endblock %}

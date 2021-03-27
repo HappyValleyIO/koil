@@ -1,19 +1,39 @@
     {% extends 'layouts/base' %}
         {% block layoutStyle %}
-        <link rel="stylesheet" type="text/css" href="{{ mix("/css/packs/single-form.css") }}">
+        <link rel="stylesheet" type="text/css" href="{{  mix("/css/packs/public.css") }}">
         {% endblock %}
 
     {% block body %}
+    <body>
+    <nav class="container-fluid" data-controller="toggle">
+        <ul>
+            <li><h1>Koil.</h1></li>
+        </ul>
 
-    <div class="form-layout">
-        <div class="logo has-centered-content">
-            <a class="title is-size-1" href="/">koil.</a>
-            <a class="subtitle is-size-3" href="/">A Spring-based SaaS starter.</a>
-        </div>
-        <div class="form-container has-centered-content">
+        <ul>
+            <li>
+                <a class="button is-primary" href="/auth/login">
+                    Login
+                </a>
+            </li>
+            <li>
+                <a class="button is-primary" href="/auth/register">
+                    Sign up
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <main class="container">
+        <article>
                 {% block content %}{% endblock %}
+        </article>
+    </main>
+    <footer class="container-fluid">
+        <div class="hero-foot">
+            <div class="container has-text-centered">
+                <p>Built by <a href="https://www.happyvalley.io">Happy Valley IO</a>.</p>
+            </div>
         </div>
-    </div>
+    </footer>
+    </body>
     {% endblock %}
-
-

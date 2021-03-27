@@ -1,44 +1,29 @@
-{% extends "layouts/dashboard-layout" %}
-{% block title %} Contact Us {% endblock %}
-{% block content %}
-<div class="card">
-    <header class="has-background-black">
-        <h3 class="title has-text-white is-size-3">Contact Us</h3>
-        <h5 class="subtitle has-text-white is-size-5">Have a question or a concern?</h5>
-    </header>
-    <div class="card-content">
+    {% extends "layouts/dashboard-layout" %}
+        {% block title %} Contact Us {% endblock %}
+    {% block content %}
+    <hgroup>
+        <h1>Contact Us</h1>
+        <h3>Have a question or a concern? Get in touch below.</h3>
+    </hgroup>
+    <div>
         <form>
-            <div class="form-section">
-                <h6 class="subtitle is-size-5">Get in touch below.</h6>
-
-                <div class="field">
-                    <label class="label">Name</label>
-                    <div class="control">
-                        <input class="input" name="name" type="text" value="Jane Doe">
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Email</label>
-                    <div class="control">
-                        <input class="input" name="email" type="email" value="jane@example.com">
-                    </div>
-                </div>
+            <label>Name
+                <input name="name" type="text" value="Jane Doe">
+            </label>
+            <label>Email
+                <input name="email" type="email" value="jane@example.com">
+            </label>
 
 
-                <div class="field">
-                    <label class="label">Questions/Comments</label>
-                    <div class="control">
-                        <input id="x" type="hidden" name="bio" required>
-                        <trix-editor input="x"></trix-editor>
-                    </div>
-                </div>
+            <label>
+                Questions/Comments
+            </label>
+            <label>
+                <textarea name="bio" required></textarea>
+            </label>
 
-                <div class="field">
-                    <button type="submit" class="button is-primary">Send</button>
-                </div>
-            </div>
+            <button type="submit" class="button is-primary">Send</button>
         </form>
     </div>
-</div>
 
-{% endblock %}
+    {% endblock %}

@@ -1,4 +1,4 @@
-package org.koil.base
+package org.koil.view
 
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ModelAttribute
