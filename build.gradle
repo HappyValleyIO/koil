@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.32'
 
     repositories {
         maven {
@@ -136,18 +136,9 @@ task copyAssets(type: Copy) {
     }
 }
 
-/**
- * We cache the node installation outside of the build dir. This is so that we don't pull down node + npm whenever we
- * run a `clean`.
- */
-def nodeCache = "${project.buildDir}/.node"
-
 node {
-//    version = '14.16.0'
-//    npmVersion = '7.5.4'
-//    download = false
-    workDir = file("$nodeCache/nodejs")
-    npmWorkDir = file("$nodeCache/npm")
+    version = '14.16.0'
+    download = true
     nodeModulesDir = file(buildAssetsDir)
     npmInstallCommand = 'ci'
 }
