@@ -153,6 +153,12 @@ node {
 }
 npm_install.dependsOn copyAssets
 
+gradle.taskGraph.whenReady { graph ->
+    if (graph.hasTask(buildProdAssets)) {
+        buildAssets.enabled = false
+    }
+}
+
 task buildAssets(type: NpmTask) {
     dependsOn npmInstall
     dependsOn copyAssets

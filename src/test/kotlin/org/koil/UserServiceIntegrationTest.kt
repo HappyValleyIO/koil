@@ -9,6 +9,7 @@ import org.koil.user.UserCreationResult
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.test.util.AssertionErrors.assertEquals
+import org.springframework.transaction.annotation.Transactional
 
 class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService) : BaseIntegrationTest() {
 
