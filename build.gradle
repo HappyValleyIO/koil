@@ -137,8 +137,7 @@ task copyAssets(type: Copy) {
 }
 
 node {
-    version = '14.16.0'
-    download = true
+    download = false
     nodeModulesDir = file(buildAssetsDir)
     npmInstallCommand = 'ci'
 }
