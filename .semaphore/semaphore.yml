@@ -12,7 +12,6 @@ blocks:
           commands:
             - sem-version java 11
             - sem-service start postgres
-            - createdb -U postgres -h 0.0.0.0 postgres
             - checkout
             - ./gradlew build --info
       env_vars:
