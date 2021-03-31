@@ -4,5 +4,5 @@
   "chromeWebSecurity": false,
   "trashAssetsBeforeRuns": true,
   "defaultCommandTimeout": 10000,
-  "screenshotsFolder": "/tmp"
+  "screenshotsFolder": "/tmp/cypress"
 }

@@ -6,7 +6,7 @@ CREATE TABLE accounts
     start_date        TIMESTAMP    NOT NULL DEFAULT NOW(),
     full_name         varchar(64)  NOT NULL,
     handle            VARCHAR(16)  NOT NULL,
-    public_account_id UUID UNIQUE  NOT NULL DEFAULT uuid_generate_v4(),
+    public_account_id UUID UNIQUE  NOT NULL DEFAULT public.uuid_generate_v4(),
     email_address     varchar(254) NOT NULL UNIQUE,
     password          varchar(254) NOT NULL,
     stop_date         TIMESTAMP
