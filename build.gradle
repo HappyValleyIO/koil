@@ -16,7 +16,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.jetbrains.kotlin.plugin.spring' version "$kotlin_version"
     id 'org.jetbrains.kotlin.jvm' version "$kotlin_version"
-    id "com.github.node-gradle.node" version "2.2.4"
+    id "com.github.node-gradle.node" version "3.0.1"
     id "com.gorylenko.gradle-git-properties" version "2.2.2"
 }
 
@@ -143,9 +143,9 @@ task copyAssets(type: Copy) {
 def nodeCache = "${project.buildDir}/.node"
 
 node {
-    version = '14.16.0'
-    npmVersion = '7.5.4'
-    download = false
+//    version = '14.16.0'
+//    npmVersion = '7.5.4'
+//    download = false
     workDir = file("$nodeCache/nodejs")
     npmWorkDir = file("$nodeCache/npm")
     nodeModulesDir = file(buildAssetsDir)
