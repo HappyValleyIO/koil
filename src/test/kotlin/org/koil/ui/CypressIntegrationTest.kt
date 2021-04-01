@@ -6,12 +6,10 @@ import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
 import org.koil.BaseIntegrationTest
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import java.io.File
+import java.util.concurrent.TimeUnit
 import kotlin.streams.toList
-
 
 /**
  * Note that this test class is **not** transactional. This means that the data will persist in the test database between runs.
@@ -20,7 +18,7 @@ import kotlin.streams.toList
  * have rollback happen based off of several ostensibly disconnected web requests.
  */
 @Execution(ExecutionMode.CONCURRENT)
-class CypressIntegrationTest: BaseIntegrationTest() {
+class CypressIntegrationTest : BaseIntegrationTest() {
     @LocalServerPort
     var port = 0
 
@@ -35,7 +33,7 @@ class CypressIntegrationTest: BaseIntegrationTest() {
                                 .start()
 
                         val lines = process.inputStream.bufferedReader().lines()
-                        process.waitFor()
+                        process.waitFor(15, TimeUnit.MINUTES)
 
                         assertEquals(0, process.exitValue()) {
                             """

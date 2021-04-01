@@ -6,8 +6,6 @@ services:
       - /etc/timezone:/etc/timezone
       - /etc/localtime:/etc/localtime
     environment:
-      - POSTGRES_PASSWORD=SomePassword123!
-      - POSTGRES_USER=root
-      - POSTGRES_DB=koil
+      - POSTGRES_DB=postgres
     ports:
       - 5432:5432

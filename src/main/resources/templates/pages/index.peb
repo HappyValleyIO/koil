@@ -6,7 +6,7 @@
     <meta name="description"
           content="koil starter app example.">
 
-    <link rel="stylesheet" type="text/css" href="{{  mix("/css/packs/public.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{ mix("/css/packs/public.css") }}">
     {% include 'components/devtools' %}
     {% include 'components/sentry' %}
 

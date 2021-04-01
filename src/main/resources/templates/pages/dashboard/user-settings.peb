@@ -15,7 +15,7 @@
                value="{{ global.user.handle }}">
     </label>
 
-    <label class="label" for="email-input">
+    <label for="email-input">
         <i class="fas fa-envelope"></i> Email Address
         <input name="email" type="email" value="{{ model.email }}">
     </label>
