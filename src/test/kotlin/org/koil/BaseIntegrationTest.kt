@@ -25,36 +25,38 @@ abstract class BaseIntegrationTest {
     @Autowired
     lateinit var accountRepository: AccountRepository
 
-    protected fun withTestSession(email: String = "test+${Random().nextInt()}@getkoil.dev",
-                                  password: String = "TestPass123!",
-                                  authorities: List<AuthAuthority> = listOf(AuthAuthority.USER),
-                                  foo: (EnrichedUserDetails) -> Unit
+    protected fun withTestSession(
+        email: String = "test+${Random().nextInt()}@getkoil.dev",
+        password: String = "TestPass123!",
+        authorities: List<AuthAuthority> = listOf(AuthAuthority.USER),
+        foo: (EnrichedUserDetails) -> Unit
     ) {
         val id = Random().nextInt().toString().substring(0..8)
         val request = UserCreationRequest(
-                fullName = "Test User [$id]",
-                email = email,
-                password = password,
-                authorities = authorities,
-                handle = id
+            fullName = "Test User [$id]",
+            email = email,
+            password = password,
+            authorities = authorities,
+            handle = id
         )
 
         (userService.createUser(request) as UserCreationResult.CreatedUser)
         userService.loadUserByUsername(email)!!.run(foo)
     }
 
-    protected fun withTestAccount(email: String = "test+${Random().nextInt()}@getkoil.dev",
-                                  password: String = "TestPass123!",
-                                  authorities: List<AuthAuthority> = listOf(AuthAuthority.USER),
-                                  foo: (Account) -> Unit
+    protected fun withTestAccount(
+        email: String = "test+${Random().nextInt()}@getkoil.dev",
+        password: String = "TestPass123!",
+        authorities: List<AuthAuthority> = listOf(AuthAuthority.USER),
+        foo: (Account) -> Unit
     ) {
         val id = Random().nextInt().toString().substring(0..8)
         val request = UserCreationRequest(
-                fullName = "Test User [$id]",
-                email = email,
-                password = password,
-                authorities = authorities,
-                handle = "user$id"
+            fullName = "Test User [$id]",
+            email = email,
+            password = password,
+            authorities = authorities,
+            handle = "user$id"
         )
 
         (userService.createUser(request) as UserCreationResult.CreatedUser)

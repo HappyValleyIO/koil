@@ -13,7 +13,7 @@ class AdminControllerAuthTest : BaseIntegrationTest() {
     fun `GIVEN an admin user WHEN requesting the admin dashboard THEN return OK`() {
         withTestSession(authorities = listOf(AuthAuthority.ADMIN)) { admin ->
             mockMvc.perform(get("/admin").with(user(admin)))
-                    .andExpect(status().isOk)
+                .andExpect(status().isOk)
         }
     }
 
@@ -21,7 +21,7 @@ class AdminControllerAuthTest : BaseIntegrationTest() {
     fun `GIVEN a non-admin user WHEN requesting the admin dashboard THEN return OK`() {
         withTestSession(authorities = listOf(AuthAuthority.USER)) { nonAdmin ->
             mockMvc.perform(get("/admin").with(user(nonAdmin)))
-                    .andExpect(status().isForbidden)
+                .andExpect(status().isForbidden)
         }
     }
 }

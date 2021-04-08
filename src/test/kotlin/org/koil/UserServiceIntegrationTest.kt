@@ -9,7 +9,6 @@ import org.koil.user.UserCreationResult
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.test.util.AssertionErrors.assertEquals
-import org.springframework.transaction.annotation.Transactional
 
 class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService) : BaseIntegrationTest() {
 
@@ -18,7 +17,15 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
         val email = "stephen+${RandomString.make()}@getkoil.dev"
         val password = "SomePassword456!"
         val created: UserCreationResult.CreatedUser =
-                userService.createUser(UserCreationRequest("Stephen the tester", email, password, "tester", listOf(AuthAuthority.ADMIN))) as UserCreationResult.CreatedUser
+            userService.createUser(
+                UserCreationRequest(
+                    "Stephen the tester",
+                    email,
+                    password,
+                    "tester",
+                    listOf(AuthAuthority.ADMIN)
+                )
+            ) as UserCreationResult.CreatedUser
         val queried = userDetails.loadUserByUsername(email) as EnrichedUserDetails
 
         assertEquals("Assert logged in user is same as created user", created.account.accountId, queried.accountId)
@@ -30,7 +37,14 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
     fun `GIVEN no user for principal WHEN creating a new user THEN ensure they only have USER authority by default`() {
         val email = "stephen+${RandomString.make()}@getkoil.dev"
         val password = "SomePassword456!"
-        userService.createUser(UserCreationRequest("Stephen the tester", email, password, "tester")) as UserCreationResult.CreatedUser
+        userService.createUser(
+            UserCreationRequest(
+                "Stephen the tester",
+                email,
+                password,
+                "tester"
+            )
+        ) as UserCreationResult.CreatedUser
         val queried = userDetails.loadUserByUsername(email) as EnrichedUserDetails
 
         assertEquals("Only USER authority present", listOf("USER"), queried.authorities.map { it.authority })
@@ -40,9 +54,21 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
     fun `GIVEN no user for principal WHEN creating a new user with admin THEN ensure they have USER and ADMIN rights authorities`() {
         val email = "stephen+${RandomString.make()}@getkoil.dev"
         val password = "SomePassword456!"
-        userService.createUser(UserCreationRequest("Stephen the tester", email, password, "tester", listOf(AuthAuthority.ADMIN, AuthAuthority.USER))) as UserCreationResult.CreatedUser
+        userService.createUser(
+            UserCreationRequest(
+                "Stephen the tester",
+                email,
+                password,
+                "tester",
+                listOf(AuthAuthority.ADMIN, AuthAuthority.USER)
+            )
+        ) as UserCreationResult.CreatedUser
         val queried = userDetails.loadUserByUsername(email) as EnrichedUserDetails
 
-        assertEquals("USER and ADMIN authorities present", listOf("USER", "ADMIN").sorted(), queried.authorities.map { it.authority }.sorted())
+        assertEquals(
+            "USER and ADMIN authorities present",
+            listOf("USER", "ADMIN").sorted(),
+            queried.authorities.map { it.authority }.sorted()
+        )
     }
 }

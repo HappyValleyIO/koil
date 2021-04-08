@@ -18,6 +18,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version "$kotlin_version"
     id "com.github.node-gradle.node" version "3.0.1"
     id "com.gorylenko.gradle-git-properties" version "2.2.2"
+    id "com.github.ben-manes.versions" version "0.38.0"
 }
 
 apply plugin: 'java'

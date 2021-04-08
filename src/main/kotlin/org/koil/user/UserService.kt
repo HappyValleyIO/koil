@@ -14,11 +14,11 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty
 
 data class UserCreationRequest(
-        @get:NotEmpty val fullName: String,
-        @get:Email val email: String,
-        @field:Length(min = 8) private val password: String,
-        val handle: String,
-        val authorities: List<AuthAuthority> = listOf(AuthAuthority.USER)
+    @get:NotEmpty val fullName: String,
+    @get:Email val email: String,
+    @field:Length(min = 8) private val password: String,
+    val handle: String,
+    val authorities: List<AuthAuthority> = listOf(AuthAuthority.USER)
 ) {
     fun getPassword(encoder: PasswordEncoder): String = encoder.encode(password)
 }
@@ -34,15 +34,24 @@ interface UserService {
 
 @Component
 class UserServiceImpl(
-        private val repository: AccountRepository,
-        private val encoder: PasswordEncoder,
-        private val publisher: ApplicationEventPublisher
+    private val repository: AccountRepository,
+    private val encoder: PasswordEncoder,
+    private val publisher: ApplicationEventPublisher
 ) : UserService, UserDetailsService {
     override fun createUser(request: UserCreationRequest): UserCreationResult {
         return if (repository.findAccountByEmailAddress(request.email) == null) {
             val authorities = request.authorities.map { AccountAuthority(it, Instant.now()) }
-            val account = Account(null, Instant.now(), request.fullName, request.handle, UUID.randomUUID(), request.email, request.getPassword(encoder), null,
-                    authorities)
+            val account = Account(
+                null,
+                Instant.now(),
+                request.fullName,
+                request.handle,
+                UUID.randomUUID(),
+                request.email,
+                request.getPassword(encoder),
+                null,
+                authorities
+            )
             val saved = repository.save(account)
 
             publisher.publishEvent(AccountCreationEvent(this, account))
@@ -57,11 +66,11 @@ class UserServiceImpl(
         val account = if (email != null) repository.findAccountByEmailAddress(email) else null
         if (account !== null && account.accountId !== null) {
             return EnrichedUserDetails(
-                    User.builder()
-                            .username(account.emailAddress)
-                            .password(account.password)
-                            .authorities(account.authorities.map { it.authority.grantedAuthority })
-                            .build(), account.accountId, account.handle
+                User.builder()
+                    .username(account.emailAddress)
+                    .password(account.password)
+                    .authorities(account.authorities.map { it.authority.grantedAuthority })
+                    .build(), account.accountId, account.handle
             )
         } else {
             throw UsernameNotFoundException("Could not find user $email")

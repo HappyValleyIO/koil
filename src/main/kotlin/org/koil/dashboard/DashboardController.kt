@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView
 @Controller
 @RequestMapping("/dashboard")
 class DashboardController(
-        val views: IDashboardViews
+    val views: IDashboardViews
 ) {
 
     @GetMapping("")

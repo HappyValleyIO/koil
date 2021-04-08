@@ -4,27 +4,29 @@ import org.koil.user.Account
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.ModelAndView
 
-data class LoginViewModel(val email: String = "",
-                          val redirect: Boolean = false,
-                          val badCredentials: Boolean = false,
-                          val errors: Map<String, String?> = mapOf())
+data class LoginViewModel(
+    val email: String = "",
+    val redirect: Boolean = false,
+    val badCredentials: Boolean = false,
+    val errors: Map<String, String?> = mapOf()
+)
 
 data class RegistrationViewModel(
-        val attempt: RegistrationAttempt? = null,
-        val errors: MutableMap<String, String?> = mutableMapOf(),
-        val account: Account? = null
+    val attempt: RegistrationAttempt? = null,
+    val errors: MutableMap<String, String?> = mutableMapOf(),
+    val account: Account? = null
 )
 
 data class PasswordResetRequestModel(
-        val attempt: PasswordResetRequest? = null,
-        val errors: MutableMap<String, String?> = mutableMapOf(),
-        val completed: Boolean = false
+    val attempt: PasswordResetRequest? = null,
+    val errors: MutableMap<String, String?> = mutableMapOf(),
+    val completed: Boolean = false
 )
 
 data class ResetPasswordViewModel(
-        val attempt: PasswordResetAttempt? = null,
-        val errors: MutableMap<String, String?> = mutableMapOf(),
-        val code: String?
+    val attempt: PasswordResetAttempt? = null,
+    val errors: MutableMap<String, String?> = mutableMapOf(),
+    val code: String?
 )
 
 interface IAuthViews {

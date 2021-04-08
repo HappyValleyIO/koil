@@ -25,9 +25,9 @@ interface AuthService {
 
 @Component
 class AuthServiceImpl(
-        private val notifications: NotificationService,
-        private val passwordEncoder: PasswordEncoder,
-        private val accountRepository: AccountRepository
+    private val notifications: NotificationService,
+    private val passwordEncoder: PasswordEncoder,
+    private val accountRepository: AccountRepository
 ) : AuthService {
     override fun requestPasswordReset(email: String): PasswordResetRequestResult {
         // Create the unique password reset code

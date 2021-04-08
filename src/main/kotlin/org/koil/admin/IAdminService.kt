@@ -1,9 +1,9 @@
 package org.koil.admin
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.koil.auth.AuthAuthority
 import org.koil.user.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
@@ -17,11 +17,12 @@ interface IAdminService {
 }
 
 @Component
-class AdminServiceImpl(private val userService: UserService,
-                       @Value("\${admin-user.email:}") private val adminEmailFromEnv: String,
-                       @Value("\${admin-user.password:}") private val adminPasswordFromEnv: String,
-                       private val persistence: IAdminPersistence,
-                       private val accountRepository: AccountRepository
+class AdminServiceImpl(
+    private val userService: UserService,
+    @Value("\${admin-user.email:}") private val adminEmailFromEnv: String,
+    @Value("\${admin-user.password:}") private val adminPasswordFromEnv: String,
+    private val persistence: IAdminPersistence,
+    private val accountRepository: AccountRepository
 ) : IAdminService, ApplicationListener<ContextRefreshedEvent> {
 
     companion object {
@@ -35,11 +36,15 @@ class AdminServiceImpl(private val userService: UserService,
     }
 
     override fun createAdminFromEmail(email: String, password: String): UserCreationResult {
-        return userService.createUser(UserCreationRequest("Default Admin",
+        return userService.createUser(
+            UserCreationRequest(
+                "Default Admin",
                 email,
                 password,
                 "DefaultAdmin",
-                listOf(AuthAuthority.ADMIN))).also {
+                listOf(AuthAuthority.ADMIN)
+            )
+        ).also {
             if (it is UserCreationResult.CreatedUser) {
                 LOGGER.info("Created an admin account with email {}", email)
             }

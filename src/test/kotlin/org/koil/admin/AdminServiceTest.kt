@@ -62,7 +62,15 @@ class AdminServiceTest : BaseIntegrationTest() {
         val email = "user+${Random().nextInt()}@getkoil.dev"
         (adminService.createAdminFromEmail(email, "SomePass123!") as UserCreationResult.CreatedUser).account
 
-        val nonAdmin = userDetails.createUser(UserCreationRequest("Stephen the tester", "x$email", "TestPass23!", "tester", listOf(AuthAuthority.USER))) as UserCreationResult.CreatedUser
+        val nonAdmin = userDetails.createUser(
+            UserCreationRequest(
+                "Stephen the tester",
+                "x$email",
+                "TestPass23!",
+                "tester",
+                listOf(AuthAuthority.USER)
+            )
+        ) as UserCreationResult.CreatedUser
 
         assertThrows(IllegalArgumentException::class.java) {
             adminService.getAccounts(nonAdmin.account.accountId!!)

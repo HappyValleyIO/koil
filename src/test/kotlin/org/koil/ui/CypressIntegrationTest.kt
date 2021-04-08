@@ -25,23 +25,27 @@ class CypressIntegrationTest : BaseIntegrationTest() {
     @TestFactory
     fun runCypressTests(): Collection<DynamicTest> {
         return File("src/webapp/cypress/integration").list()
-                .map { name ->
-                    DynamicTest.dynamicTest(name) {
-                        val process = ProcessBuilder()
-                                .directory(File("./build/webapp/"))
-                                .command("/bin/bash", "-c", "CYPRESS_BASE_URL=http://localhost:$port npx cypress run --spec cypress/integration/$name")
-                                .start()
+            .map { name ->
+                DynamicTest.dynamicTest(name) {
+                    val process = ProcessBuilder()
+                        .directory(File("./build/webapp/"))
+                        .command(
+                            "/bin/bash",
+                            "-c",
+                            "CYPRESS_BASE_URL=http://localhost:$port npx cypress run --spec cypress/integration/$name"
+                        )
+                        .start()
 
-                        val lines = process.inputStream.bufferedReader().lines()
-                        process.waitFor(15, TimeUnit.MINUTES)
+                    val lines = process.inputStream.bufferedReader().lines()
+                    process.waitFor(15, TimeUnit.MINUTES)
 
-                        assertEquals(0, process.exitValue()) {
-                            """
+                    assertEquals(0, process.exitValue()) {
+                        """
                                 PROCESS EXIT CODE: ${process.exitValue()}
                                 ${lines.toList().joinToString("\n")}
                             """
-                        }
                     }
                 }
+            }
     }
 }

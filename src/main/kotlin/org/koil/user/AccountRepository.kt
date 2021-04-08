@@ -7,11 +7,13 @@ import java.util.*
 interface AccountRepository : CrudRepository<Account, Long> {
     fun findAccountByEmailAddress(email: String): Account?
 
-    @Query("""
+    @Query(
+        """
         SELECT a.*, apr.* FROM accounts a
         JOIN account_password_reset apr ON a.account_id = apr.account_id
         WHERE apr.reset_code = :resetCode
-    """)
+    """
+    )
     fun findAccountByPasswordResetCode(resetCode: UUID): Account?
 }
 

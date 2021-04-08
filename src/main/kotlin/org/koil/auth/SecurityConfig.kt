@@ -20,10 +20,12 @@ import java.util.concurrent.TimeUnit
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(private val userDetailsService: UserServiceImpl,
-                     private val passwordEncoder: PasswordEncoder,
-                     private val switchUserFilter: SwitchUserFilter) :
-        WebSecurityConfigurerAdapter() {
+class SecurityConfig(
+    private val userDetailsService: UserServiceImpl,
+    private val passwordEncoder: PasswordEncoder,
+    private val switchUserFilter: SwitchUserFilter
+) :
+    WebSecurityConfigurerAdapter() {
 
     @Autowired
     @Throws(java.lang.Exception::class)
@@ -34,23 +36,23 @@ class SecurityConfig(private val userDetailsService: UserServiceImpl,
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         http.csrf()
-                .csrfTokenRepository(HttpSessionCsrfTokenRepository())
-                .and()
-                .addFilterAfter(switchUserFilter, FilterSecurityInterceptor::class.java)
-                .authorizeRequests()
-                .antMatchers("/admin/impersonation/logout").hasAuthority(AuthRole.ADMIN_IMPERSONATING_USER.name)
-                .antMatchers("/admin/**").hasAuthority(AuthAuthority.ADMIN.name)
-                .antMatchers("/dashboard/**").authenticated()
-                .anyRequest().permitAll()
-                .and()
-                .logout()
-                .logoutSuccessUrl("/auth/login?logout")
-                .permitAll()
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint { _, response, _ ->
-                    response.sendRedirect("/auth/login?redirect")
-                }
+            .csrfTokenRepository(HttpSessionCsrfTokenRepository())
+            .and()
+            .addFilterAfter(switchUserFilter, FilterSecurityInterceptor::class.java)
+            .authorizeRequests()
+            .antMatchers("/admin/impersonation/logout").hasAuthority(AuthRole.ADMIN_IMPERSONATING_USER.name)
+            .antMatchers("/admin/**").hasAuthority(AuthAuthority.ADMIN.name)
+            .antMatchers("/dashboard/**").authenticated()
+            .anyRequest().permitAll()
+            .and()
+            .logout()
+            .logoutSuccessUrl("/auth/login?logout")
+            .permitAll()
+            .and()
+            .exceptionHandling()
+            .authenticationEntryPoint { _, response, _ ->
+                response.sendRedirect("/auth/login?redirect")
+            }
     }
 
     override fun configure(auth: AuthenticationManagerBuilder?) {
@@ -67,7 +69,8 @@ class SecurityConfig(private val userDetailsService: UserServiceImpl,
 class WebConfig : WebMvcConfigurer {
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/")
-                .setCacheControl(
-                        CacheControl.maxAge(365, TimeUnit.DAYS).cachePublic())
+            .setCacheControl(
+                CacheControl.maxAge(365, TimeUnit.DAYS).cachePublic()
+            )
     }
 }

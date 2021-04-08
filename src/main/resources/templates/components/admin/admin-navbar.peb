@@ -22,7 +22,7 @@
             <div class="navbar-item">
                 <div class="buttons">
                     <form method="POST" action="/logout">
-                    {% include 'components/csrf-field' %}
+                        {% include 'components/csrf-field' %}
                         <button class="button is-primary is-light" type="submit">
                             Log out
                         </button>
@@ -34,7 +34,7 @@
 
     <div class="navbar-menu is-hidden-desktop" data-target="toggle.toggleable" data-test="mobile-menu">
         <div class="navbar-item">
-        {% include 'components/dashboard-menu' %}
+                {% include 'components/dashboard-menu' %}
         </div>
     </div>
 </nav>

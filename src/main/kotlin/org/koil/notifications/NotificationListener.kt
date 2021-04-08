@@ -15,19 +15,19 @@ import java.util.*
 
 data class EmailDefaults(val clientPreviewText: String, val companyDetails: String, val unsubscribeLink: String)
 data class NotificationAlertSuccessModel(
-        val defaults: EmailDefaults,
-        val title: String,
-        val headline: String,
-        val actionUrl: String,
-        val actionText: String,
-        val thankYouText: String
+    val defaults: EmailDefaults,
+    val title: String,
+    val headline: String,
+    val actionUrl: String,
+    val actionText: String,
+    val thankYouText: String
 )
 
 data class AccountCreationNotificationModel(
-        val defaults: EmailDefaults,
-        val subtitle: String,
-        val footer: String,
-        val title: String
+    val defaults: EmailDefaults,
+    val subtitle: String,
+    val footer: String,
+    val title: String
 )
 
 data class PasswordResetModel(val defaults: EmailDefaults, val resetLink: String, val appName: String)
@@ -43,20 +43,20 @@ class NotificationListener(val notifications: NotificationService) {
 
 @Component
 class NotificationService(
-        private val sender: JavaMailSender,
-        private val views: EmailViews,
-        @Value("\${mail.fromAddress}") private val fromAddress: String
+    private val sender: JavaMailSender,
+    private val views: EmailViews,
+    @Value("\${mail.fromAddress}") private val fromAddress: String
 ) {
     fun sendAccountCreationConfirmation(account: Account) {
         val model = AccountCreationNotificationModel(
-                defaults = EmailDefaults(
-                        "Welcome to koil!",
-                        "Happy Valley IO Ltd, 2 Melville Street, Falkirk, FK1 1HZ",
-                        "%unsubscribe_link%"
-                ),
-                title = "Welcome to koil!",
-                subtitle = "We're happy to have you!",
-                footer = "Get in touch if you have any trouble!"
+            defaults = EmailDefaults(
+                "Welcome to koil!",
+                "Happy Valley IO Ltd, 2 Melville Street, Falkirk, FK1 1HZ",
+                "%unsubscribe_link%"
+            ),
+            title = "Welcome to koil!",
+            subtitle = "We're happy to have you!",
+            footer = "Get in touch if you have any trouble!"
         )
 
         sendMessage(views.renderWelcomeMessage(model), account.emailAddress, model.title)
@@ -65,13 +65,13 @@ class NotificationService(
     fun sendPasswordResetEmail(email: String, code: UUID?) {
         val url = "http://localhost:8080/auth/password-reset?code=" + URLEncoder.encode(code.toString(), "UTF-8")
         val model = PasswordResetModel(
-                defaults = EmailDefaults(
-                        "Password reset link",
-                        "Happy Valley IO Ltd, 2 Melville Street, Falkirk, FK1 1HZ",
-                        "%unsubscribe_link%"
-                ),
-                resetLink = url,
-                appName = "koil"
+            defaults = EmailDefaults(
+                "Password reset link",
+                "Happy Valley IO Ltd, 2 Melville Street, Falkirk, FK1 1HZ",
+                "%unsubscribe_link%"
+            ),
+            resetLink = url,
+            appName = "koil"
         )
 
         sendMessage(views.renderPasswordReset(model), email, "Password reset link")

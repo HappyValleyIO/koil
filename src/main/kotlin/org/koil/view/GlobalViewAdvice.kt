@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 
 data class GlobalViewModel(val user: EnrichedUserDetails?) {
     fun isAdmin(): Boolean =
-            user?.isAdmin() ?: false
+        user?.isAdmin() ?: false
 
     fun isImpersonatingUser(): Boolean {
         val auth = SecurityContextHolder.getContext().authentication

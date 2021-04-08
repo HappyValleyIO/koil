@@ -18,58 +18,58 @@ class EmailDevController {
     @GetMapping("/alert-success")
     fun alertSuccessEmail(): ModelAndView {
         return ModelAndView(
-                "email/alert-success-inlined",
-                mapOf(
-                        "model" to NotificationAlertSuccessModel(
-                                defaults = EmailDefaults(
-                                        "A notification for you to check out",
-                                        "Happy Valley IO Ltd, 2 Melville Street, Falkirk, FK1 1HZ",
-                                        "%unsubscribe_link%"
-                                ),
-                                title = "A thing happened with the other thing!",
-                                headline = "Ready for more?",
-                                actionUrl = "https://localhost:8080/dashboard/history",
-                                actionText = "Read Now",
-                                thankYouText = "Thanks for following!"
-                        )
+            "email/alert-success-inlined",
+            mapOf(
+                "model" to NotificationAlertSuccessModel(
+                    defaults = EmailDefaults(
+                        "A notification for you to check out",
+                        "Happy Valley IO Ltd, 2 Melville Street, Falkirk, FK1 1HZ",
+                        "%unsubscribe_link%"
+                    ),
+                    title = "A thing happened with the other thing!",
+                    headline = "Ready for more?",
+                    actionUrl = "https://localhost:8080/dashboard/history",
+                    actionText = "Read Now",
+                    thankYouText = "Thanks for following!"
                 )
+            )
         )
     }
 
     @GetMapping("/welcome")
     fun welcomeEmail(): ModelAndView {
         return ModelAndView(
-                "email/welcome-inlined",
-                mapOf(
-                        "model" to AccountCreationNotificationModel(
-                                defaults = EmailDefaults(
-                                        "A new post for you to read",
-                                        "Happy Valley IO Ltd, 2 Melville Street, Falkirk, FK1 1HZ",
-                                        "%unsubscribe_link%"
-                                ),
-                                title = "Welcome to koil!",
-                                subtitle = "We're happy to have you!",
-                                footer = "Thanks for signing up! Get in touch if you have any trouble!"
-                        )
+            "email/welcome-inlined",
+            mapOf(
+                "model" to AccountCreationNotificationModel(
+                    defaults = EmailDefaults(
+                        "A new post for you to read",
+                        "Happy Valley IO Ltd, 2 Melville Street, Falkirk, FK1 1HZ",
+                        "%unsubscribe_link%"
+                    ),
+                    title = "Welcome to koil!",
+                    subtitle = "We're happy to have you!",
+                    footer = "Thanks for signing up! Get in touch if you have any trouble!"
                 )
+            )
         )
     }
 
     @GetMapping("/password")
     fun passwordEmail(): ModelAndView {
         return ModelAndView(
-                "email/password-inlined",
-                mapOf(
-                        "model" to PasswordResetModel(
-                                defaults = EmailDefaults(
-                                        "Password reset link",
-                                        "Happy Valley IO Ltd, 2 Melville Street, Falkirk, FK1 1HZ",
-                                        "%unsubscribe_link%"
-                                ),
-                                resetLink = "http://localhost:8080/auth/login",
-                                appName = "koil"
-                        )
+            "email/password-inlined",
+            mapOf(
+                "model" to PasswordResetModel(
+                    defaults = EmailDefaults(
+                        "Password reset link",
+                        "Happy Valley IO Ltd, 2 Melville Street, Falkirk, FK1 1HZ",
+                        "%unsubscribe_link%"
+                    ),
+                    resetLink = "http://localhost:8080/auth/login",
+                    appName = "koil"
                 )
+            )
         )
     }
 }

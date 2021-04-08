@@ -13,10 +13,14 @@ class UserController(val views: IUserViews) {
     @GetMapping("user-settings")
     fun userSettings(@AuthenticationPrincipal user: EnrichedUserDetails): ModelAndView {
         val model = UserSettingsViewModel(
-                handle = user.handle,
-                bio = "Some example bio",
-                email = user.details.username,
-                notificationSettings = NotificationSettingsViewModel(weeklyActivity = true, updateOnMessage = false, reminderEmail = true)
+            handle = user.handle,
+            bio = "Some example bio",
+            email = user.details.username,
+            notificationSettings = NotificationSettingsViewModel(
+                weeklyActivity = true,
+                updateOnMessage = false,
+                reminderEmail = true
+            )
         )
 
         return views.userSettingsView(model)

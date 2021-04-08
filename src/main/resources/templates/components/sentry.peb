@@ -1,11 +1,11 @@
 {# @pebvariable name="sentry_dsn" type="java.lang.String" #}
 {# @pebvariable name="sentry_release" type="java.lang.String" #}
 
-{% if sentry_release %}
-<script>
-    window.SENTRY_RELEASE = '{{  sentry_release }}'
+    {% if sentry_release %}
+    <script>
+        window.SENTRY_RELEASE = '{{  sentry_release }}'
     </script>
-{% endif %}
+    {% endif %}
 
 {% if sentry_dsn %}
 <script

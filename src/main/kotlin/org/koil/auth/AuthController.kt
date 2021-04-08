@@ -23,44 +23,46 @@ import javax.validation.constraints.Pattern
 
 
 data class PasswordResetAttempt(
-        @get:Pattern(
-                regexp = "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
-                message = "Code given is not a valid reset code"
-        ) val code: String,
-        @get:Email(message = "Must be a valid email address") val email: String?,
-        @get:Length(min = 8, message = "Password must be at least 8 characters long") val password: String?,
-        val passwordConfirm: String?
+    @get:Pattern(
+        regexp = "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+        message = "Code given is not a valid reset code"
+    ) val code: String,
+    @get:Email(message = "Must be a valid email address") val email: String?,
+    @get:Length(min = 8, message = "Password must be at least 8 characters long") val password: String?,
+    val passwordConfirm: String?
 )
 
 
 data class PasswordResetRequest(@get:Email(message = "Must be a valid email address") val email: String)
 
 data class RegistrationAttempt(
-        @get:Email(message = "Must be a valid email address") val email: String,
-        @get:Length(min = 4, max = 16, message = "Handle must be between 4 and 16 chars long")
-        @get:Pattern(
-                regexp = "^[a-zA-Z0-9_]*$",
-                message = "Handle can only contain alphanumeric characters (letters A-Z and number 0-9) or underscores."
-        ) val handle: String,
-        @get:Length(min = 8, message = "Password must be at least 8 characters long") val password: String,
-        @get:NotEmpty(message = "Name cannot be empty") val name: String
+    @get:Email(message = "Must be a valid email address") val email: String,
+    @get:Length(min = 4, max = 16, message = "Handle must be between 4 and 16 chars long")
+    @get:Pattern(
+        regexp = "^[a-zA-Z0-9_]*$",
+        message = "Handle can only contain alphanumeric characters (letters A-Z and number 0-9) or underscores."
+    ) val handle: String,
+    @get:Length(min = 8, message = "Password must be at least 8 characters long") val password: String,
+    @get:NotEmpty(message = "Name cannot be empty") val name: String
 )
 
 data class LoginAttempt(
-        @get:Email(message = "Must be a valid email address") val email: String,
-        @get:Length(min = 8, message = "Password must be at least 8 characters long") val password: String
+    @get:Email(message = "Must be a valid email address") val email: String,
+    @get:Length(min = 8, message = "Password must be at least 8 characters long") val password: String
 )
 
 @Controller
 @RequestMapping("/auth")
-class AuthController(@Autowired val users: UserService,
-                     @Autowired val auth: AuthService,
-                     @Autowired val views: IAuthViews) {
+class AuthController(
+    @Autowired val users: UserService,
+    @Autowired val auth: AuthService,
+    @Autowired val views: IAuthViews
+) {
 
     @GetMapping("/login")
     fun viewLogin(
-            @AuthenticationPrincipal principal: EnrichedUserDetails?,
-            @RequestParam("redirect", required = false) redirect: String?
+        @AuthenticationPrincipal principal: EnrichedUserDetails?,
+        @RequestParam("redirect", required = false) redirect: String?
     ): ModelAndView {
         if (principal !== null) {
             return ModelAndView("redirect:/dashboard")
@@ -90,8 +92,8 @@ class AuthController(@Autowired val users: UserService,
 
     @PostMapping("/request-password-reset")
     fun requestPasswordReset(
-            @Valid form: PasswordResetRequest,
-            result: BindingResult
+        @Valid form: PasswordResetRequest,
+        result: BindingResult
     ): ModelAndView {
         val model = PasswordResetRequestModel(form, result.errors().toMutableMap(), false)
 
@@ -100,7 +102,11 @@ class AuthController(@Autowired val users: UserService,
         } else {
             return when (auth.requestPasswordReset(email = form.email)) {
                 is PasswordResetRequestResult.Success -> views.requestPasswordReset(model.copy(completed = true))
-                is PasswordResetRequestResult.CouldNotFindUserWithEmail -> views.requestPasswordReset(model.copy(completed = true))
+                is PasswordResetRequestResult.CouldNotFindUserWithEmail -> views.requestPasswordReset(
+                    model.copy(
+                        completed = true
+                    )
+                )
                 is PasswordResetRequestResult.FailedUnexpectedly -> {
                     model.errors["unexpected"] = """
                       An unexpected error has occurred - please try again. If you continue to experience the issue then please get in touch at support@getkoil.dev
@@ -123,7 +129,7 @@ class AuthController(@Autowired val users: UserService,
         }
         if (uuid == null) {
             model.errors["code"] =
-                    "Whoops! It looks like you've arrived at this page without a valid reset code. Please click the button in your email again."
+                "Whoops! It looks like you've arrived at this page without a valid reset code. Please click the button in your email again."
         }
 
         return views.resetPassword(model)
@@ -131,9 +137,9 @@ class AuthController(@Autowired val users: UserService,
 
     @PostMapping("/password-reset")
     fun resetPassword(
-            request: HttpServletRequest,
-            @Valid attempt: PasswordResetAttempt,
-            result: BindingResult
+        request: HttpServletRequest,
+        @Valid attempt: PasswordResetAttempt,
+        result: BindingResult
     ): ModelAndView {
         val model = ResetPasswordViewModel(attempt, result.errors().toMutableMap(), attempt.code)
 
@@ -145,7 +151,7 @@ class AuthController(@Autowired val users: UserService,
 
         if (uuid == null) {
             model.errors["code"] =
-                    "Whoops! It looks like you've arrived at this page without a valid reset code. Please click the button in your email again."
+                "Whoops! It looks like you've arrived at this page without a valid reset code. Please click the button in your email again."
         }
 
         if (!attempt.password.equals(attempt.passwordConfirm)) {
@@ -164,26 +170,38 @@ class AuthController(@Autowired val users: UserService,
 
     @GetMapping("/register")
     fun registrationPage(
-            @RequestParam("email", defaultValue = "") email: String,
-            model: MutableMap<String, Any>
+        @RequestParam("email", defaultValue = "") email: String,
+        model: MutableMap<String, Any>
     ): ModelAndView {
         return views.register(RegistrationViewModel(RegistrationAttempt(email, "", "", "")))
     }
 
     @PostMapping("/register")
     fun registrationSubmit(
-            request: HttpServletRequest,
-            @Valid attempt: RegistrationAttempt,
-            result: BindingResult
+        request: HttpServletRequest,
+        @Valid attempt: RegistrationAttempt,
+        result: BindingResult
     ): ModelAndView {
         return if (!result.hasErrors()) {
-            when (users.createUser(UserCreationRequest(attempt.name, attempt.email, attempt.password, attempt.handle))) {
+            when (users.createUser(
+                UserCreationRequest(
+                    attempt.name,
+                    attempt.email,
+                    attempt.password,
+                    attempt.handle
+                )
+            )) {
                 is UserCreationResult.CreatedUser -> {
                     request.login(attempt.email, attempt.password)
                     ModelAndView("redirect:/dashboard")
                 }
                 is UserCreationResult.UserAlreadyExists -> {
-                    views.register(RegistrationViewModel(errors = mutableMapOf("email" to "A user with that email address already exists"), attempt = attempt))
+                    views.register(
+                        RegistrationViewModel(
+                            errors = mutableMapOf("email" to "A user with that email address already exists"),
+                            attempt = attempt
+                        )
+                    )
                 }
             }
         } else {

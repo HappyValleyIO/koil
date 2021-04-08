@@ -6,13 +6,13 @@
 <div class="field">
     <label class="checkbox">
 
-    {% if isChecked %}
-        <input type="checkbox" name="{{ name }}" checked>
-    {% else %}
-        <input type="checkbox" name="{{ name }}">
-    {% endif %}
+        {% if isChecked %}
+            <input type="checkbox" name="{{ name }}" checked>
+            {% else %}
+            <input type="checkbox" name="{{ name }}">
+        {% endif %}
 
-    {{ label }}
+        {{ label }}
     </label>
 </div>
 {% endmacro %}

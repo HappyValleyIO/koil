@@ -10,7 +10,7 @@
         Koil is an integrated web development framework focused on productivity.
     {% endblock %}
 ">
-{#    <link rel="stylesheet" type="text/css" href="{{  mix("/css/packs/public.css") }}">#}
+    {#    <link rel="stylesheet" type="text/css" href="{{  mix("/css/packs/public.css") }}">#}
     {% include 'components/devtools' %}
     {% block layoutStyle %}{% endblock %}
     {% block pageStyle %}{% endblock %}
@@ -19,5 +19,5 @@
     {% include 'components/sentry' %}
     {% block scripts %}{% endblock %}
 </head>
-        {% block body %}{% endblock %}
+    {% block body %}{% endblock %}
 </html>

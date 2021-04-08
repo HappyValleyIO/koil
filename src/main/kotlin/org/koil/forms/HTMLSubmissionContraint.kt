@@ -13,16 +13,16 @@ import kotlin.reflect.KClass
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.FIELD, AnnotationTarget.PROPERTY_GETTER)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class HTMLSubmissionConstraint(
-        val message: String = "Looks like you're trying to pass some HTML that's not allowed!",
-        val groups: Array<KClass<*>> = [],
-        val payload: Array<KClass<out Payload>> = []
+    val message: String = "Looks like you're trying to pass some HTML that's not allowed!",
+    val groups: Array<KClass<*>> = [],
+    val payload: Array<KClass<out Payload>> = []
 )
 
 class HTMLSubmissionValidator : ConstraintValidator<HTMLSubmissionConstraint?, String?> {
     override fun initialize(contactNumber: HTMLSubmissionConstraint?) {}
     override fun isValid(
-            html: String?,
-            cxt: ConstraintValidatorContext
+        html: String?,
+        cxt: ConstraintValidatorContext
     ): Boolean {
         return Jsoup.isValid(html, Whitelist.relaxed().addTags("strike", "s"))
     }
