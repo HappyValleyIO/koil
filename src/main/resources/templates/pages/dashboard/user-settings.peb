@@ -1,0 +1,57 @@
+{# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
+{# @pebvariable name="model" type="org.koil.user.UserSettingsViewModel" #}
+    {% extends "layouts/dashboard-layout" %}
+    {% block title %} User Settings {% endblock %}
+{% block content %}
+<hgroup>
+    <h1>User Settings</h1>
+    <h2>All the settings that you can customize</h2>
+</hgroup>
+<form>
+    <h3>Account Settings</h3>
+    <label>
+        <i class="fas fa-user"></i> Handle
+        <input minlength="4" maxlength="16" name="handle" type="text"
+               value="{{ global.user.handle }}">
+    </label>
+
+    <label for="email-input">
+        <i class="fas fa-envelope"></i> Email Address
+        <input name="email" type="email" value="{{ model.email }}">
+    </label>
+
+    <hgroup>
+        <h3>Notification Settings</h3>
+        <h4>What notifications are you interested in?</h4>
+    </hgroup>
+    {% import 'components/form/checkbox' %}
+    <fieldset>
+        {{ checkbox(name="weekly-summary", label="Send me a weekly activity summary", isChecked=model.notificationSettings.weeklyActivity) }}
+            {{ checkbox(name="update-on-message", label="Send me an update when I receive a message", isChecked=model.notificationSettings.updateOnMessage) }}
+            {{ checkbox(name="reminder-email", label="Send me reminders when I'm due to complete a retrospective", isChecked=model.notificationSettings.reminderEmail) }}
+    </fieldset>
+
+    <hgroup>
+        <h3>Change Password</h3>
+    </hgroup>
+    <label>
+        <i class="fas fa-lock"></i> Old Password
+        <input class="input" name="current-password" type="password"
+               placeholder="Current password">
+    </label>
+
+    <label>
+        <i class="fas fa-lock"></i> New Password
+        <input name="new-password" type="password">
+    </label>
+
+    <label>
+        <i class="fas fa-lock"></i> Confirm New Password
+        <input class="input" name="confirm-password" type="password">
+    </label>
+
+    <button type="submit">Save Changes</button>
+    <button type="reset" class="secondary">Cancel</button>
+</form>
+
+{% endblock %}

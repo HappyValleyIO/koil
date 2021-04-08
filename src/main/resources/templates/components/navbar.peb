@@ -1,0 +1,83 @@
+{# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
+
+<nav class="container-fluid" data-controller="toggle">
+    <ul>
+        <li><h1>Koil.</h1></li>
+    </ul>
+    <ul class="is-hidden-mobile" data-test="desktop-navbar">
+        {% if global.isAdmin %}
+            <li><a href="/admin" data-test="navbar-admin-link">Admin Panel</a></li>
+        {% endif %}
+        <li>
+            <a href="/dashboard/user-settings" data-test="user-handle">@{{ global.user.handle }}</a>
+        </li>
+        {% if global.isImpersonatingUser %}
+            <li>
+                <form method="POST" action="/admin/impersonation/logout">
+                    {% include 'components/csrf-field' %}
+                    <button type="submit" data-test="end-impersonation">
+                        End Impersonation
+                    </button>
+                </form>
+            </li>
+            {% else %}
+            <li class="without-padding">
+                <form method="POST" action="/logout">
+                    {% include 'components/csrf-field' %}
+                    <button class="btn-slim">
+                        Log out
+                    </button>
+                </form>
+            </li>
+        {% endif %}
+    </ul>
+    <ul class="is-hidden-tablet">
+        <li><i class="fas fa-bars is-clickable" data-action="click->toggle#toggle" data-test="menu-button"></i></li>
+    </ul>
+
+    <aside class="slide-menu is-hidden-tablet" data-target="toggle.toggleable" data-test="mobile-navbar">
+        <div class="exit-button">
+            <i class="fas fa-times is-clickable" data-action="click->toggle#toggle"></i>
+        </div>
+        <nav>
+            <details open>
+                <summary>Menu title</summary>
+                <ul>
+                    <li><a href="/dashboard/">Home</a></li>
+                    <li><a href="/dashboard/contact-us">Contact Us</a></li>
+                    <li><a href="/dashboard/user-settings">My Settings</a></li>
+                </ul>
+            </details>
+            <details open>
+                <summary>My Account</summary>
+                <ul>
+                    {% if global.isAdmin %}
+                        <li><a href="/admin" data-test="navbar-admin-link">Admin Panel</a></li>
+                    {% endif %}
+                    <li>
+                        <a href="/dashboard/user-settings" data-test="user-handle-mobile">@{{ global.user.handle }}</a>
+                    </li>
+                    {% if global.isImpersonatingUser %}
+                        <li>
+                            <form method="POST" action="/admin/impersonation/logout">
+                                {% include 'components/csrf-field' %}
+                                <button type="submit" data-test="end-impersonation-mobile">
+                                    End Impersonation
+                                </button>
+                            </form>
+                        </li>
+                        {% else %}
+                        <li class="without-padding">
+                            <form method="POST" action="/logout">
+                                {% include 'components/csrf-field' %}
+                                <button class="btn-slim">
+                                    Log out
+                                </button>
+                            </form>
+                        </li>
+                    {% endif %}
+                </ul>
+            </details>
+        </nav>
+    </aside>
+</nav>

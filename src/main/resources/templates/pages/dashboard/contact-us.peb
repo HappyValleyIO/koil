@@ -1,0 +1,29 @@
+    {% extends "layouts/dashboard-layout" %}
+        {% block title %} Contact Us {% endblock %}
+    {% block content %}
+    <hgroup>
+        <h1>Contact Us</h1>
+        <h3>Have a question or a concern? Get in touch below.</h3>
+    </hgroup>
+    <div>
+        <form>
+            <label>Name
+                <input name="name" type="text" value="Jane Doe">
+            </label>
+            <label>Email
+                <input name="email" type="email" value="jane@example.com">
+            </label>
+
+
+            <label>
+                Questions/Comments
+            </label>
+            <label>
+                <textarea name="bio" required></textarea>
+            </label>
+
+            <button type="submit" class="button is-primary">Send</button>
+        </form>
+    </div>
+
+    {% endblock %}
