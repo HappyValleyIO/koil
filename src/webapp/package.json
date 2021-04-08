@@ -4,7 +4,8 @@
   "description": "An opinionated way to build monolithic spring-based web apps.",
   "private": true,
   "scripts": {
-    "build": "parcel build ./src/**/*.html",
+    "dev": "mix",
+    "prod": "mix --production",
     "cy:open": "cypress open"
   },
   "repository": {
@@ -14,15 +15,14 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@happyvalleyio/parcel-plugin-pebble": "^0.1.3",
+    "autoprefixer": "^9.0.0",
+    "css-loader": "^5.0.2",
     "cypress": "^6.2.0",
+    "glob": "^7.1.6",
     "husky": "^4.3.6",
+    "laravel-mix": "^6.0.11",
     "lint-staged": "^10.5.3",
-    "parcel-bundler": "^1.12.4",
-    "parcel-plugin-html-root-syntax": "0.0.3",
-    "prettier": "2.0.4",
-    "sass": "^1.30.0"
+    "prettier": "2.0.4"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",

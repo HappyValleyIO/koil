@@ -1,0 +1,16 @@
+{% extends "layouts/dashboard-layout" %}
+{% block title %} Not Found {% endblock %}
+{% block meta %}
+<meta name="turbolinks-visit-control" content="reload">
+{% endblock %}
+{% block content %}
+
+<div class="card">
+    <header>
+        <h3 class="title is-size-3">It looks like we couldn't find what you were looking for!</h3>
+    </header>
+    <div class="card-content">
+        <button type="button" class="button is-primary">Go Back</button>
+    </div>
+</div>
+{% endblock %}

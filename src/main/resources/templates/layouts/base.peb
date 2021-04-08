@@ -1,0 +1,24 @@
+{# @pebvariable name="dev" type="java.lang.Boolean" #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block meta %}{% endblock %}
+    <title>Koil | {% block title %}{% endblock %}</title>
+    <meta name="description" content="
+    {% block description %}
+        Koil is an integrated web development framework focused on productivity.
+    {% endblock %}
+">
+    <link rel="stylesheet" type="text/css" href="{{ mix("/css/packs/index.css") }}">
+    {% include 'components/devtools' %}
+    {% block layoutStyle %}{% endblock %}
+    {% block pageStyle %}{% endblock %}
+    <script type="module" src="{{ mix("/js/packs/application.js") }}" defer></script>
+
+    {% include 'components/sentry' %}
+    {% block scripts %}{% endblock %}
+</head>
+<body>
+        {% block body %}{% endblock %}
+</body>

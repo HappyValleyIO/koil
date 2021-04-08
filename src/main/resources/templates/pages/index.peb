@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>koil App.</title>
+    <meta name="description"
+          content="koil starter app example.">
+
+    <link rel="stylesheet" type="text/css" href="{{ mix("/css/packs/index.css") }}">
+    {% include 'components/devtools' %}
+    {% include 'components/sentry' %}
+
+    <script type="module" src="{{ mix("/js/packs/application.js") }}" defer></script>
+</head>
+<body>
+
+<div class="hero is-fullheight">
+    <div class="hero-head">
+        <nav class="navbar is-transparent" role="navigation" aria-label="main navigation" data-controller="toggle">
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+               data-action="click->toggle#toggle" data-target="toggle.toggleable" data-test="menu-button">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+
+            <div class="navbar-menu">
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <a class="button is-primary" href="/auth/login">
+                            Login
+                        </a>
+                    </div>
+
+                    <div class="navbar-item">
+                        <a class="button is-primary" href="/auth/register">
+                            Sign up
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navbar-menu is-hidden-tablet" data-target="toggle.toggleable" data-test="mobile-menu">
+                <div class="menu">
+                    <ul class="menu-list">
+                        <li><a href="/auth/login">Login</a></li>
+                        <li><a href="/auth/register">Sign Up</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <h1 class="title is-size-1 ">
+                koil App<span class="has-text-primary">.</span>
+            </h1>
+            <h3 class="subtitle is-size-3">
+                A starter template for Spring-based SaaS
+            </h3>
+
+            <form class="field is-centered has-addons" action="/auth/register">
+                <div class="control">
+                    <label style="display: none;">Sign up email address</label>
+                    <input type="email" class="input" name="email" placeholder="Sign up with email now"
+                           data-test="sign-up-email" required>
+                </div>
+                <div class="control">
+                    <button class="button is-primary">Join</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="hero-foot">
+        <div class="container has-text-centered">
+            <p>Built by <a href="https://www.happyvalley.io">Happy Valley IO</a>.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
