@@ -1,59 +1,23 @@
-{# @pebvariable name="isAdmin" type="java.lang.Boolean" #}
-{# @pebvariable name="isImpersonatingUser" type="java.lang.Boolean" #}
+{# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
 
-<div class="menu">
-    <p class="menu-label">
-        koil
-    </p>
-    <ul class="menu-list">
-        <li><a href="/dashboard" data-controller="nav-link">Home</a></li>
-    </ul>
-
-    <p class="menu-label">
-        My Account
-    </p>
-    <ul class="menu-list">
-        <li><a href="/dashboard/user-settings" data-controller="nav-link">Account Settings</a></li>
-        <li>
-            <a href="/dashboard/contact-us" data-controller="nav-link">
-                Get Help
-            </a>
-        </li>
-    </ul>
-    {% if isAdmin %}
-        <p class="menu-label">
-            Admin
-        </p>
-        <ul class="menu-list">
-            <li><a href="/admin" data-test="dashboard-menu-admin-link">Admin Panel</a></li>
-        </ul>
-    {% endif %}
-    <ul class="menu-list is-hidden-tablet">
-        <p class="menu-label">
-            User
-        </p>
-        <li>
-            <a href="/dashboard/user-settings" class="is-link"
-               data-test="user-handle-mobile">@{{ global.user.handle }}</a>
-        </li>
-        {% if isImpersonatingUser %}
-            <li>
-                <form method="POST" action="/admin/impersonation/logout">
-                    {% include 'components/csrf-field' %}
-                    <button class="button is-primary is-light" type="submit" data-test="end-impersonation-mobile">
-                        End Impersonation
-                    </button>
-                </form>
-            </li>
-        {% else %}
-            <li>
-                <form method="POST" action="/logout">
-                    {% include 'components/csrf-field' %}
-                    <button class="button is-primary is-light" type="submit">
-                        Log out
-                    </button>
-                </form>
-            </li>
+<aside class="is-hidden-mobile">
+    <nav>
+        <details open>
+            <summary>Menu title</summary>
+            <ul>
+                <li><a href="/dashboard/" data-controller="nav">Home</a></li>
+                <li><a href="/dashboard/contact-us" data-controller="nav">Contact Us</a></li>
+                <li><a href="/dashboard/user-settings" data-controller="nav">My Settings</a></li>
+            </ul>
+        </details>
+        {% if global.isAdmin %}
+            <details open>
+                <summary>Admin menu</summary>
+                <ul>
+                    <li><a href="/admin" data-test="dashboard-menu-admin-link" data-controller="nav">Admin Panel</a>
+                    </li>
+                </ul>
+            </details>
         {% endif %}
-    </ul>
-</div>
+    </nav>
+</aside>

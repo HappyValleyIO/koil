@@ -1,75 +1,47 @@
 package org.koil.ui
 
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.context.SpringBootTest
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.parallel.Execution
+import org.junit.jupiter.api.parallel.ExecutionMode
+import org.koil.BaseIntegrationTest
 import org.springframework.boot.web.server.LocalServerPort
-import org.testcontainers.Testcontainers
-import org.testcontainers.containers.GenericContainer
-import org.testcontainers.containers.output.OutputFrame
-import org.testcontainers.containers.output.Slf4jLogConsumer
-import java.util.concurrent.CountDownLatch
+import java.io.File
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.streams.toList
 
-class KGenericContainer(imageName: String) : GenericContainer<KGenericContainer>(imageName)
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class CypressIntegrationTest {
-    companion object {
-        private val LOGGER: Logger = LoggerFactory.getLogger(CypressIntegrationTest::class.java)
-    }
-
-    val testResult = AtomicBoolean(false)
-
+/**
+ * Note that this test class is **not** transactional. This means that the data will persist in the test database between runs.
+ *
+ * This is because it's hard to implement well. The tests have no idea how cypress will call the system so it's hard to
+ * have rollback happen based off of several ostensibly disconnected web requests.
+ */
+@Execution(ExecutionMode.CONCURRENT)
+class CypressIntegrationTest : BaseIntegrationTest() {
     @LocalServerPort
     var port = 0
 
-    private fun createCypressContainer(): KGenericContainer? {
-        val result: KGenericContainer = KGenericContainer("cypress/included:6.2.0")
-                .withCommand("run")
-                .withLogConsumer(Slf4jLogConsumer(LOGGER))
-                .withSharedMemorySize(1024L * 1024 * 1024 * 4) // Chrome chews through memory. This is a hacky way to stop it from dying
+    @TestFactory
+    fun runCypressTests(): Collection<DynamicTest> {
+        return File("src/webapp/cypress/integration").list()
+                .map { name ->
+                    DynamicTest.dynamicTest(name) {
+                        val process = ProcessBuilder()
+                                .directory(File("./build/webapp/"))
+                                .command("/bin/bash", "-c", "CYPRESS_BASE_URL=http://localhost:$port npx cypress run --spec cypress/integration/$name")
+                                .start()
 
-        result.withFileSystemBind("build/webapp", "/e2e")
-        result.workingDirectory = "/e2e"
-        result.addEnv("CYPRESS_baseUrl", "http://host.testcontainers.internal:$port")
-        return result
-    }
+                        val lines = process.inputStream.bufferedReader().lines()
+                        process.waitFor(15, TimeUnit.MINUTES)
 
-    @Test
-    @Throws(InterruptedException::class)
-    fun runCypressTests() {
-        Testcontainers.exposeHostPorts(port)
-
-        val countDownLatch = CountDownLatch(1)
-
-        createCypressContainer()!!.use { container ->
-            container.start()
-
-            container.followOutput {
-                when {
-                    it.utf8String.contains("All specs passed") -> {
-                        testResult.set(true)
-                        countDownLatch.countDown()
-                    }
-                    it.utf8String.contains("tests failed") -> {
-                        testResult.set(false)
-                        countDownLatch.countDown()
-                    }
-                    it.type == OutputFrame.OutputType.END -> {
-                        it.utf8String
-                        countDownLatch.countDown()
+                        assertEquals(0, process.exitValue()) {
+                            """
+                                PROCESS EXIT CODE: ${process.exitValue()}
+                                ${lines.toList().joinToString("\n")}
+                            """
+                        }
                     }
                 }
-            }
-            countDownLatch.await(5, TimeUnit.MINUTES)
-        }
-
-        assertTrue(testResult.get())
     }
 }

@@ -1,0 +1,20 @@
+.slide-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translateX(-100vw);
+  width: 100vw;
+  height: 100vh;
+  background: var(--background);
+  padding: 2em;
+
+  &.is-active {
+    transform: translateX(0);
+  }
+
+  .exit-button {
+    text-align: right;
+    padding-bottom: 2em;
+  }
+}
+

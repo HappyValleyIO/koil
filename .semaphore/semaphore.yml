@@ -11,7 +11,7 @@ blocks:
         - name: Build
           commands:
             - sem-version java 11
-            - checkout
+            - sem-service start postgres
             - ./gradlew build --info
       env_vars:
         - name: TERM
@@ -21,3 +21,12 @@ blocks:
       prologue:
         commands:
           - echo $DOCKER_PASSWORD | docker login --username "$DOCKER_USERNAME" --password-stdin
+          - sem-version node 14.16.0
+          - checkout
+          - cache restore $(checksum build.gradle)
+          - cache restore $(checksum src/webapp/package-lock.json)
+      epilogue:
+        always:
+          commands:
+            - cache store $(checksum build.gradle) $HOME/.gradle
+            - cache store $(checksum src/webapp/package-lock.json) $HOME/.npm

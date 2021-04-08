@@ -8,11 +8,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Transactional
 abstract class BaseIntegrationTest {
     @Autowired
     lateinit var mockMvc: MockMvc
@@ -34,7 +36,7 @@ abstract class BaseIntegrationTest {
                 email = email,
                 password = password,
                 authorities = authorities,
-                handle = "user$id"
+                handle = id
         )
 
         (userService.createUser(request) as UserCreationResult.CreatedUser)
