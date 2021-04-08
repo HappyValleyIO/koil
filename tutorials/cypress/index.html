@@ -665,12 +665,12 @@ To give this a BDD slant, the test would read <code>GIVEN the mobile menu isn't 
 <p>A favourite trick of ours is to run a cypress test for a variety of different viewport sizes. This saves a bunch of time 
 in verifying that our website works across screen sizes without manual QA.</p>
 <p>Add a device array to the top of the file:</p>
-<div class="codehilite"><pre><span></span><code><span class="kr">const</span> <span class="nx">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;iphone-6&#39;</span><span class="p">,</span> <span class="s1">&#39;iphone-x&#39;</span><span class="p">,</span> <span class="s1">&#39;ipad-mini&#39;</span><span class="p">];</span>
+<div class="codehilite"><pre><span></span><code><span class="kd">const</span> <span class="nx">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;iphone-6&#39;</span><span class="p">,</span> <span class="s1">&#39;iphone-x&#39;</span><span class="p">,</span> <span class="s1">&#39;ipad-mini&#39;</span><span class="p">];</span>
 </code></pre></div>
 
 
 <p>We'll loop over this array, and add the existing test contents to the inner loop:</p>
-<div class="codehilite"><pre><span></span><code><span class="kr">const</span> <span class="nx">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;iphone-6&#39;</span><span class="p">,</span> <span class="s1">&#39;iphone-x&#39;</span><span class="p">,</span> <span class="s1">&#39;ipad-mini&#39;</span><span class="p">];</span>
+<div class="codehilite"><pre><span></span><code><span class="kd">const</span> <span class="nx">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;iphone-6&#39;</span><span class="p">,</span> <span class="s1">&#39;iphone-x&#39;</span><span class="p">,</span> <span class="s1">&#39;ipad-mini&#39;</span><span class="p">];</span>
 
 <span class="nx">sizes</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">size</span> <span class="p">=&gt;</span> <span class="p">{</span>
     <span class="nx">describe</span><span class="p">(</span><span class="sb">`User can open mobile menu on </span><span class="si">${</span><span class="nx">size</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>

@@ -595,10 +595,10 @@ Let's add our own to the bottom:</p>
 <p>Looking at this file, we'll see a bunch of <code>Controller</code> classes being imported and added to a <a href="https://stimulusjs.org/">StimulusJS</a> application. 
 If you've never used stimulus before then I'd recommend going through their <a href="https://stimulusjs.org/handbook/introduction">handbook</a>.</p>
 <p>Alright, let's add our own <code>Controller</code> to these. Create a file called <code>hello_controller.js</code> in the <code>controllers</code> directory. In this file, we'll add:</p>
-<div class="codehilite"><pre><span></span><code><span class="kr">import</span> <span class="p">{</span> <span class="nx">Controller</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&quot;stimulus&quot;</span><span class="p">;</span>
+<div class="codehilite"><pre><span></span><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Controller</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&quot;stimulus&quot;</span><span class="p">;</span>
 
-<span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">HelloController</span> <span class="kr">extends</span> <span class="nx">Controller</span> <span class="p">{</span>
-  <span class="kr">static</span> <span class="nx">get</span> <span class="nx">targets</span><span class="p">()</span> <span class="p">{</span>
+<span class="k">export</span> <span class="k">default</span> <span class="kd">class</span> <span class="nx">HelloController</span> <span class="k">extends</span> <span class="nx">Controller</span> <span class="p">{</span>
+  <span class="k">static</span> <span class="nx">get</span> <span class="nx">targets</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">];</span>
   <span class="p">}</span>
 
@@ -610,7 +610,7 @@ If you've never used stimulus before then I'd recommend going through their <a h
 
 
 <p>And hook it into the application in <code>application.js</code>, by adding an import at the top:</p>
-<div class="codehilite"><pre><span></span><code><span class="kr">import</span> <span class="nx">HelloController</span> <span class="nx">from</span> <span class="s2">&quot;./controllers/hello_controller&quot;</span><span class="p">;</span>
+<div class="codehilite"><pre><span></span><code><span class="k">import</span> <span class="nx">HelloController</span> <span class="nx">from</span> <span class="s2">&quot;./controllers/hello_controller&quot;</span><span class="p">;</span>
 </code></pre></div>
 
 
