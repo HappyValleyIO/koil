@@ -1,4 +1,4 @@
-const sizes = ['iphone-6', 'iphone-x', 'ipad-mini'];
+const sizes = ['iphone-6', 'iphone-x'];
 
 sizes.forEach(size => {
     describe(`User can open mobile menu on ${size}`, () => {

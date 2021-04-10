@@ -1,6 +1,24 @@
-@import "~bulma/sass/utilities/_all";
-@import "~bulma/sass/base/helpers";
+@import "~@picocss/pico/scss/variables";
 
 .is-clickable {
   cursor: pointer;
+}
+
+// Visibility modifiers
+.is-hidden {
+  display: none;
+}
+
+// Hidden only on mobile screens
+.is-hidden-mobile {
+  @media screen and (max-width: map-get($breakpoints, 'sm')) {
+    display: none;
+  }
+}
+
+// Hidden on everything larger than a mobile screen
+.is-hidden-tablet {
+  @media screen and (min-width: map-get($breakpoints, 'sm')) {
+    display: none;
+  }
 }

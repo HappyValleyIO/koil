@@ -4,7 +4,7 @@ module.exports = {
     plugins: [
         require('autoprefixer'),
         purgecss({
-            content: ['../**/*.peb', 'js/**/*.js']
+            content: ['../**/*.peb', 'js/**/*.js', "../../**/*.peb"]
         })
     ]
 }

@@ -83,5 +83,6 @@ Cypress.Commands.add('loginAsAdmin', () => {
   cy.get('[data-test=login-email-input]').type('admin@getkoil.dev')
   cy.get('[data-test=login-password-input]').type('SecurePass123!')
   cy.get('[data-test=login-submit]').click()
+  cy.get('[data-test=dashboard-index]').should('exist')
   cy.visit('/admin')
 })

@@ -1,9 +1,10 @@
-<div class="menu">
-    <p class="menu-label">
-        koil
-    </p>
-    <ul class="menu-list">
-        <li><a href="/dashboard" data-controller="nav-link">Home</a></li>
-    </ul>
-
-</div>
+<aside class="is-hidden-mobile">
+    <nav>
+        <details open>
+            <summary>Admin Panel</summary>
+            <ul>
+                <li><a href="/dashboard" data-controller="nav-link">Home</a></li>
+            </ul>
+        </details>
+    </nav>
+</aside>

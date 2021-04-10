@@ -1,40 +1,44 @@
 {# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
 
-<nav class="navbar is-transparent" role="navigation" aria-label="main navigation" data-controller="toggle">
-    <div class="navbar-brand">
-        <div class="navbar-item logo-title">
-            <a class="title has-text-weight-bold has-text-centered" href="/dashboard">Admin Dashboard</a>
-        </div>
+<nav class="container-fluid" role="navigation" aria-label="main navigation" data-controller="toggle">
+    <ul>
+        <li><h1>Koil Admin</h1></li>
+    </ul>
+    <ul class="is-hidden-mobile" data-test="desktop-navbar">
+        <li>
+            <a href="/dashboard">User Dashboard</a>
+        </li>
+        <li class="without-passing">
+            <form method="POST" action="/logout">
+                {% include 'components/csrf-field' %}
+                <button class="button is-primary is-light" type="submit">
+                    Log out
+                </button>
+            </form>
+        </li>
+    </ul>
+    <ul class="is-hidden-tablet">
+        <li><i class="fas fa-bars is-clickable" data-action="click->toggle#toggle" data-test="menu-button"></i></li>
+    </ul>
 
-        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-test="menu-button"
-           data-target="toggle.toggleable" data-action="click->toggle#toggle">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
-
-    <div class="navbar-menu">
-        <div class="navbar-end">
-            <div class="navbar-item">
-                <a href="/dashboard/user-settings" class="is-link">@{{ global.user.handle }}</a>
-            </div>
-            <div class="navbar-item">
-                <div class="buttons">
-                    <form method="POST" action="/logout">
-                        {% include 'components/csrf-field' %}
-                        <button class="button is-primary is-light" type="submit">
-                            Log out
-                        </button>
-                    </form>
-                </div>
-            </div>
+    <aside class="slide-menu is-hidden-tablet" data-target="toggle.toggleable" data-test="mobile-navbar">
+        <div class="exit-button">
+            <i class="fas fa-times is-clickable" data-action="click->toggle#toggle"></i>
         </div>
-    </div>
-
-    <div class="navbar-menu is-hidden-desktop" data-target="toggle.toggleable" data-test="mobile-menu">
-        <div class="navbar-item">
-                {% include 'components/dashboard-menu' %}
-        </div>
-    </div>
+        <nav>
+            <details open>
+                <summary>Admin menu</summary>
+                <ul>
+                    <li class="without-passing">
+                        <form method="POST" action="/logout">
+                            {% include 'components/csrf-field' %}
+                            <button class="button is-primary is-light" type="submit">
+                                Log out
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </details>
+        </nav>
+    </aside>
 </nav>

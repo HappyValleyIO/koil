@@ -3,6 +3,7 @@
         <link rel="stylesheet" type="text/css" href="{{  mix("/css/packs/public.css") }}">
         {% endblock %}
 
+
     {% block body %}
     <body>
     <nav class="container-fluid" data-controller="toggle">

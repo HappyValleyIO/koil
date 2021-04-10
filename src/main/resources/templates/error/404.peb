@@ -1,7 +1,7 @@
     {% extends "layouts/dashboard-layout" %}
         {% block title %} Not Found {% endblock %}
         {% block meta %}
-        <meta name="turbolinks-visit-control" content="reload">
+        <meta name="turbo-visit-control" content="reload">
         {% endblock %}
     {% block content %}
 

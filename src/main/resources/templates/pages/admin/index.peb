@@ -25,9 +25,9 @@
                 <form action="/admin/impersonation" method="POST">
                     {% include 'components/csrf-field' %}
                     <label>
-                        <input class="is-hidden" type="email" name="username" value="{{ account.emailAddress }}">
+                        <input type="hidden" name="username" value="{{ account.emailAddress }}">
                     </label>
-                    <button class="link" type="submit" data-test="impersonate">Impersonate</button>
+                    <button type="submit" data-test="impersonate">Impersonate</button>
                 </form>
             </td>
         </tr>

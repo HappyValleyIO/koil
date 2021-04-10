@@ -6,17 +6,14 @@
     {% endblock %}
 
 {% block body %}
-<body>
-<div class="base-layout" data-controller="modal">
+<body class="dashboard-grid">
     {% include 'components/admin/admin-navbar' %}
-    <aside>
-            {% include 'components/admin/admin-menu' %}
-    </aside>
-    <main>
-        <div class="container content content-container">
+    {% include 'components/admin/admin-menu' %}
+
+    <main class="container">
+        <article>
                 {% block content %}{% endblock %}
-        </div>
+        </article>
     </main>
-</div>
 </body>
 {% endblock %}

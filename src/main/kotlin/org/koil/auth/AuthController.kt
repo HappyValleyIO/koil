@@ -6,6 +6,7 @@ import org.koil.user.UserCreationRequest
 import org.koil.user.UserCreationResult
 import org.koil.user.UserService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.validation.BindingResult
@@ -74,14 +75,18 @@ class AuthController(
     @PostMapping("/login")
     fun verifyLogin(@Valid attempt: LoginAttempt, result: BindingResult, request: HttpServletRequest): ModelAndView {
         if (result.hasErrors()) {
-            return views.login(LoginViewModel(email = attempt.email, errors = result.errors()))
+            return views.login(LoginViewModel(email = attempt.email, errors = result.errors())).apply {
+                status = HttpStatus.BAD_REQUEST
+            }
         }
 
         return try {
             request.login(attempt.email, attempt.password)
             ModelAndView("redirect:/dashboard")
         } catch (e: Throwable) {
-            views.login(LoginViewModel(badCredentials = true))
+            views.login(LoginViewModel(badCredentials = true)).apply {
+                status = HttpStatus.BAD_REQUEST
+            }
         }
     }
 
@@ -98,7 +103,9 @@ class AuthController(
         val model = PasswordResetRequestModel(form, result.errors().toMutableMap(), false)
 
         return if (result.hasErrors()) {
-            views.requestPasswordReset(model)
+            views.requestPasswordReset(model).apply {
+                status = HttpStatus.BAD_REQUEST
+            }
         } else {
             return when (auth.requestPasswordReset(email = form.email)) {
                 is PasswordResetRequestResult.Success -> views.requestPasswordReset(model.copy(completed = true))
@@ -106,13 +113,17 @@ class AuthController(
                     model.copy(
                         completed = true
                     )
-                )
+                ).apply {
+                    status = HttpStatus.BAD_REQUEST
+                }
                 is PasswordResetRequestResult.FailedUnexpectedly -> {
                     model.errors["unexpected"] = """
                       An unexpected error has occurred - please try again. If you continue to experience the issue then please get in touch at support@getkoil.dev
                       """.trimIndent()
 
-                    views.requestPasswordReset(model.copy(completed = true))
+                    views.requestPasswordReset(model.copy(completed = true)).apply {
+                        status = HttpStatus.INTERNAL_SERVER_ERROR
+                    }
                 }
             }
         }
@@ -159,7 +170,9 @@ class AuthController(
         }
 
         return if (model.errors.keys.size != 0) {
-            return views.resetPassword(model)
+            return views.resetPassword(model).apply {
+                status = HttpStatus.BAD_REQUEST
+            }
         } else {
             // Attempt to reset the password
             auth.resetPassword(uuid!!, attempt.email ?: "", attempt.password ?: "")
@@ -201,7 +214,9 @@ class AuthController(
                             errors = mutableMapOf("email" to "A user with that email address already exists"),
                             attempt = attempt
                         )
-                    )
+                    ).apply {
+                        status = HttpStatus.BAD_REQUEST
+                    }
                 }
             }
         } else {

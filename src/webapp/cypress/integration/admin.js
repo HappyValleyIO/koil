@@ -1,6 +1,10 @@
 const sizes = ['iphone-6', 'iphone-x', 'ipad-mini', 'macbook-13'];
 
+
 sizes.forEach(size => {
+    function isDesktopStyle() {
+        return ['ipad-mini', 'macbook-13'].includes(size)
+    }
 
     describe(`Admin access on ${size}`, () => {
 
@@ -16,7 +20,7 @@ sizes.forEach(size => {
             cy.get('[data-test=login-password-input]').type('SecurePass123!')
             cy.get('[data-test=login-submit]').click()
 
-            if (size === 'macbook-13') {
+            if (isDesktopStyle()) {
                 cy.get('[data-test=navbar-admin-link]').should('be.visible')
                 cy.get('[data-test=dashboard-menu-admin-link]').should('be.visible')
             } else {
@@ -30,7 +34,7 @@ sizes.forEach(size => {
         it('should not show the admin links to an admin on the normal dashboard', () => {
             cy.createRandomAccountAndLogin()
 
-            if (size === 'macbook-13') {
+            if (isDesktopStyle()) {
                 cy.get('[data-test=navbar-admin-link]').should('not.exist')
                 cy.get('[data-test=dashboard-menu-admin-link]').should('not.exist')
             } else {
@@ -71,15 +75,19 @@ sizes.forEach(size => {
                     .within(() => {
                         cy.get('[data-test=impersonate]').click()
                     })
-                if (size === 'macbook-13') {
+                cy.get('[data-test=dashboard-index]').should('exist')
+
+                if (isDesktopStyle()) {
                     cy.get('[data-test=user-handle]').contains(`@${account.username}`)
                     cy.get('[data-test=end-impersonation]').should('be.visible').click()
+                    cy.get('[data-test=end-impersonation]').should('not.exist')
                     cy.get('[data-test=user-handle]').contains(`@DefaultAdmin`)
                 } else {
                     cy.get('[data-test=menu-button]').click()
                     cy.get('[data-test=user-handle-mobile]').contains(`@${account.username}`)
                     cy.get('[data-test=mobile-navbar]').within(() => {
                         cy.get('[data-test=end-impersonation-mobile]').should('be.visible').click()
+                        cy.get('[data-test=end-impersonation-mobile]').should('not.exist')
                     })
 
                     cy.get('[data-test=menu-button]').click()

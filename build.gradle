@@ -42,7 +42,6 @@ configurations {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
@@ -140,7 +139,9 @@ node {
     nodeModulesDir = file(buildAssetsDir)
     npmInstallCommand = 'ci'
 }
+
 npm_install.dependsOn copyAssets
+npmInstall.dependsOn copyAssets
 
 gradle.taskGraph.whenReady { graph ->
     if (graph.hasTask(buildProdAssets)) {
@@ -166,6 +167,7 @@ task buildAssets(type: NpmTask) {
 
 task bundleAssets(type: Copy) {
     dependsOn buildAssets
+    dependsOn processTestResources
     from file("$buildAssetsDir/dist")
     into file("$buildDir/resources/main/static/assets")
 }
@@ -189,8 +191,11 @@ task buildProdAssets(type: NpmTask) {
 
 task bundleProdAssets(type: Copy) {
     dependsOn buildProdAssets
+    dependsOn processTestResources
     from file("${buildAssetsDir}/dist")
     into file("$buildDir/resources/main/static/assets")
 }
 
+compileTestKotlin.dependsOn(bundleProdAssets)
+bootJarMainClassName.dependsOn(bundleProdAssets)
 bootJar.dependsOn(bundleProdAssets)
