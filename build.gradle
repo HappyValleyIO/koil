@@ -191,11 +191,11 @@ task buildProdAssets(type: NpmTask) {
 
 task bundleProdAssets(type: Copy) {
     dependsOn buildProdAssets
-    dependsOn processTestResources
+    dependsOn compileTestKotlin
     from file("${buildAssetsDir}/dist")
     into file("$buildDir/resources/main/static/assets")
 }
 
-compileTestKotlin.dependsOn(bundleProdAssets)
+test.dependsOn(bundleProdAssets)
 bootJarMainClassName.dependsOn(bundleProdAssets)
 bootJar.dependsOn(bundleProdAssets)
