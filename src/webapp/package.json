@@ -31,10 +31,10 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
+    "@hotwired/turbo": "*",
     "@picocss/pico": "^1.2.1",
     "animate.css": "^3.7.2",
     "bulma": "^0.8.2",
-    "stimulus": "^2.0.0",
-    "turbolinks": "^5.2.0"
+    "stimulus": "^2.0.0"
   }
 }

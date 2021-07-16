@@ -45,7 +45,7 @@ abstract class BaseIntegrationTest {
     }
 
     protected fun withTestAccount(
-        email: String = "test+${Random().nextInt()}@getkoil.dev",
+        email: String = "test+${Random().nextInt().toString().substring(0..8)}@getkoil.dev",
         password: String = "TestPass123!",
         authorities: List<AuthAuthority> = listOf(AuthAuthority.USER),
         foo: (Account) -> Unit
