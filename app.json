@@ -14,6 +14,16 @@
       }
     }
   ],
+  "env": {
+    "SECRET_TOKEN": {
+      "description": "A secret key for verifying the integrity of signed cookies.",
+      "generator": "secret"
+    },
+    "REMEMBER_ME_KEY": {
+      "description": "Remember me token key.",
+      "value": "sometoken"
+    }
+  },
   "formation": {
     "web": {
       "quantity": 1,

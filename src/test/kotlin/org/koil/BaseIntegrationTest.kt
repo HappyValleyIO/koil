@@ -45,12 +45,12 @@ abstract class BaseIntegrationTest {
     }
 
     protected fun withTestAccount(
-        email: String = "test+${Random().nextInt().toString().substring(0..8)}@getkoil.dev",
+        email: String = "test+${Random().nextInt().toString().substring(0..4)}@getkoil.dev",
         password: String = "TestPass123!",
         authorities: List<AuthAuthority> = listOf(AuthAuthority.USER),
         foo: (Account) -> Unit
     ) {
-        val id = Random().nextInt().toString().substring(0..8)
+        val id = Random().nextInt().toString().substring(0..4)
         val request = UserCreationRequest(
             fullName = "Test User [$id]",
             email = email,

@@ -63,31 +63,14 @@ class AuthController(
     @GetMapping("/login")
     fun viewLogin(
         @AuthenticationPrincipal principal: EnrichedUserDetails?,
-        @RequestParam("redirect", required = false) redirect: String?
+        @RequestParam("redirect", required = false) redirect: String?,
+        @RequestParam("error", required = false) error: String?,
     ): ModelAndView {
         if (principal !== null) {
             return ModelAndView("redirect:/dashboard")
         }
 
-        return views.login(LoginViewModel(redirect = redirect != null))
-    }
-
-    @PostMapping("/login")
-    fun verifyLogin(@Valid attempt: LoginAttempt, result: BindingResult, request: HttpServletRequest): ModelAndView {
-        if (result.hasErrors()) {
-            return views.login(LoginViewModel(email = attempt.email, errors = result.errors())).apply {
-                status = HttpStatus.BAD_REQUEST
-            }
-        }
-
-        return try {
-            request.login(attempt.email, attempt.password)
-            ModelAndView("redirect:/dashboard")
-        } catch (e: Throwable) {
-            views.login(LoginViewModel(badCredentials = true)).apply {
-                status = HttpStatus.BAD_REQUEST
-            }
-        }
+        return views.login(LoginViewModel(redirect = redirect != null, badCredentials = error != null))
     }
 
     @GetMapping("/request-password-reset")
