@@ -1,4 +1,4 @@
-§package org.koil.config
+package org.koil.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
