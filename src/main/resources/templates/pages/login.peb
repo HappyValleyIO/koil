@@ -34,6 +34,12 @@
             <small class="warning">{{ model.errors.get("password") }}</small>
         </label>
 
+        <fieldset>
+            <label>
+                <input type="checkbox" name="remember-me" data-test="remember-me"> Remember Me
+            </label>
+        </fieldset>
+
         <button type="submit" data-test="login-submit">Login</button>
         <p>
             Can't login? <a href="/auth/request-password-reset">Reset your password</a> or
