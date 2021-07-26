@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
-    "@hotwired/turbo": "*",
+    "@hotwired/turbo": "7.0.0-rc.1",
     "@picocss/pico": "^1.2.1",
     "animate.css": "^3.7.2",
     "bulma": "^0.8.2",
