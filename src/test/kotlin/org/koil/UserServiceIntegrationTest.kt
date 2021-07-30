@@ -76,7 +76,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
     @Test
     fun `GIVEN user with chosen email already exists WHEN create user THEN do not allow use of this email`() {
         val slug = RandomString.make()
-        
+
         val existingUser: UserCreationResult = userService.createUser(
             UserCreationRequest(
                 "Mr. Existing",

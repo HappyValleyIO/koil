@@ -5,6 +5,12 @@ import org.springframework.data.repository.CrudRepository
 import java.util.*
 
 interface AccountRepository : CrudRepository<Account, Long> {
+    @Query(
+        """
+        SELECT * FROM accounts
+        WHERE lower(email_address) = lower(:email)
+    """
+    )
     fun findAccountByEmailAddress(email: String): Account?
 
     @Query(
