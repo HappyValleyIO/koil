@@ -9,6 +9,7 @@ import org.koil.user.UserCreationResult
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.test.util.AssertionErrors.assertEquals
+import org.springframework.test.util.AssertionErrors.assertTrue
 
 class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService) : BaseIntegrationTest() {
 
@@ -70,5 +71,37 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
             listOf("USER", "ADMIN").sorted(),
             queried.authorities.map { it.authority }.sorted()
         )
+    }
+
+    @Test
+    fun `GIVEN user with chosen email already exists WHEN create user THEN do not allow use of this email`() {
+        val slug = RandomString.make()
+        
+        val existingUser: UserCreationResult = userService.createUser(
+            UserCreationRequest(
+                "Mr. Existing",
+                "existing$slug",
+                "password1!",
+                "existing$slug"
+            )
+        ) as UserCreationResult.CreatedUser
+
+        val attemptedEmailSteal = userService.createUser(
+            UserCreationRequest(
+                "Mr. Existing",
+                "existing$slug",
+                "password1!",
+                "existing$slug"
+            )
+        ) as UserCreationResult.UserAlreadyExists
+
+        val attemptedEmailStealCapitalized = userService.createUser(
+            UserCreationRequest(
+                "Mr. Existing",
+                "Existing$slug",
+                "password1!",
+                "existing$slug"
+            )
+        ) as UserCreationResult.UserAlreadyExists
     }
 }
