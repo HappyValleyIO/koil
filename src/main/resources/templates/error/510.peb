@@ -1,0 +1,3 @@
+    {% set pageTitle="Not Extended" %}
+        {% set errorMessage = "This request requires further extensions." %}
+    {% include "error/error" %}

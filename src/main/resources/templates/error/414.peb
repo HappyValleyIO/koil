@@ -1,0 +1,3 @@
+    {% set pageTitle="URI Too Long" %}
+        {% set errorMessage = "This URI is over the max length allowed." %}
+    {% include "error/error" %}

@@ -1,0 +1,3 @@
+    {% set pageTitle="Bad Gateway" %}
+        {% set errorMessage = "We got an invalid response while trying to do that. Please try again later." %}
+    {% include "error/error" %}

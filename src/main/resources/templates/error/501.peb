@@ -1,0 +1,3 @@
+    {% set pageTitle="Not Implemented" %}
+        {% set errorMessage = "This method is not supported by the server." %}
+    {% include "error/error" %}

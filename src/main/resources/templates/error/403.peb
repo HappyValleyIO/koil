@@ -1,0 +1,3 @@
+    {% set pageTitle="Forbidden" %}
+        {% set errorMessage = "You are not allowed to do this!" %}
+    {% include "error/error" %}

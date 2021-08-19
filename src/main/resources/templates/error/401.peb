@@ -1,0 +1,3 @@
+    {% set pageTitle="Unauthorized" %}
+        {% set errorMessage = "You must be authenticated to do this." %}
+    {% include "error/error" %}

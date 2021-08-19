@@ -1,0 +1,3 @@
+    {% set pageTitle="Gone" %}
+        {% set errorMessage = "The resource you are looking for is no longer there." %}
+    {% include "error/error" %}

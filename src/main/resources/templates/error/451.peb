@@ -1,0 +1,3 @@
+    {% set pageTitle="Unavailable For Legal Reasons" %}
+        {% set errorMessage = "This page cannot be legally provided." %}
+    {% include "error/error" %}

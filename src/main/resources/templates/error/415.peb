@@ -1,0 +1,3 @@
+    {% set pageTitle="Unsupported Media Type" %}
+        {% set errorMessage = "This media format is not supported." %}
+    {% include "error/error" %}

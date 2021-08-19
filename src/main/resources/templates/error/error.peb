@@ -16,7 +16,7 @@
 {% block content %}
 <div class="card">
     <header>
-        <h3>{{ errorMessage }}</h3>
+        <h3 data-test="error-message">{{ errorMessage }}</h3>
     </header>
 
     <div class="card-content">

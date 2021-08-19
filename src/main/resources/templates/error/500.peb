@@ -1,0 +1,3 @@
+    {% set pageTitle="Internal Server Error" %}
+        {% set errorMessage = "Woops! Something has gone wrong on our end. Please try again later." %}
+    {% include "error/error" %}
