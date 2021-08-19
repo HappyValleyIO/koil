@@ -1,0 +1,27 @@
+{# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
+
+    {% extends 'layouts/dashboard-layout' %}
+    {% block title %} {{ pageTitle }} {% endblock %}
+    {% block meta %}
+    <meta name="turbolinks-visit-control" content="reload">
+    {% endblock %}
+    {% block scripts %}
+    <script>
+        function goBack() {
+            window.history.back()
+        }
+    </script>
+    {% endblock %}
+
+{% block content %}
+<div class="card">
+    <header>
+        <h3>{{ errorMessage }}</h3>
+    </header>
+
+    <div class="card-content">
+        <a href="/" type="button" class="button" data-test="home"><button>Home</button></a>
+        <button type="button" class="button" onclick="goBack()" data-test="back">Go Back</button>
+    </div>
+</div>
+{% endblock %}
