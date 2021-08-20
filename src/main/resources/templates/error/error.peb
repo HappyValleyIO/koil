@@ -5,13 +5,6 @@
     {% block meta %}
     <meta name="turbolinks-visit-control" content="reload">
     {% endblock %}
-    {% block scripts %}
-    <script>
-        function goBack() {
-            window.history.back()
-        }
-    </script>
-    {% endblock %}
 
 {% block content %}
 <div class="card">
@@ -19,9 +12,11 @@
         <h3 data-test="error-message">{{ errorMessage }}</h3>
     </header>
 
-    <div class="card-content">
-        <a href="/" type="button" class="button" data-test="home"><button>Home</button></a>
-        <button type="button" class="button" onclick="goBack()" data-test="back">Go Back</button>
+    <div class="card-content" data-controller="back">
+        <a href="/" type="button" class="button" data-test="home">
+            <button>Home</button>
+        </a>
+        <button type="button" class="button" data-action="click->back#goBack" data-test="back">Go Back</button>
     </div>
 </div>
 {% endblock %}
