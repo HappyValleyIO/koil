@@ -30,7 +30,9 @@ class AdminServiceImpl(
     }
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        if (adminEmailFromEnv.isNotEmpty() && adminPasswordFromEnv.isNotEmpty()) {
+        if ((adminEmailFromEnv.isNotEmpty() && adminPasswordFromEnv.isNotEmpty())
+            && accountRepository.findAccountByEmailAddress(adminEmailFromEnv) == null
+        ) {
             createAdminFromEmail(adminEmailFromEnv, adminPasswordFromEnv)
         }
     }

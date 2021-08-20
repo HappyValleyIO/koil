@@ -1,0 +1,3 @@
+    {% set pageTitle="Too Many Requests" %}
+        {% set errorMessage = "You have sent too many requests in too short a space of time." %}
+    {% include "error/error" %}

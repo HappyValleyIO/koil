@@ -1,0 +1,23 @@
+{# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
+
+    {% extends 'layouts/base-layout' %}
+    {% block title %} {{ pageTitle }} {% endblock %}
+    {% block meta %}
+    <meta name="turbolinks-visit-control" content="reload">
+    {% endblock %}
+
+{% block content %}
+<div class="card">
+    <header>
+        <h3 data-test="error-message">{{ errorMessage }}</h3>
+    </header>
+
+    <div class="card-content" data-controller="back">
+        <a href="/" type="button" class="button" data-test="home">
+            <button>Home</button>
+        </a>
+        <button type="button" class="button" data-action="click->back#goBack" data-test="back">Go Back</button>
+        <noscript><i>This button won't work! Please use the "back" button in your browser.</i></noscript>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,3 @@
+    {% set pageTitle="Service Unavailable" %}
+        {% set errorMessage = "We are not ready to handle this request! Possibly, we are down for maintainance..." %}
+    {% include "error/error" %}

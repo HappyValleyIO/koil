@@ -1,0 +1,3 @@
+    {% set pageTitle="Bad Request" %}
+        {% set errorMessage = "The server could not understand this request." %}
+    {% include "error/error" %}

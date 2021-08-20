@@ -1,0 +1,3 @@
+    {% set pageTitle="Request Timeout" %}
+        {% set errorMessage = "The request timed out." %}
+    {% include "error/error" %}

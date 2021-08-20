@@ -1,0 +1,3 @@
+    {% set pageTitle="Gateway Timeout" %}
+        {% set errorMessage = "We could not get a response in time while acting as a gateway." %}
+    {% include "error/error" %}

@@ -1,0 +1,3 @@
+    {% set pageTitle="HTTP Version Not Supported" %}
+        {% set errorMessage = "The HTTP Version is not supported." %}
+    {% include "error/error" %}

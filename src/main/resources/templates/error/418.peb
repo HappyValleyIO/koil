@@ -1,0 +1,3 @@
+    {% set pageTitle="I'm a teapot" %}
+        {% set errorMessage = "Would you like a cup?" %}
+    {% include "error/error" %}

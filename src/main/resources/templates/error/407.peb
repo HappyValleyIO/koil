@@ -1,0 +1,3 @@
+    {% set pageTitle="Proxy Authentication Required" %}
+        {% set errorMessage = "You must be authenticated by a proxy." %}
+    {% include "error/error" %}

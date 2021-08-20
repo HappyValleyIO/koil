@@ -1,0 +1,3 @@
+    {% set pageTitle="Method Not Allowed" %}
+        {% set errorMessage = "The method you tried to use is not allowed." %}
+    {% include "error/error" %}

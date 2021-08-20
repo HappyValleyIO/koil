@@ -1,0 +1,3 @@
+    {% set pageTitle="Range Not Satisfiable" %}
+        {% set errorMessage = "The specified range cannot be fulfilled" %}
+    {% include "error/error" %}

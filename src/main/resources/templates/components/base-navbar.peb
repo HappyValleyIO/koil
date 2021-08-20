@@ -1,0 +1,7 @@
+{# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
+
+<nav class="container-fluid" >
+    <ul>
+        <li><h1>Koil.</h1></li>
+    </ul>
+</nav>

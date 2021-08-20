@@ -1,0 +1,3 @@
+    {% set pageTitle="Conflict" %}
+        {% set errorMessage = "Your request is not consistent with the state of the server." %}
+    {% include "error/error" %}
