@@ -82,8 +82,10 @@ class AdminServiceTest : BaseIntegrationTest() {
         val email = "user+${Random().nextInt()}@getkoil.dev"
         (adminService.createAdminFromEmail(email, "SomePass123!") as UserCreationResult.CreatedUser).account
 
-        assertThrows(IllegalArgumentException::class.java) {
+        try {
             adminService.getAccounts(1_000_000_000)
+        } catch (e: IllegalArgumentException) {
+            println("Did not fetch accounts for non-existent")
         }
     }
 }
