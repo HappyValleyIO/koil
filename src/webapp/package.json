@@ -18,7 +18,7 @@
     "@fullhuman/postcss-purgecss": "^4.0.3",
     "autoprefixer": "^9.0.0",
     "css-loader": "^5.2.0",
-    "cypress": "^6.8.0",
+    "cypress": "^8.3.1",
     "glob": "^7.1.6",
     "husky": "^4.3.8",
     "laravel-mix": "^6.0.13",

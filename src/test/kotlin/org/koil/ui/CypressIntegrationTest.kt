@@ -24,7 +24,7 @@ class CypressIntegrationTest : BaseIntegrationTest() {
 
     @TestFactory
     fun runCypressTests(): Collection<DynamicTest> {
-        return File("src/webapp/cypress/integration").list()
+        return File("./build/webapp/cypress/integration").list()
             .map { name ->
                 DynamicTest.dynamicTest(name) {
                     val process = ProcessBuilder()

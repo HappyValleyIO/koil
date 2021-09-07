@@ -1,14 +1,11 @@
 package org.koil
 
 import org.koil.auth.AuthRole
-import org.koil.notifications.LoggingMailSender
 import org.koil.user.UserServiceImpl
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -27,12 +24,6 @@ class BeanConfig {
     @Bean
     fun passwordEncoder(): PasswordEncoder {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder()
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(JavaMailSender::class)
-    fun loggingMailSender(): JavaMailSender {
-        return LoggingMailSender()
     }
 
     @Bean

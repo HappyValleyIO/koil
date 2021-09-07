@@ -1,8 +1,10 @@
 package org.koil.auth
 
 import org.koil.user.Account
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.ModelAndView
+import java.util.*
 
 data class LoginViewModel(
     val email: String = "",
@@ -26,8 +28,23 @@ data class PasswordResetRequestModel(
 data class ResetPasswordViewModel(
     val attempt: PasswordResetAttempt? = null,
     val errors: MutableMap<String, String?> = mutableMapOf(),
-    val code: String?
-)
+    val code: UUID? = null,
+    val status: HttpStatus = HttpStatus.OK
+) {
+    companion object {
+        fun fromCode(code: String): ResetPasswordViewModel = try {
+            val parsed = UUID.fromString(code)
+            ResetPasswordViewModel(code = parsed)
+        } catch (e: Exception) {
+            ResetPasswordViewModel(
+                errors = mutableMapOf(
+                    "code" to "Whoops! It looks like you've arrived at this page without a valid reset code. Please click the button in your email again."
+                ),
+                status = HttpStatus.BAD_REQUEST
+            )
+        }
+    }
+}
 
 interface IAuthViews {
     fun login(model: LoginViewModel): ModelAndView
@@ -55,6 +72,7 @@ class AuthViewsImpl : IAuthViews {
 
     override fun resetPassword(model: ResetPasswordViewModel): ModelAndView {
         return ModelAndView("pages/password-reset", mapOf("model" to model))
+            .apply { status = model.status }
     }
 
 }

@@ -7,13 +7,17 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 interface IAdminService {
     fun createAdminFromEmail(email: String, password: String): UserCreationResult
 
-    fun getAccounts(queryingAsAccount: Long): List<Account>
+    fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<Account>
+
+    fun getAccount(queryingAsAccount: Long, accountId: Long): Account?
 }
 
 @Component
@@ -31,7 +35,7 @@ class AdminServiceImpl(
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         if ((adminEmailFromEnv.isNotEmpty() && adminPasswordFromEnv.isNotEmpty())
-            && accountRepository.findAccountByEmailAddress(adminEmailFromEnv) == null
+            && accountRepository.findAccountByEmailAddressIgnoreCase(adminEmailFromEnv) == null
         ) {
             createAdminFromEmail(adminEmailFromEnv, adminPasswordFromEnv)
         }
@@ -53,13 +57,23 @@ class AdminServiceImpl(
         }
     }
 
-    override fun getAccounts(queryingAsAccount: Long): List<Account> {
+    override fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<Account> {
+        checkAdminStatus(queryingAsAccount)
+
+        return persistence.getAllAccounts(pageable)
+    }
+
+    override fun getAccount(queryingAsAccount: Long, accountId: Long): Account? {
+        checkAdminStatus(queryingAsAccount)
+
+        return persistence.findById(accountId)
+    }
+
+    private fun checkAdminStatus(queryingAsAccount: Long) {
         val isAdmin = accountRepository.findByIdOrNull(queryingAsAccount)?.isAdmin() ?: false
 
         require(isAdmin) {
             "Attempting to retrieve account as a non-admin user!"
         }
-
-        return persistence.getAllAccounts()
     }
 }

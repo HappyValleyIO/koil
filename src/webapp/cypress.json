@@ -3,6 +3,10 @@
   "video": false,
   "chromeWebSecurity": false,
   "trashAssetsBeforeRuns": true,
-  "defaultCommandTimeout": 10000,
-  "screenshotsFolder": "/tmp/cypress"
+  "defaultCommandTimeout": 30000,
+  "screenshotsFolder": "/tmp/cypress",
+  "retries": {
+    "runMode": 3,
+    "openMode": 0
+  }
 }
