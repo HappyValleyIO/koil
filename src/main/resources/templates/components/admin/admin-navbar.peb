@@ -5,13 +5,10 @@
         <li><h1>Koil Admin</h1></li>
     </ul>
     <ul class="is-hidden-mobile" data-test="desktop-navbar">
-        <li>
-            <a href="/dashboard">User Dashboard</a>
-        </li>
         <li class="without-passing">
             <form method="POST" action="/logout">
                 {% include 'components/csrf-field' %}
-                <button class="button is-primary is-light" type="submit">
+                <button class="btn-slim" type="submit">
                     Log out
                 </button>
             </form>
@@ -32,7 +29,7 @@
                     <li class="without-passing">
                         <form method="POST" action="/logout">
                             {% include 'components/csrf-field' %}
-                            <button class="button is-primary is-light" type="submit">
+                            <button class="btn-slim" type="submit">
                                 Log out
                             </button>
                         </form>

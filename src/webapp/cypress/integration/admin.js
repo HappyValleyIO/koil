@@ -71,10 +71,12 @@ sizes.forEach(size => {
         it('should allow an admin to impersonate another user', () => {
             cy.loginAsAdmin()
             cy.get('@account').then(account => {
+                cy.visit("/admin?size=10000")
                 cy.get(`[data-test="account-row-${account.email}"]`)
                     .within(() => {
-                        cy.get('[data-test=impersonate]').click()
+                        cy.get('[data-test=user-details]').click()
                     })
+                cy.get('[data-test=impersonate]').click()
                 cy.get('[data-test=dashboard-index]').should('exist')
 
                 if (isDesktopStyle()) {

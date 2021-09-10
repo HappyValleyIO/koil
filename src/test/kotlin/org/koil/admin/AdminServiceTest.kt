@@ -10,6 +10,7 @@ import org.koil.user.UserCreationRequest
 import org.koil.user.UserCreationResult
 import org.koil.user.UserServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Pageable
 import java.util.*
 
 class AdminServiceTest : BaseIntegrationTest() {
@@ -51,9 +52,9 @@ class AdminServiceTest : BaseIntegrationTest() {
         val email = "user+${Random().nextInt()}@getkoil.dev"
         val admin = (adminService.createAdminFromEmail(email, "SomePass123!") as UserCreationResult.CreatedUser).account
 
-        val result = adminService.getAccounts(admin.accountId!!)
+        val result = adminService.getAccounts(admin.accountId!!, Pageable.unpaged())
 
-        assertThat(result).isEqualTo(adminPersistence.getAllAccounts())
+        assertThat(result).isEqualTo(adminPersistence.getAllAccounts(Pageable.unpaged()))
     }
 
 
@@ -73,7 +74,7 @@ class AdminServiceTest : BaseIntegrationTest() {
         ) as UserCreationResult.CreatedUser
 
         assertThrows(IllegalArgumentException::class.java) {
-            adminService.getAccounts(nonAdmin.account.accountId!!)
+            adminService.getAccounts(nonAdmin.account.accountId!!, Pageable.unpaged())
         }
     }
 
@@ -83,7 +84,7 @@ class AdminServiceTest : BaseIntegrationTest() {
         (adminService.createAdminFromEmail(email, "SomePass123!") as UserCreationResult.CreatedUser).account
 
         assertThrows(IllegalArgumentException::class.java) {
-            adminService.getAccounts(1_000_000_000)
+            adminService.getAccounts(Long.MAX_VALUE, Pageable.unpaged())
         }
     }
 }

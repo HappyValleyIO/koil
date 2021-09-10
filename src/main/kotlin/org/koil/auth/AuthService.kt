@@ -31,7 +31,7 @@ class AuthServiceImpl(
 ) : AuthService {
     override fun requestPasswordReset(email: String): PasswordResetRequestResult {
         // Create the unique password reset code
-        return accountRepository.findAccountByEmailAddress(email)?.let {
+        return accountRepository.findAccountByEmailAddressIgnoreCase(email)?.let {
             try {
                 val code = UUID.randomUUID()
                 accountRepository.save(it.withPasswordReset(code))

@@ -39,7 +39,7 @@ class UserServiceImpl(
     private val publisher: ApplicationEventPublisher
 ) : UserService, UserDetailsService {
     override fun createUser(request: UserCreationRequest): UserCreationResult {
-        return if (repository.findAccountByEmailAddress(request.email) == null) {
+        return if (repository.findAccountByEmailAddressIgnoreCase(request.email) == null) {
             val authorities = request.authorities.map { AccountAuthority(it, Instant.now()) }
             val account = Account(
                 null,
@@ -63,7 +63,7 @@ class UserServiceImpl(
     }
 
     override fun loadUserByUsername(email: String?): EnrichedUserDetails? {
-        val account = if (email != null) repository.findAccountByEmailAddress(email) else null
+        val account = if (email != null) repository.findAccountByEmailAddressIgnoreCase(email) else null
         if (account !== null && account.accountId !== null) {
             return EnrichedUserDetails(
                 User.builder()

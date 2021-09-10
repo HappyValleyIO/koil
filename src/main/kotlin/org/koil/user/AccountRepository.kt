@@ -1,17 +1,12 @@
 package org.koil.user
 
 import org.springframework.data.jdbc.repository.query.Query
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.repository.PagingAndSortingRepository
 import java.util.*
 
-interface AccountRepository : CrudRepository<Account, Long> {
-    @Query(
-        """
-        SELECT * FROM accounts
-        WHERE lower(email_address) = lower(:email)
-    """
-    )
-    fun findAccountByEmailAddress(email: String): Account?
+interface AccountRepository : PagingAndSortingRepository<Account, Long> {
+
+    fun findAccountByEmailAddressIgnoreCase(email: String): Account?
 
     @Query(
         """

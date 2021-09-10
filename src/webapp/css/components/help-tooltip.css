@@ -1,0 +1,10 @@
+/* Help tooltip class */
+.help-tooltip[data-tooltip] {
+    display: inline-block;
+    border-bottom: none;
+}
+
+.help-tooltip > i {
+    height: 1rem;
+    width: 1rem;
+}

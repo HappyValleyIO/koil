@@ -31,7 +31,7 @@ abstract class BaseIntegrationTest {
         authorities: List<AuthAuthority> = listOf(AuthAuthority.USER),
         foo: (EnrichedUserDetails) -> Unit
     ) {
-        val id = Random().nextInt().toString().substring(0..8)
+        val id = "${Random().nextInt()}00000000".substring(0..8)
         val request = UserCreationRequest(
             fullName = "Test User [$id]",
             email = email,
@@ -50,7 +50,7 @@ abstract class BaseIntegrationTest {
         authorities: List<AuthAuthority> = listOf(AuthAuthority.USER),
         foo: (Account) -> Unit
     ) {
-        val id = Random().nextInt().toString().substring(0..4)
+        val id = "${Random().nextInt()}00000000".substring(0..8)
         val request = UserCreationRequest(
             fullName = "Test User [$id]",
             email = email,
@@ -60,6 +60,6 @@ abstract class BaseIntegrationTest {
         )
 
         (userService.createUser(request) as UserCreationResult.CreatedUser)
-        accountRepository.findAccountByEmailAddress(email)!!.run(foo)
+        accountRepository.findAccountByEmailAddressIgnoreCase(email)!!.run(foo)
     }
 }

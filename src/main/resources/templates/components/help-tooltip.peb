@@ -1,0 +1,5 @@
+{% macro helptooltip(text) %}
+<span class="help-tooltip" data-tooltip="{{ text }}">
+    <i class="far fa-question-circle"></i>
+</span>
+{% endmacro %}

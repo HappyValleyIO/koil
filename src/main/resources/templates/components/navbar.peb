@@ -15,7 +15,7 @@
             <li>
                 <form method="POST" action="/admin/impersonation/logout">
                     {% include 'components/csrf-field' %}
-                    <button type="submit" data-test="end-impersonation">
+                    <button type="submit" class="btn-slim" data-test="end-impersonation">
                         End Impersonation
                     </button>
                 </form>
@@ -61,7 +61,7 @@
                         <li>
                             <form method="POST" action="/admin/impersonation/logout">
                                 {% include 'components/csrf-field' %}
-                                <button type="submit" data-test="end-impersonation-mobile">
+                                <button type="submit" class="btn-slim" data-test="end-impersonation-mobile">
                                     End Impersonation
                                 </button>
                             </form>

@@ -25,7 +25,7 @@ import javax.validation.constraints.Pattern
 
 data class PasswordResetAttempt(
     @get:Pattern(
-        regexp = "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+        regexp = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}",
         message = "Code given is not a valid reset code"
     ) val code: String,
     @get:Email(message = "Must be a valid email address") val email: String?,
@@ -45,11 +45,6 @@ data class RegistrationAttempt(
     ) val handle: String,
     @get:Length(min = 8, message = "Password must be at least 8 characters long") val password: String,
     @get:NotEmpty(message = "Name cannot be empty") val name: String
-)
-
-data class LoginAttempt(
-    @get:Email(message = "Must be a valid email address") val email: String,
-    @get:Length(min = 8, message = "Password must be at least 8 characters long") val password: String
 )
 
 @Controller
@@ -113,19 +108,8 @@ class AuthController(
     }
 
     @GetMapping("/password-reset")
-    fun resetPasswordPage(@RequestParam("code") code: String?): ModelAndView {
-        val model = ResetPasswordViewModel(code = code)
-
-        val uuid: UUID? = try {
-            UUID.fromString(code)
-        } catch (e: Throwable) {
-            null
-        }
-        if (uuid == null) {
-            model.errors["code"] =
-                "Whoops! It looks like you've arrived at this page without a valid reset code. Please click the button in your email again."
-        }
-
+    fun resetPasswordPage(@RequestParam("code") code: String): ModelAndView {
+        val model = ResetPasswordViewModel.fromCode(code)
         return views.resetPassword(model)
     }
 
@@ -135,7 +119,8 @@ class AuthController(
         @Valid attempt: PasswordResetAttempt,
         result: BindingResult
     ): ModelAndView {
-        val model = ResetPasswordViewModel(attempt, result.errors().toMutableMap(), attempt.code)
+        val model =
+            ResetPasswordViewModel(attempt, result.errors().toMutableMap(), code = UUID.fromString(attempt.code))
 
         val uuid: UUID? = try {
             UUID.fromString(attempt.code)
@@ -204,6 +189,9 @@ class AuthController(
             }
         } else {
             views.register(RegistrationViewModel(errors = result.errors().toMutableMap(), attempt = attempt))
+                .apply {
+                    status = HttpStatus.BAD_REQUEST
+                }
         }
     }
 }

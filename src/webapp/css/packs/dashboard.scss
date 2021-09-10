@@ -1,7 +1,7 @@
-@import "~@picocss/pico/scss/pico";
-@import "~@fortawesome/fontawesome-free/css/all.css";
-@import "../components/slide-menu";
+@import "../components/common";
 @import "../components/utilities";
+@import "../components/slide-menu";
+@import "../components/help-tooltip";
 
 /* Grid */
 body > main {
@@ -135,4 +135,8 @@ label + button {
 
 .without-padding {
   padding: 0;
+}
+
+.without-margin {
+  margin: 0;
 }
