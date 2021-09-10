@@ -6,7 +6,7 @@ sizes.forEach(size => {
         return ['ipad-mini', 'macbook-13'].includes(size)
     }
 
-    describe(`Admin access on ${size}`, () => {
+    describe(`Admin menus on ${size}`, () => {
 
         beforeEach(() => {
             cy.viewport(size)

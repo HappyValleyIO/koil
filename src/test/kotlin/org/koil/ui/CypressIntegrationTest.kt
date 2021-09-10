@@ -30,7 +30,11 @@ class CypressIntegrationTest : BaseIntegrationTest() {
         val nodeDirectory = Files.list(Paths.get("./.gradle/nodejs")).toList().last()
         val npx = Paths.get(nodeDirectory.toString(), "bin/npx").toAbsolutePath()
 
-        return File("./build/webapp/cypress/integration").list()
+        val basePath = "./build/webapp/cypress/integration/"
+
+        return Files.walk(Paths.get(basePath))
+            .filter { Files.isRegularFile(it) }
+            .map { it.toString().substringAfter(basePath) }
             .map { name ->
                 DynamicTest.dynamicTest(name) {
                     val process = ProcessBuilder()
@@ -52,5 +56,6 @@ class CypressIntegrationTest : BaseIntegrationTest() {
                     }
                 }
             }
+            .toList()
     }
 }
