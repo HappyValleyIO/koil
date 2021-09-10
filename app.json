@@ -22,6 +22,10 @@
     "REMEMBER_ME_KEY": {
       "description": "Remember me token key.",
       "value": "sometoken"
+    },
+    "ADMIN_USER_EMAIL": {
+      "description": "Email to use for the default admin user",
+      "value": "support@happyvalley.io"
     }
   },
   "formation": {

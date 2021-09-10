@@ -4,7 +4,6 @@
   "chromeWebSecurity": false,
   "trashAssetsBeforeRuns": true,
   "defaultCommandTimeout": 30000,
-  "screenshotsFolder": "/tmp/cypress",
   "retries": {
     "runMode": 3,
     "openMode": 0
