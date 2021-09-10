@@ -200,3 +200,7 @@ test.dependsOn(bundleProdAssets)
 bootJarMainClassName.dependsOn(bundleProdAssets)
 bootJar.dependsOn(bundleProdAssets)
 jar.dependsOn(bundleProdAssets)
+
+jar { // Disable plain jar generation
+    enabled = false
+}
