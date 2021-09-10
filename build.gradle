@@ -135,7 +135,8 @@ task copyAssets(type: Copy) {
 }
 
 node {
-    download = false
+    download = true
+    version = "16.9.0" // If you'd like to be on LTS then it'll break the download for M1 macs.
     nodeModulesDir = file(buildAssetsDir)
     npmInstallCommand = 'ci'
 }

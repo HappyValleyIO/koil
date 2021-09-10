@@ -60,18 +60,3 @@ Then install the dependencies by running `pip install -r requirements.txt` in th
 
 To run the docs in dev mode, run the command `mkdocs serve`.
 
-## Using NVM on linux
-
-To use NVM on linux you'll need to configure /usr/bin/node, /usr/bin/npx and /usr/bin/npm so that IntelliJ can detect them.
-
-To do this, add the env variable `export NVM_SYMLINK_CURRENT=true` above the NVM snippet in your `~/.bashrc`, `~/.zshrc` or equivalent file.
-
-This will configure a symlink to the current node directory `~/.nvm/current`.
-
-You can then use this to configure `/usr/bin` symlinks:
-
-```bash
-sudo ln -s ~/.nvm/current/bin/node /usr/bin/node
-sudo ln -s ~/.nvm/current/bin/npm /usr/bin/npm
-sudo ln -s ~/.nvm/current/bin/npx /usr/bin/npx
-```

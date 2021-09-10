@@ -8,6 +8,8 @@ import org.junit.jupiter.api.parallel.ExecutionMode
 import org.koil.BaseIntegrationTest
 import org.springframework.boot.web.server.LocalServerPort
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
 import kotlin.streams.toList
 
@@ -24,6 +26,10 @@ class CypressIntegrationTest : BaseIntegrationTest() {
 
     @TestFactory
     fun runCypressTests(): Collection<DynamicTest> {
+        // If this breaks then it's likely that there are multiple node installations in .gradle/nodejs for this project
+        val nodeDirectory = Files.list(Paths.get("./.gradle/nodejs")).toList().last()
+        val npx = Paths.get(nodeDirectory.toString(), "bin/npx").toAbsolutePath()
+
         return File("./build/webapp/cypress/integration").list()
             .map { name ->
                 DynamicTest.dynamicTest(name) {
@@ -32,17 +38,16 @@ class CypressIntegrationTest : BaseIntegrationTest() {
                         .command(
                             "/bin/bash",
                             "-c",
-                            "CYPRESS_BASE_URL=http://localhost:$port npx cypress run --spec cypress/integration/$name"
+                            "CYPRESS_BASE_URL=http://localhost:$port $npx cypress run --spec cypress/integration/$name"
                         )
                         .start()
 
-                    val lines = process.inputStream.bufferedReader().lines()
+                    process.inputStream.transferTo(System.out)
                     process.waitFor(15, TimeUnit.MINUTES)
 
                     assertEquals(0, process.exitValue()) {
                         """
                                 PROCESS EXIT CODE: ${process.exitValue()}
-                                ${lines.toList().joinToString("\n")}
                             """
                     }
                 }

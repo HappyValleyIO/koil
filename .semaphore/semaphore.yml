@@ -12,7 +12,7 @@ blocks:
           commands:
             - sem-version java 11
             - sem-service start postgres
-            - ./gradlew build --info
+            - ./gradlew build --scan
       env_vars:
         - name: TERM
           value: dumb
@@ -21,7 +21,6 @@ blocks:
       prologue:
         commands:
           - echo $DOCKER_PASSWORD | docker login --username "$DOCKER_USERNAME" --password-stdin
-          - sem-version node 16.5.0
           - checkout
           - cache restore $(checksum build.gradle)
           - cache restore $(checksum src/webapp/package-lock.json)
