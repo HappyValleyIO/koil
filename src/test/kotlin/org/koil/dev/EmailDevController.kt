@@ -1,14 +1,15 @@
 package org.koil.dev
 
-import org.koil.notifications.AccountCreationNotificationModel
+import org.koil.notifications.AccountCreationNotificationViewModel
 import org.koil.notifications.EmailDefaults
 import org.koil.notifications.NotificationAlertSuccessModel
-import org.koil.notifications.PasswordResetModel
+import org.koil.notifications.PasswordResetViewModel
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
+import java.util.*
 
 @Controller
 @Profile("dev")
@@ -41,7 +42,7 @@ class EmailDevController {
         return ModelAndView(
             "email/welcome-inlined",
             mapOf(
-                "model" to AccountCreationNotificationModel(
+                "model" to AccountCreationNotificationViewModel(
                     defaults = EmailDefaults(
                         "A new post for you to read",
                         "Happy Valley IO Ltd, 2 Melville Street, Falkirk, FK1 1HZ",
@@ -60,14 +61,15 @@ class EmailDevController {
         return ModelAndView(
             "email/password-inlined",
             mapOf(
-                "model" to PasswordResetModel(
+                "model" to PasswordResetViewModel(
                     defaults = EmailDefaults(
                         "Password reset link",
                         "Happy Valley IO Ltd, 2 Melville Street, Falkirk, FK1 1HZ",
                         "%unsubscribe_link%"
                     ),
-                    resetLink = "http://localhost:8080/auth/login",
-                    appName = "koil"
+                    baseUrl = "http://localhost:8080/",
+                    appName = "koil",
+                    code = UUID.randomUUID()
                 )
             )
         )

@@ -1,6 +1,6 @@
 package org.koil.auth
 
-import org.koil.notifications.NotificationService
+import org.koil.notifications.EmailNotificationService
 import org.koil.user.AccountRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
@@ -25,7 +25,7 @@ interface AuthService {
 
 @Component
 class AuthServiceImpl(
-    private val notifications: NotificationService,
+    private val notifications: EmailNotificationService,
     private val passwordEncoder: PasswordEncoder,
     private val accountRepository: AccountRepository
 ) : AuthService {
