@@ -2,12 +2,16 @@ package org.koil.user
 
 import org.hibernate.validator.constraints.Length
 import org.koil.auth.AuthAuthority
+import org.koil.extensions.toKotlin
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Isolation
+import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 import java.util.*
 import javax.validation.constraints.Email
@@ -30,6 +34,8 @@ sealed class UserCreationResult {
 
 interface UserService {
     fun createUser(request: UserCreationRequest): UserCreationResult
+    fun findUserById(accountId: Long): Account?
+    fun updateUser(accountId: Long, request: UpdateUserSettingsRequest): AccountUpdateResult
 }
 
 @Component
@@ -50,6 +56,7 @@ class UserServiceImpl(
                 request.email,
                 request.getPassword(encoder),
                 null,
+                notificationSettings = NotificationSettings.default,
                 authorities
             )
             val saved = repository.save(account)
@@ -61,6 +68,26 @@ class UserServiceImpl(
             UserCreationResult.UserAlreadyExists
         }
     }
+
+    override fun findUserById(accountId: Long): Account? =
+        repository.findById(accountId).toKotlin()
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    override fun updateUser(accountId: Long, request: UpdateUserSettingsRequest): AccountUpdateResult =
+        repository.findByIdOrNull(accountId)
+            ?.let { account ->
+                val updated = request.update(account)
+                val emailInUse = repository.existsAccountByEmailAddressIgnoreCase(request.normalizedEmail)
+
+                if (emailInUse && request.normalizedEmail != account.emailAddress) {
+                    AccountUpdateResult.EmailAlreadyInUse(request.email)
+                } else {
+                    repository.save(updated)
+                        .let {
+                            AccountUpdateResult.AccountUpdated(it)
+                        }
+                }
+            } ?: throw NoAccountFoundUnexpectedlyException(accountId)
 
     override fun loadUserByUsername(email: String?): EnrichedUserDetails? {
         val account = if (email != null) repository.findAccountByEmailAddressIgnoreCase(email) else null

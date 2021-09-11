@@ -14,6 +14,7 @@ import java.net.URLEncoder
 import java.util.*
 
 data class EmailDefaults(val clientPreviewText: String, val companyDetails: String, val unsubscribeLink: String)
+
 data class NotificationAlertSuccessModel(
     val defaults: EmailDefaults,
     val title: String,

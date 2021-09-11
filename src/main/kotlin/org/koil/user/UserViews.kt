@@ -1,28 +1,40 @@
 package org.koil.user
 
-import org.springframework.stereotype.Component
 import org.springframework.web.servlet.ModelAndView
 
 data class NotificationSettingsViewModel(
     val weeklyActivity: Boolean,
-    val updateOnMessage: Boolean,
-    val reminderEmail: Boolean
+    val emailOnAccountChange: Boolean
 )
 
 data class UserSettingsViewModel(
-    val handle: String,
-    val bio: String,
+    val name: String,
     val email: String,
-    val notificationSettings: NotificationSettingsViewModel
-)
+    val notificationSettings: NotificationSettingsViewModel,
+    val updated: Boolean,
+    val emailInUse: Boolean
+) {
+    companion object {
+        fun from(account: Account, updated: Boolean, emailInUse: Boolean): UserSettingsViewModel =
+            UserSettingsViewModel(
+                account.fullName, account.emailAddress,
+                NotificationSettingsViewModel(
+                    account.notificationSettings.weeklyActivity,
+                    account.notificationSettings.emailOnAccountChange
+                ),
+                updated = updated,
+                emailInUse = emailInUse
+            )
+    }
 
-interface IUserViews {
-    fun userSettingsView(userSettingsViewModel: UserSettingsViewModel): ModelAndView
+    val updateSuccess = !emailInUse && updated
+    val updateFailed = emailInUse && updated
 }
 
-@Component
-class UserViews : IUserViews {
-    override fun userSettingsView(userSettingsViewModel: UserSettingsViewModel): ModelAndView {
-        return ModelAndView("pages/dashboard/user-settings", mapOf("model" to userSettingsViewModel))
+sealed class UserViews<T>(val templateName: String) {
+    fun render(model: T): ModelAndView {
+        return ModelAndView(templateName, mapOf("model" to model))
     }
+
+    object UserSettings : UserViews<UserSettingsViewModel>("pages/dashboard/user-settings")
 }

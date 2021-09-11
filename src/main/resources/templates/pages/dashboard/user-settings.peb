@@ -7,33 +7,57 @@
     <h1>User Settings</h1>
     <h2>All the settings that you can customize</h2>
 </hgroup>
-<form>
-    <h3>Account Settings</h3>
+<form method="post" data-test="user-settings">
+    {% include 'components/csrf-field' %}
+
+    <hgroup>
+        <h3>Account Settings</h3>
+        {% if model.updateSuccess %}
+            <h4 data-test="updated">
+                <ins>Updated Successfully!</ins>
+            </h4>
+        {% endif %}
+
+        {% if model.updateFailed %}
+            <h4 data-test="update-failed">
+                <mark>Update failed - errors are below.</mark>
+            </h4>
+        {% endif %}
+    </hgroup>
     <label>
-        <i class="fas fa-user"></i> Handle
-        <input minlength="4" maxlength="16" name="handle" type="text"
-               value="{{ global.user.handle }}">
+        <i class="fas fa-user"></i> Full Name
+        <input minlength="4" maxlength="16" name="name" type="text"
+               value="{{ model.name }}" data-test="name-input">
     </label>
 
     <label for="email-input">
         <i class="fas fa-envelope"></i> Email Address
-        <input name="email" type="email" value="{{ model.email }}">
+        <input name="email" type="email" value="{{ model.email }}" data-test="email-input">
+        {% if model.emailInUse %}
+            <small data-test="email-in-use">The updated email you wanted is already in use. Please try another.</small>
+        {% endif %}
     </label>
 
     <hgroup>
-        <h3>Notification Settings</h3>
-        <h4>What notifications are you interested in?</h4>
+        <h4>Notification Settings</h4>
+        <h5>What notifications are you interested in?</h5>
     </hgroup>
+
     {% import 'components/form/checkbox' %}
     <fieldset>
-        {{ checkbox(name="weekly-summary", label="Send me a weekly activity summary", isChecked=model.notificationSettings.weeklyActivity) }}
-            {{ checkbox(name="update-on-message", label="Send me an update when I receive a message", isChecked=model.notificationSettings.updateOnMessage) }}
-            {{ checkbox(name="reminder-email", label="Send me reminders when I'm due to complete a retrospective", isChecked=model.notificationSettings.reminderEmail) }}
+        {{ checkbox(name="weeklySummary", label="Send me a weekly activity summary", isChecked=model.notificationSettings.weeklyActivity) }}
+            {{ checkbox(name="updateOnAccountChange", label="Send me an update when a change is made to my account", isChecked=model.notificationSettings.emailOnAccountChange) }}
     </fieldset>
 
-    <hgroup>
-        <h3>Change Password</h3>
-    </hgroup>
+    <div class="grid">
+        <button type="submit">Save Changes</button>
+        <button type="reset" class="secondary">Cancel</button>
+    </div>
+</form>
+
+<form method="post" action="/dashboard/user-settings/change-password">
+    <h3>Change Password</h3>
+
     <label>
         <i class="fas fa-lock"></i> Old Password
         <input class="input" name="current-password" type="password"
@@ -50,8 +74,10 @@
         <input class="input" name="confirm-password" type="password">
     </label>
 
-    <button type="submit">Save Changes</button>
-    <button type="reset" class="secondary">Cancel</button>
+    <div class="grid">
+        <button type="submit">Update password</button>
+        <button type="reset" class="secondary">Cancel</button>
+    </div>
 </form>
 
 {% endblock %}
