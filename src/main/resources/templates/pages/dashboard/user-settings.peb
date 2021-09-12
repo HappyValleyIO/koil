@@ -34,7 +34,8 @@
         <i class="fas fa-envelope"></i> Email Address
         <input name="email" type="email" value="{{ model.email }}" data-test="email-input">
         {% if model.emailInUse %}
-            <small data-test="email-in-use">The updated email you wanted is already in use. Please try another.</small>
+            <small class="warning" data-test="email-in-use">The updated email you wanted is already in use. Please try
+                another.</small>
         {% endif %}
     </label>
 
