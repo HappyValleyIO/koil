@@ -7,7 +7,7 @@ import org.koil.fixtures.AccountFixtures
 
 internal class UpdateUserSettingsRequestTest {
     @Test
-    internal fun `updates existing account as excepted`() {
+    internal fun `updates existing account as expected`() {
         val account = AccountFixtures.existingAccount
 
         val request = UpdateUserSettingsRequest(
