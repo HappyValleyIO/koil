@@ -26,6 +26,10 @@
     "ADMIN_USER_EMAIL": {
       "description": "Email to use for the default admin user",
       "value": "support@happyvalley.io"
+    },
+    "APP_BASE_URL": {
+      "description": "Base url to use for any email links (e.g. password reset)",
+      "value": "https://koil-sample.herokuapp.com"
     }
   },
   "formation": {

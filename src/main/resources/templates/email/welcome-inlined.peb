@@ -1,4 +1,4 @@
-{# @pebvariable name="model" type="org.koil.notifications.AccountCreationNotificationModel" #}
+{# @pebvariable name="model" type="org.koil.notifications.AccountCreationNotificationViewModel" #}
 
 <!doctype html>
 <html>
