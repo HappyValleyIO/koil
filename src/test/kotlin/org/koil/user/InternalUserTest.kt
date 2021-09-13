@@ -46,13 +46,14 @@ class InternalUserTest {
                 startDate = user.startDate,
                 stopDate = user.stopDate,
                 authorities = user.authorities,
-                password = user.password
+                password = user.password,
+                notificationSettings = NotificationSettings.default
             )
         )
     }
 
     private fun internalTestUser(authorities: List<AuthAuthority> = listOf(AuthAuthority.ADMIN)): Account {
         return Account(0, Instant.now(), "Test User", "stepbeek", UUID.randomUUID(), "test@example.com",
-            "SomePAss123!", null, authorities.map { AccountAuthority(it, Instant.now()) })
+            "SomePAss123!", null, NotificationSettings.default, authorities.map { AccountAuthority(it, Instant.now()) })
     }
 }

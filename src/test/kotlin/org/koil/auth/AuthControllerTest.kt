@@ -98,7 +98,7 @@ class AuthControllerTest : BaseIntegrationTest() {
 
         @Test
         internal fun `GIVEN an existing user WHEN attempting to reset password without valid code THEN return failure`() {
-            withTestAccount { account ->
+            withTestAccount {
                 mockMvc.get("/auth/password-reset") {
                     with(csrf())
                 }.andExpect {

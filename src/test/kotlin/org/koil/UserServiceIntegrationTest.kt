@@ -1,11 +1,12 @@
 package org.koil
 
+import assertk.assertThat
+import assertk.assertions.isEqualTo
 import org.assertj.core.internal.bytebuddy.utility.RandomString
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.koil.auth.AuthAuthority
-import org.koil.user.EnrichedUserDetails
-import org.koil.user.UserCreationRequest
-import org.koil.user.UserCreationResult
+import org.koil.user.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.test.util.AssertionErrors.assertEquals
@@ -102,5 +103,65 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
                 "existing$slug"
             )
         ) as UserCreationResult.UserAlreadyExists
+    }
+
+    @Test
+    internal fun `GIVEN an existing user WHEN updating with unique details THEN report success`() {
+        val slug = RandomString.make()
+
+        withTestAccount { account ->
+            val request = UpdateUserSettingsRequest(
+                name = slug,
+                email = "$slug@example.com",
+                weeklySummary = !account.notificationSettings.weeklyActivity,
+                updateOnAccountChange = !account.notificationSettings.emailOnAccountChange
+            )
+
+            val result = userService.updateUser(account.accountId!!, request)
+
+            assertThat(result).isEqualTo(
+                AccountUpdateResult.AccountUpdated(
+                    request.update(account)
+                )
+            )
+        }
+    }
+
+    @Test
+    internal fun `GIVEN an existing user WHEN updating with already taken email THEN report success`() {
+        val slug = RandomString.make()
+        withTestAccount { other ->
+            withTestAccount { account ->
+                val request = UpdateUserSettingsRequest(
+                    name = slug,
+                    email = other.emailAddress,
+                    weeklySummary = !account.notificationSettings.weeklyActivity,
+                    updateOnAccountChange = !account.notificationSettings.emailOnAccountChange
+                )
+
+                val result = userService.updateUser(account.accountId!!, request)
+
+                assertThat(result).isEqualTo(
+                    AccountUpdateResult.EmailAlreadyInUse(
+                        other.emailAddress
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    internal fun `GIVEN an existing user WHEN attempting to update a nonexistent user THEN throw exception`() {
+        assertThrows<NoAccountFoundUnexpectedlyException> {
+            userService.updateUser(
+                accountId = Long.MAX_VALUE,
+                request = UpdateUserSettingsRequest(
+                    name = "Test",
+                    email = "test@example.com",
+                    false,
+                    updateOnAccountChange = false
+                )
+            )
+        }
     }
 }

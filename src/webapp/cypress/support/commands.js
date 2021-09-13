@@ -63,10 +63,11 @@ Cypress.Commands.add('createRandomAccount', () => {
   cy.createAccount(name, username, email, passwd)
     .then(() => {
       return {
-        name: name,
-        email: email,
-        passwd: passwd,
-        username: username
+          name: name,
+          email: email,
+          passwd: passwd,
+          username: username,
+          slug: slug
       }
     }).as('account')
 })
