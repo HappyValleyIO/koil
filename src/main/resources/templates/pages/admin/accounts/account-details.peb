@@ -1,39 +1,72 @@
 {# @pebvariable name="model" type="org.koil.admin.AdminAccountDetailsViewModel" #}
+{# @pebvariable name="submitted" type="org.koil.admin.accounts.UpdateAccountRequest" #}
 
     {% extends "layouts/admin-layout" %}
     {% block title %} Admin | {{ model.account.fullName }} {% endblock %}
     {% import "components/help-tooltip" %}
+    {% import "components/form/errors" %}
 
 {% block content %}
 <div>
     <small><a href="/admin">Back to all accounts</a></small>
-    <h3>User Details</h3>
-    <form>
+    <hgroup>
+        <h3>User Details</h3>
+
+        {% if model.updated %}
+            <h4>
+                <mark data-test="update-confirmed">User account was updated successfully.</mark>
+            </h4>
+        {% endif %}
+    </hgroup>
+
+    <form method="POST" data-test="user-details-form">
+        {% include "components/csrf-field" %}
         <label>
             Full Name
-            <input type="text" name="fullName" value="{{ model.account.fullName }}" readonly>
+            <input type="text" name="fullName" maxlength="64"
+                   value="{{ submitted.fullName | default(model.account.fullName) }}"
+                   required>
+
+            {{ errors(getFieldErrors('submitted', 'fullName')) }}
         </label>
 
         <label>
             Email Address
-            <input type="email" name="email" value="{{ model.account.emailAddress }}" readonly>
+            <input type="email" name="email" value="{{ submitted.email | default(model.account.emailAddress) }}"
+                   required>
+            {{ errors(getFieldErrors('submitted', 'email')) }}
+            {% if model.emailAlreadyTaken %}
+                <small class="warning" data-test="email-taken">
+                    It looks like this email is already taken. Please try another.
+                </small>
+            {% endif %}
         </label>
-
 
         <label>
             Handle
-            <input type="email" name="email" value="{{ model.account.emailAddress }}" readonly>
+            <input type="text" name="handle" maxlength="16" minlength="4"
+                   value="{{ submitted.handle | default(model.account.handle) }}" required>
+            {{ errors(getFieldErrors('submitted', 'handle')) }}
         </label>
 
-        <label>
-            Roles & Authorities
-            {{ helptooltip(text="What can this user do?") }}
-            <ul>
-                    {% for role in model.account.authorities %}
-                    <li>{{ role.authority }}</li>
-                    {% endfor %}
-            </ul>
-        </label>
+        <fieldset>
+            <legend> Roles & Authorities
+                {{ helptooltip(text="What can this user do?") }}
+            </legend>
+            {% for role in model.possibleAuthorities %}
+                <label>
+                    <input type="checkbox" name="authorities" value="{{ role.first }}" {% if role.second %}
+                           checked
+                    {% endif %}>
+                    {{role.first}}
+                </label>
+            {% endfor %}
+        </fieldset>
+
+        <div class="grid">
+            <button type="submit">Update User</button>
+            <button type="reset" class="secondary">Cancel</button>
+        </div>
     </form>
 
     <h3>Actions</h3>

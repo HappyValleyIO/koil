@@ -1,0 +1,5 @@
+{% macro errors(errors) %}
+    {% for err in errors %}
+    <small class="warning">{{ err }}</small>
+    {% endfor %}
+{% endmacro %}

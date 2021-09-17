@@ -1,5 +1,6 @@
 package org.koil.admin
 
+import org.koil.admin.accounts.UpdateAccountRequest
 import org.koil.auth.AuthAuthority
 import org.koil.user.*
 import org.slf4j.Logger
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 interface IAdminService {
     fun createAdminFromEmail(email: String, password: String): UserCreationResult
@@ -18,6 +20,8 @@ interface IAdminService {
     fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<Account>
 
     fun getAccount(queryingAsAccount: Long, accountId: Long): Account?
+
+    fun updateAccount(requestor: Long, userToUpdate: Long, request: UpdateAccountRequest): AdminAccountUpdateResult
 }
 
 @Component
@@ -67,6 +71,27 @@ class AdminServiceImpl(
         checkAdminStatus(queryingAsAccount)
 
         return persistence.findById(accountId)
+    }
+
+    @Transactional
+    override fun updateAccount(
+        requestor: Long,
+        userToUpdate: Long,
+        request: UpdateAccountRequest
+    ): AdminAccountUpdateResult {
+        checkAdminStatus(requestor)
+
+        val account: Account = accountRepository.findByIdOrNull(userToUpdate)
+            ?: return AdminAccountUpdateResult.CouldNotFindAccount
+        val emailInUse = accountRepository.existsAccountByEmailAddressIgnoreCase(request.normalizedEmail)
+
+        return if (!emailInUse || account.emailAddress == request.normalizedEmail) {
+            val updated = request.update(account)
+            val saved = accountRepository.save(updated)
+            AdminAccountUpdateResult.AccountUpdateSuccess(saved)
+        } else {
+            AdminAccountUpdateResult.EmailAlreadyTaken(account)
+        }
     }
 
     private fun checkAdminStatus(queryingAsAccount: Long) {

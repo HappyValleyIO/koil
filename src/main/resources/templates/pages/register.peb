@@ -31,7 +31,9 @@
             <input type="email" name="email" value="{{ model.attempt.email }}"
                    data-test="email-input">
 
-            <small class="help is-danger">{{ model.errors.get("email") }}</small>
+            {% if model.errors.containsKey("email") %}
+                <small class="warning" data-test="email-error">{{ model.errors.get("email") }}</small>
+            {% endif %}
         </label>
 
 
