@@ -1,4 +1,5 @@
-const sizes = ['iphone-6', 'iphone-x', 'ipad-mini', 'macbook-13'];
+const sizes = ['iphone-12', 'ipad-mini', 'macbook-13'];
+
 sizes.forEach(size => {
 
     describe(`User sign up flows on ${size}`, () => {
@@ -11,7 +12,7 @@ sizes.forEach(size => {
             cy.visit("/");
             cy.get('[data-test=sign-up-email]').type('test@getkoil.dev{enter}');
             cy.get('[data-test=register-form]').within(() => {
-                cy.get('[data-test=email-input]').should('have.value', 'test@getkoil.dev')
+                cy.get('input[name=email]').should('have.value', 'test@getkoil.dev')
             })
         });
 
@@ -19,13 +20,24 @@ sizes.forEach(size => {
             cy.visit("/auth/register")
             const slug = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
             cy.get('[data-test=register-form]').within(() => {
-                cy.get('[data-test=name-input]').type('Test User');
-                cy.get('[data-test=handle-input]').type(slug);
-                cy.get('[data-test=email-input]').type(`test+${slug}@getkoil.dev`);
-                cy.get('[data-test=password-input]').type('SomeSecurePass123?!');
+                cy.get('input[name=name]').type('Test User');
+                cy.get('input[name=handle]').type(slug);
+                cy.get('input[name=email]').type(`test+${slug}@getkoil.dev`);
+                cy.get('input[name=password]').type('SomeSecurePass123?!');
 
-                cy.get('[data-test=submit-button]').click();
+                cy.get('button[type=submit]').click();
                 cy.url().should('include', '/dashboard')
+            })
+        })
+
+        it('should show password when toggled', () => {
+            cy.visit('/auth/register')
+
+            cy.get('[data-test=register-form]').within(() => {
+                cy.get('input[name=password]').should('have.attr', 'type', 'password')
+                    .type('SomePass')
+                cy.get('[data-test=toggle-password]').click()
+                cy.get('input[name=password]').should('have.attr', 'type', 'text')
             })
         })
 
@@ -38,12 +50,12 @@ sizes.forEach(size => {
                 cy.get('[data-test=register-form]').within(() => {
                     cy.get('[data-test=email-error]').should('not.exist')
 
-                    cy.get('[data-test=name-input]').type('Test User');
-                    cy.get('[data-test=handle-input]').type(slug);
-                    cy.get('[data-test=email-input]').type(account.email);
-                    cy.get('[data-test=password-input]').type('SomeSecurePass123?!');
+                    cy.get('input[name=name]').type('Test User');
+                    cy.get('input[name=handle]').type(slug);
+                    cy.get('input[name=email]').type(account.email);
+                    cy.get('input[name=password]').type('SomeSecurePass123?!');
 
-                    cy.get('[data-test=submit-button]').click()
+                    cy.get('button[type=submit]').click()
                 })
 
                 cy.get('[data-test=email-error]').should('exist')
