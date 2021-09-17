@@ -1,10 +1,7 @@
 package org.koil.auth
 
 import org.hibernate.validator.constraints.Length
-import org.koil.user.EnrichedUserDetails
-import org.koil.user.UserCreationRequest
-import org.koil.user.UserCreationResult
-import org.koil.user.UserService
+import org.koil.user.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -31,7 +28,7 @@ data class RegistrationAttempt(
     fun toCreationRequest(): UserCreationRequest = UserCreationRequest(
         fullName = name,
         email = email,
-        password = password,
+        password = HashedPassword.encode(password),
         handle = handle
     )
 }
@@ -39,7 +36,7 @@ data class RegistrationAttempt(
 @Controller
 @RequestMapping("/auth")
 class RegistrationController(
-    @Autowired val users: UserService,
+    @Autowired private val users: UserService,
 ) {
     @GetMapping("/register")
     fun register(

@@ -1,6 +1,5 @@
 package org.koil.user
 
-import org.hibernate.validator.constraints.Length
 import org.koil.auth.AuthAuthority
 import org.koil.extensions.toKotlin
 import org.springframework.context.ApplicationEventPublisher
@@ -8,24 +7,19 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 import java.util.*
-import javax.validation.constraints.Email
-import javax.validation.constraints.NotEmpty
 
 data class UserCreationRequest(
-    @get:NotEmpty val fullName: String,
-    @get:Email val email: String,
-    @field:Length(min = 8) private val password: String,
+    val fullName: String,
+    val email: String,
+    val password: HashedPassword,
     val handle: String,
     val authorities: List<AuthAuthority> = listOf(AuthAuthority.USER)
-) {
-    fun getPassword(encoder: PasswordEncoder): String = encoder.encode(password)
-}
+)
 
 sealed class UserCreationResult {
     data class CreatedUser(val account: Account) : UserCreationResult()
@@ -41,7 +35,6 @@ interface UserService {
 @Component
 class UserServiceImpl(
     private val repository: AccountRepository,
-    private val encoder: PasswordEncoder,
     private val publisher: ApplicationEventPublisher
 ) : UserService, UserDetailsService {
     override fun createUser(request: UserCreationRequest): UserCreationResult {
@@ -54,7 +47,7 @@ class UserServiceImpl(
                 request.handle,
                 UUID.randomUUID(),
                 request.email,
-                request.getPassword(encoder),
+                request.password,
                 null,
                 notificationSettings = NotificationSettings.default,
                 authorities
@@ -95,7 +88,7 @@ class UserServiceImpl(
             return EnrichedUserDetails(
                 User.builder()
                     .username(account.emailAddress)
-                    .password(account.password)
+                    .password(account.password.encodedPassword)
                     .authorities(account.authorities.map { it.authority.grantedAuthority })
                     .build(), account.accountId, account.handle
             )

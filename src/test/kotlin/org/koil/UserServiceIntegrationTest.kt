@@ -22,7 +22,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
                 UserCreationRequest(
                     "Stephen the tester",
                     email,
-                    password,
+                    password = HashedPassword.encode(password),
                     "tester",
                     listOf(AuthAuthority.ADMIN)
                 )
@@ -42,7 +42,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
             UserCreationRequest(
                 "Stephen the tester",
                 email,
-                password,
+                password = HashedPassword.encode(password),
                 "tester"
             )
         ) as UserCreationResult.CreatedUser
@@ -59,7 +59,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
             UserCreationRequest(
                 "Stephen the tester",
                 email,
-                password,
+                password = HashedPassword.encode(password),
                 "tester",
                 listOf(AuthAuthority.ADMIN, AuthAuthority.USER)
             )
@@ -81,7 +81,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
             UserCreationRequest(
                 "Mr. Existing",
                 "existing$slug",
-                "password1!",
+                password = HashedPassword.encode("password1!"),
                 "existing$slug"
             )
         ) as UserCreationResult.CreatedUser
@@ -90,7 +90,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
             UserCreationRequest(
                 "Mr. Existing",
                 "existing$slug",
-                "password1!",
+                password = HashedPassword.encode("password1!"),
                 "existing$slug"
             )
         ) as UserCreationResult.UserAlreadyExists
@@ -99,7 +99,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
             UserCreationRequest(
                 "Mr. Existing",
                 "Existing$slug",
-                "password1!",
+                password = HashedPassword.encode("password1!"),
                 "existing$slug"
             )
         ) as UserCreationResult.UserAlreadyExists
