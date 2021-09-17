@@ -31,6 +31,9 @@
       "description": "Base url to use for any email links (e.g. password reset)",
       "value": "https://koil-sample.herokuapp.com"
     },
+    "ADMIN_USER_PASSWORD": {
+      "description": "Password for the default administrative account",
+      "value": "SecurePass123!",
     "PROMETHEUS_PASSWORD": {
       "description": "Password user by prometheus for http basic auth when scraping",
       "value": "prometheus"
