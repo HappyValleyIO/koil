@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.koil.BaseIntegrationTest
+import org.koil.admin.accounts.UpdateAccountRequest
 import org.koil.auth.AuthAuthority
 import org.koil.user.UserCreationRequest
 import org.koil.user.UserCreationResult
@@ -85,6 +86,108 @@ class AdminServiceTest : BaseIntegrationTest() {
 
         assertThrows(IllegalArgumentException::class.java) {
             adminService.getAccounts(Long.MAX_VALUE, Pageable.unpaged())
+        }
+    }
+
+    @Test
+    internal fun `GIVEN existing account WHEN updating with available details THEN successfully update`() {
+        val email = "user+${Random().nextInt()}@getkoil.dev"
+        val admin = (adminService.createAdminFromEmail(email, "SomePass123!") as UserCreationResult.CreatedUser).account
+
+        withTestAccount { account ->
+            val update = UpdateAccountRequest(
+                "Updated Name",
+                "updated${account.emailAddress}  ",
+                "u${account.handle}",
+                AuthAuthority.values().toList()
+            )
+
+            val result = (adminService.updateAccount(
+                admin.accountId!!,
+                account.accountId!!,
+                update
+            ) as AdminAccountUpdateResult.AccountUpdateSuccess).account
+
+            assertThat(result.handle).isEqualTo(update.handle)
+            assertThat(result.fullName).isEqualTo(update.fullName)
+            assertThat(result.emailAddress).isEqualTo(update.normalizedEmail)
+            assertThat(result.authorities.map { it.authority }).isEqualTo(update.authorities)
+        }
+    }
+
+    @Test
+    internal fun `GIVEN existing account WHEN updating with taken email THEN return failure`() {
+        val email = "user+${Random().nextInt()}@getkoil.dev"
+        val admin =
+            (adminService.createAdminFromEmail(email, "SomePass123!") as UserCreationResult.CreatedUser).account
+
+        withTestAccount { account ->
+            val update = UpdateAccountRequest(
+                "Updated Name",
+                "admin@getkoil.dev",
+                "u${account.handle}",
+                AuthAuthority.values().toList()
+            )
+
+            val result = adminService.updateAccount(
+                admin.accountId!!,
+                account.accountId!!,
+                update
+            )
+
+            assertThat(result).isEqualTo(AdminAccountUpdateResult.EmailAlreadyTaken(account))
+        }
+    }
+
+    @Test
+    internal fun `GIVEN existing account WHEN updating with nothing changed THEN return success`() {
+        val email = "user+${Random().nextInt()}@getkoil.dev"
+        val admin =
+            (adminService.createAdminFromEmail(email, "SomePass123!") as UserCreationResult.CreatedUser).account
+
+        withTestAccount { account ->
+            val update = UpdateAccountRequest(
+                account.fullName,
+                account.emailAddress,
+                account.handle,
+                account.authorities.map { it.authority }
+            )
+
+            val result = adminService.updateAccount(
+                admin.accountId!!,
+                account.accountId!!,
+                update
+            )
+
+            val authorities = (result as AdminAccountUpdateResult.AccountUpdateSuccess).account.authorities
+
+            assertThat(result).isEqualTo(AdminAccountUpdateResult.AccountUpdateSuccess(account.copy(authorities = authorities)))
+            assertThat(authorities.map { it.authority }).isEqualTo(account.authorities.map { it.authority })
+        }
+    }
+
+
+    @Test
+    internal fun `GIVEN existing account WHEN updating as non-admin THEN fail`() {
+        val email = "user+${Random().nextInt()}@getkoil.dev"
+        val admin =
+            (adminService.createAdminFromEmail(email, "SomePass123!") as UserCreationResult.CreatedUser).account
+
+        withTestAccount { account ->
+            val update = UpdateAccountRequest(
+                account.fullName,
+                account.emailAddress,
+                account.handle,
+                account.authorities.map { it.authority }
+            )
+
+            assertThrows(IllegalArgumentException::class.java) {
+                adminService.updateAccount(
+                    account.accountId!!,
+                    admin.accountId!!,
+                    update
+                )
+            }
         }
     }
 }
