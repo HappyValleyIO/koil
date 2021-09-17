@@ -1,9 +1,8 @@
 package org.koil.auth
 
 import org.koil.user.Account
+import org.koil.view.ViewRenderer
 import org.springframework.http.HttpStatus
-import org.springframework.stereotype.Component
-import org.springframework.web.servlet.ModelAndView
 import java.util.*
 
 data class LoginViewModel(
@@ -32,47 +31,15 @@ data class ResetPasswordViewModel(
     val status: HttpStatus = HttpStatus.OK
 ) {
     companion object {
-        fun fromCode(code: String): ResetPasswordViewModel = try {
-            val parsed = UUID.fromString(code)
-            ResetPasswordViewModel(code = parsed)
-        } catch (e: Exception) {
-            ResetPasswordViewModel(
-                errors = mutableMapOf(
-                    "code" to "Whoops! It looks like you've arrived at this page without a valid reset code. Please click the button in your email again."
-                ),
-                status = HttpStatus.BAD_REQUEST
-            )
-        }
+        fun fromCode(code: UUID): ResetPasswordViewModel =
+            ResetPasswordViewModel(code = code)
     }
 }
 
-interface IAuthViews {
-    fun login(model: LoginViewModel): ModelAndView
-
-    fun register(model: RegistrationViewModel): ModelAndView
-
-    fun requestPasswordReset(model: PasswordResetRequestModel): ModelAndView
-
-    fun resetPassword(model: ResetPasswordViewModel): ModelAndView
+sealed class AuthViews<T>(override val template: String) : ViewRenderer<T> {
+    object Login : AuthViews<LoginViewModel>("pages/login")
+    object Register : AuthViews<RegistrationViewModel>("pages/register")
+    object PasswordResetRequest : AuthViews<PasswordResetRequestModel>("pages/request-password-reset")
+    object ResetPassword : AuthViews<ResetPasswordViewModel>("pages/password-reset")
 }
 
-@Component
-class AuthViewsImpl : IAuthViews {
-    override fun login(model: LoginViewModel): ModelAndView {
-        return ModelAndView("pages/login", mapOf("model" to model))
-    }
-
-    override fun register(model: RegistrationViewModel): ModelAndView {
-        return ModelAndView("pages/register", mapOf("model" to model))
-    }
-
-    override fun requestPasswordReset(model: PasswordResetRequestModel): ModelAndView {
-        return ModelAndView("pages/request-password-reset", mapOf("model" to model))
-    }
-
-    override fun resetPassword(model: ResetPasswordViewModel): ModelAndView {
-        return ModelAndView("pages/password-reset", mapOf("model" to model))
-            .apply { status = model.status }
-    }
-
-}
