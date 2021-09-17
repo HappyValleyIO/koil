@@ -4,7 +4,19 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
+import org.springframework.http.HttpStatus
+import org.springframework.web.servlet.ModelAndView
 import kotlin.streams.toList
+
+interface ViewRenderer<MODEL> {
+    fun render(model: MODEL, httpStatus: HttpStatus = HttpStatus.OK): ModelAndView =
+        ModelAndView(template, mapOf("model" to model))
+            .apply {
+                status = httpStatus
+            }
+
+    val template: String
+}
 
 abstract class PaginatedViewModel<T>(val page: Page<T>) {
     private val current = page.pageable
