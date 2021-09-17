@@ -1,4 +1,4 @@
-const sizes = ['iphone-12', 'ipad-mini', 'macbook-13'];
+import {sizes} from "../../support/sizes";
 
 sizes.forEach(size => {
 

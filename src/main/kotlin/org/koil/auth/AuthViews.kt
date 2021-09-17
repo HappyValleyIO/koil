@@ -5,10 +5,8 @@ import org.springframework.http.HttpStatus
 import java.util.*
 
 data class LoginViewModel(
-    val email: String = "",
     val redirect: Boolean = false,
-    val badCredentials: Boolean = false,
-    val errors: Map<String, String?> = mapOf()
+    val badCredentials: Boolean = false
 )
 
 data class RegistrationViewModel(

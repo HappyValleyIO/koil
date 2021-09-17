@@ -5,47 +5,41 @@
 
 {% block content %}
 <form action="/auth/login" method="post" data-test="login-form">
-    <h3>Login Here</h3>
+    {% include 'components/csrf-field' %}
+    <h3>Login</h3>
+
     {% if model.redirect %}
-        <h4 class="warning">You need to login to access that page</h4>
+        <p class="warning">You need to login to access that page</p>
     {% endif %}
 
     {% if model.badCredentials %}
-        <h4 class="warning" data-test="bad-credentials-error">Seems like that login wasn't correct, please try
-            again.</h4>
+        <p class="warning" data-test="bad-credentials-error">
+            Seems like that login wasn't correct, please try again.
+        </p>
     {% endif %}
 
-    {% include 'components/csrf-field' %}
+    <label>
+        <i class="fas fa-envelope"></i> Email Address
+        <input type="email" name="email" value="{{ model.email }}" autofocus>
+    </label>
 
-    <div>
+    <label data-controller="password">
+        <i class="fas fa-lock"></i> Password
+        <input type="password" name="password" data-password-target="input">
+
+        <small><a data-action="click->password#toggleVisibility">Toggle show/hide password</a></small>
+    </label>
+
+    <fieldset>
         <label>
-            <i class="fas fa-envelope"></i> Email Address
-            <input type="email" name="email" value="{{ model.email }}"
-                   data-test="login-email-input" autofocus>
-
-            <small class="warning">{{ model.errors.get("email") }}</small>
+            <input type="checkbox" name="remember-me"> Remember Me
         </label>
+    </fieldset>
 
-        <label data-controller="password">
-            <i class="fas fa-lock"></i> Password
-            <input type="password" name="password" data-target="password.input" data-test="login-password-input">
-
-            <small><a data-action="click->password#toggleVisibility">Toggle show/hide password</a></small>
-            <small class="warning">{{ model.errors.get("password") }}</small>
-        </label>
-
-        <fieldset>
-            <label>
-                <input type="checkbox" name="remember-me" data-test="remember-me"> Remember Me
-            </label>
-        </fieldset>
-
-        <button type="submit" data-test="login-submit">Login</button>
-        <p>
-            Can't login? <a href="/auth/request-password-reset">Reset your password</a> or
-            <a href="/auth/register">create a new account.</a>
-        </p>
-    </div>
-
+    <button type="submit" data-test="login-submit">Login</button>
+    <p>
+        Can't login? <a href="/auth/request-password-reset">Reset your password</a> or
+        <a href="/auth/register">create a new account.</a>
+    </p>
 </form>
 {% endblock %}

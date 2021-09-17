@@ -1,13 +1,7 @@
-const sizes = ['iphone-6', 'iphone-x', 'ipad-mini', 'macbook-13'];
-
+import {sizes} from "../../support/sizes";
 
 sizes.forEach(size => {
-    function isDesktopStyle() {
-        return ['ipad-mini', 'macbook-13'].includes(size)
-    }
-
     describe(`Admin updating user details on ${size}`, () => {
-
         beforeEach(() => {
             cy.viewport(size)
             cy.createRandomAccount()

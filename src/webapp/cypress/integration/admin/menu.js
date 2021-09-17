@@ -1,5 +1,4 @@
-const sizes = ['iphone-6', 'iphone-x', 'ipad-mini', 'macbook-13'];
-
+import {sizes} from "../../support/sizes";
 
 sizes.forEach(size => {
     function isDesktopStyle() {
@@ -16,9 +15,8 @@ sizes.forEach(size => {
         })
 
         it('should show the admin links to an admin on the normal dashboard', () => {
-            cy.get('[data-test=login-email-input]').type('admin@getkoil.dev')
-            cy.get('[data-test=login-password-input]').type('SecurePass123!')
-            cy.get('[data-test=login-submit]').click()
+            cy.loginAsAdmin()
+            cy.visit('/dashboard')
 
             if (isDesktopStyle()) {
                 cy.get('[data-test=navbar-admin-link]').should('be.visible')
@@ -44,27 +42,19 @@ sizes.forEach(size => {
         })
 
         it(`should login successfully`, () => {
-            cy.get('[data-test=login-email-input]').type('admin@getkoil.dev')
-            cy.get('[data-test=login-password-input]').type('SecurePass123!')
-            cy.get('[data-test=login-submit]').click()
-            cy.url().should('include', '/dashboard')
-            cy.visit('/admin')
+            cy.loginAsAdmin()
             cy.url().should('include', '/admin')
         });
 
         it(`should fail to load admin page for a non-admin`, () => {
-            cy.get('@account').then(account => {
-                cy.get('[data-test=login-email-input]').type(account.email)
-                cy.get('[data-test=login-password-input]').type(account.passwd)
-                cy.get('[data-test=login-submit]').click()
-                cy.url().should('include', '/dashboard')
+            cy.createRandomAccountAndLogin()
+            cy.url().should('include', '/dashboard')
 
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/admin'
-                }).then(response => {
-                    expect(response.status).to.eq(403)
-                })
+            cy.request({
+                failOnStatusCode: false,
+                url: '/admin'
+            }).then(response => {
+                expect(response.status).to.eq(403)
             })
         })
 
