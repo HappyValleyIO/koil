@@ -1,6 +1,5 @@
 package org.koil.auth
 
-import org.koil.user.Account
 import org.koil.view.ViewRenderer
 import org.springframework.http.HttpStatus
 import java.util.*
@@ -13,9 +12,8 @@ data class LoginViewModel(
 )
 
 data class RegistrationViewModel(
-    val attempt: RegistrationAttempt? = null,
-    val errors: MutableMap<String, String?> = mutableMapOf(),
-    val account: Account? = null
+    val email: String,
+    val emailAlreadyTaken: Boolean = false
 )
 
 data class PasswordResetRequestModel(

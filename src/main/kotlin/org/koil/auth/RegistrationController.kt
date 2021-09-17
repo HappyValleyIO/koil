@@ -1,24 +1,22 @@
 package org.koil.auth
 
 import org.hibernate.validator.constraints.Length
+import org.koil.user.EnrichedUserDetails
 import org.koil.user.UserCreationRequest
 import org.koil.user.UserCreationResult
 import org.koil.user.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.validation.BindingResult
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.validation.Valid
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Pattern
-
 
 data class RegistrationAttempt(
     @get:Email(message = "Must be a valid email address") val email: String,
@@ -29,55 +27,54 @@ data class RegistrationAttempt(
     ) val handle: String,
     @get:Length(min = 8, message = "Password must be at least 8 characters long") val password: String,
     @get:NotEmpty(message = "Name cannot be empty") val name: String
-)
+) {
+    fun toCreationRequest(): UserCreationRequest = UserCreationRequest(
+        fullName = name,
+        email = email,
+        password = password,
+        handle = handle
+    )
+}
 
 @Controller
 @RequestMapping("/auth")
 class RegistrationController(
     @Autowired val users: UserService,
-    @Autowired val auth: AuthService,
 ) {
-
     @GetMapping("/register")
-    fun registrationPage(
-        @RequestParam("email", defaultValue = "") email: String,
-        model: MutableMap<String, Any>
+    fun register(
+        @AuthenticationPrincipal user: EnrichedUserDetails?,
+        @RequestParam("email", defaultValue = "") email: String
     ): ModelAndView {
-        return AuthViews.Register.render(RegistrationViewModel(RegistrationAttempt(email, "", "", "")))
+        return if (user == null) {
+            AuthViews.Register.render(RegistrationViewModel(email))
+        } else {
+            ModelAndView("redirect:/dashboard")
+        }
     }
 
     @PostMapping("/register")
-    fun registrationSubmit(
+    fun registerSubmit(
         request: HttpServletRequest,
-        @Valid attempt: RegistrationAttempt,
+        @Valid @ModelAttribute("submitted") submitted: RegistrationAttempt,
         result: BindingResult
     ): ModelAndView {
         return if (!result.hasErrors()) {
-            when (users.createUser(
-                UserCreationRequest(
-                    attempt.name,
-                    attempt.email,
-                    attempt.password,
-                    attempt.handle
-                )
-            )) {
+            when (users.createUser(submitted.toCreationRequest())) {
                 is UserCreationResult.CreatedUser -> {
-                    request.login(attempt.email, attempt.password)
+                    request.login(submitted.email, submitted.password)
                     ModelAndView("redirect:/dashboard")
                 }
                 is UserCreationResult.UserAlreadyExists -> {
                     AuthViews.Register.render(
-                        RegistrationViewModel(
-                            errors = mutableMapOf("email" to "A user with that email address already exists"),
-                            attempt = attempt
-                        ),
+                        RegistrationViewModel(email = submitted.email, emailAlreadyTaken = true),
                         HttpStatus.BAD_REQUEST
                     )
                 }
             }
         } else {
             AuthViews.Register.render(
-                RegistrationViewModel(errors = result.errors().toMutableMap(), attempt = attempt),
+                RegistrationViewModel(email = submitted.email),
                 HttpStatus.BAD_REQUEST
             )
         }

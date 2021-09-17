@@ -29,7 +29,7 @@ sizes.forEach(size => {
             })
         })
 
-        it.only(`should return an error when email already taken`, () => {
+        it(`should return an error when email already taken`, () => {
             cy.createRandomAccount()
             cy.clearCookies()
             cy.get('@account').then(account => {

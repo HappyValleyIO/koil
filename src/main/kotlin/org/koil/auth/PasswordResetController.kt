@@ -87,18 +87,18 @@ class PasswordResetController(
     @PostMapping("/password-reset")
     fun resetPassword(
         request: HttpServletRequest,
-        @Valid attempt: PasswordResetAttempt,
+        @Valid submitted: PasswordResetAttempt,
         result: BindingResult
     ): ModelAndView {
-        if (!attempt.passwordsMatch) {
+        if (!submitted.passwordsMatch) {
             result.addError(FieldError(result.objectName, "passwordConfirm", "Passwords don't match!"))
         }
 
         return if (result.hasErrors()) {
             AuthViews.ResetPassword.render(ResetPasswordViewModel(), httpStatus = HttpStatus.BAD_REQUEST)
         } else {
-            auth.resetPassword(attempt.parsedCode(), attempt.email ?: "", attempt.password ?: "")
-            request.login(attempt.email, attempt.password)
+            auth.resetPassword(submitted.parsedCode(), submitted.email ?: "", submitted.password ?: "")
+            request.login(submitted.email, submitted.password)
             ModelAndView("redirect:/dashboard")
         }
     }

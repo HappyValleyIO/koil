@@ -1,8 +1,6 @@
 package org.koil.auth
 
 import org.koil.user.EnrichedUserDetails
-import org.koil.user.UserService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,10 +10,7 @@ import org.springframework.web.servlet.ModelAndView
 
 @Controller
 @RequestMapping("/auth")
-class LoginController(
-    @Autowired val users: UserService,
-    @Autowired val auth: AuthService,
-) {
+class LoginController {
     @GetMapping("/login")
     fun viewLogin(
         @AuthenticationPrincipal principal: EnrichedUserDetails?,
