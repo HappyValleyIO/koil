@@ -2,8 +2,22 @@ const sizes = ['iphone-6', 'iphone-x', 'ipad-mini', 'macbook-13'];
 
 sizes.forEach(size => {
 
-    describe(`User login flows on ${size}`, () => {
 
+    describe(` Already logged in used on ${size}`, () => {
+        beforeEach(() => {
+            cy.viewport(size)
+            cy.createRandomAccount()
+        })
+
+        it('should be redirected when visiting login page', () => {
+            cy.get('@account').then(() => {
+                cy.visit("/auth/login")
+                cy.get('[data-test=dashboard-index]').should('exist')
+            })
+        })
+    })
+
+    describe(`User login flows on ${size}`, () => {
         beforeEach(() => {
             cy.viewport(size)
             cy.createRandomAccount()

@@ -45,7 +45,7 @@ data class UpdateUserSettingsRequest(
 }
 
 @Table("account_authorities")
-data class AccountAuthority(val authority: AuthAuthority, val authorityGranted: Instant)
+data class AccountAuthority(val authority: AuthAuthority, val authorityGranted: Instant = Instant.now())
 
 @Table("accounts")
 data class Account(

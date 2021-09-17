@@ -21,7 +21,7 @@
         <label>
             <i class="fas fa-envelope"></i> Email Address
             <input type="email" name="email" value="{{ model.email }}"
-                   data-test="login-email-input">
+                   data-test="login-email-input" autofocus>
 
             <small class="warning">{{ model.errors.get("email") }}</small>
         </label>
