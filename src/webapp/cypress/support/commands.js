@@ -90,3 +90,10 @@ Cypress.Commands.add('loginAsAdmin', () => {
     cy.get('[data-test=dashboard-index]').should('exist')
     cy.visit('/admin')
 })
+
+Cypress.Commands.add('accountDetailsForEmail', (email) => {
+    return cy.request({
+        url: `/dev/account?email=${encodeURIComponent(email)}`,
+        method: 'GET',
+    })
+})

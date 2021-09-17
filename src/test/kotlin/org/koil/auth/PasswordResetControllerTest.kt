@@ -16,7 +16,7 @@ class PasswordResetControllerTest : BaseIntegrationTest() {
                 with(SecurityMockMvcRequestPostProcessors.csrf())
             }.andExpect {
                 status {
-                    is2xxSuccessful()
+                    is3xxRedirection()
                 }
             }
 

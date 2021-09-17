@@ -1,4 +1,4 @@
-import {sizes} from '../support/sizes'
+import {sizes} from '../../support/sizes'
 
 sizes.forEach(size => {
     describe(`User settings page on ${size}`, () => {

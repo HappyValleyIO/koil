@@ -1,5 +1,5 @@
 {# @pebvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" #}
 
 <label>
-    <input hidden name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}" style="display: none;">
+    <input hidden class="is-hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}">
 </label>
