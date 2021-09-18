@@ -1,0 +1,19 @@
+// Use this mixin to override the default dark theme from pico
+@mixin dark-override {
+  // E.g. to change background color
+  // --background-color: blue;
+}
+
+// Dark theme (Auto)
+// Automatically enabled if user has Dark mode enabled
+@media only screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    @include dark-override;
+  }
+}
+
+// Dark theme (Forced)
+// Enabled if forced with data-theme="dark"
+[data-theme="dark"] {
+  @include dark-override;
+}

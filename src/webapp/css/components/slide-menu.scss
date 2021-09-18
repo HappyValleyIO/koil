@@ -1,3 +1,4 @@
+// Full page mobile menu that slides in when active
 .slide-menu {
   position: fixed;
   top: 0;
@@ -5,10 +6,11 @@
   transform: translateX(-100vw);
   width: 100vw;
   height: 100vh;
-  background: var(--background);
-  padding: 2em;
+  overflow: auto;
+  background: var(--background-color);
+  padding: var(--menu-padding, 2em);
 
-  &.is-active {
+  &[data-active] {
     transform: translateX(0);
   }
 

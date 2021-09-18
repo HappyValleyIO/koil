@@ -1,0 +1,19 @@
+@import "visibility";
+@import "typography";
+
+.is-clickable {
+  cursor: pointer;
+}
+
+.btn-slim {
+  margin: 0;
+  padding: 0.5em;
+}
+
+.without-padding {
+  padding: 0;
+}
+
+.without-margin {
+  margin: 0;
+}
