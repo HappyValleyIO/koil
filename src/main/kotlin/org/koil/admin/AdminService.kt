@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 interface IAdminService {
-    fun createAdminFromEmail(email: String, password: String): UserCreationResult
+    fun createAdminFromEmail(email: String, password: HashedPassword): UserCreationResult
 
     fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<Account>
 
@@ -41,11 +41,11 @@ class AdminServiceImpl(
         if ((adminEmailFromEnv.isNotEmpty() && adminPasswordFromEnv.isNotEmpty())
             && accountRepository.findAccountByEmailAddressIgnoreCase(adminEmailFromEnv) == null
         ) {
-            createAdminFromEmail(adminEmailFromEnv, adminPasswordFromEnv)
+            createAdminFromEmail(adminEmailFromEnv, HashedPassword.encode(adminPasswordFromEnv))
         }
     }
 
-    override fun createAdminFromEmail(email: String, password: String): UserCreationResult {
+    override fun createAdminFromEmail(email: String, password: HashedPassword): UserCreationResult {
         return userService.createUser(
             UserCreationRequest(
                 "Default Admin",

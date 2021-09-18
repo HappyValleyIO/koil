@@ -1,4 +1,5 @@
 {# @pebvariable name="model" type="org.koil.auth.RegistrationViewModel" #}
+{# @pebvariable name="submitted" type="org.koil.auth.RegistrationAttempt" #}
 
     {% extends "layouts/single-form" %}
     {% block title %} Login {% endblock %}
@@ -7,46 +8,50 @@
 <form action="/auth/register" method="post" data-test="register-form">
     <h3>Register Here</h3>
     {% include 'components/csrf-field' %}
+    {% import 'components/form/errors' %}
 
     <div>
         <label>
             <i class="fas fa-user-tie"></i> Name
-            <input type="text" name="name" value="{{ model.attempt.name }}"
-                   data-test="name-input">
-
-            <small class="warning">{{ model.errors.get("name") }}</small>
+            <input type="text" name="name" value="{{ submitted.name }}">
             <small>This isn't shown publicly. We use it for account recovery.</small>
+
+            {{ errors(getFieldErrors('submitted', 'name')) }}
         </label>
 
         <label>
             <i class="fas fa-user"></i> Account Handle
             <input type="text" name="handle" maxlength="16" minlength="4"
-                   value="{{ model.attempt.handle }}" data-test="handle-input">
+                   value="{{ submitted.handle }}">
 
-            <small id="name-error" class="help is-danger">{{ model.errors.get("handle") }}</small>
+            {{ errors(getFieldErrors('submitted', 'handle')) }}
         </label>
 
         <label>
             <i class="fas fa-envelope"></i> Email Address
-            <input type="email" name="email" value="{{ model.attempt.email }}"
-                   data-test="email-input">
-
-            {% if model.errors.containsKey("email") %}
-                <small class="warning" data-test="email-error">{{ model.errors.get("email") }}</small>
+            <input type="email" name="email" value="{{ submitted.email | default(model.email)}}">
+            {% if model.emailAlreadyTaken %}
+                <small class="warning" data-test="email-error">
+                    Looks like this email is already taken - please try another, or <a href="/auth/login">login.</a>
+                </small>
             {% endif %}
+            {{ errors(getFieldErrors('submitted', 'email')) }}
         </label>
 
 
         <label data-controller="password">
             <i class="fas fa-lock"></i> Password
-            <input type="password" name="password" value="{{ model.attempt.password }}" class="input"
-                   data-target="password.input" data-test="password-input">
+            <input type="password" name="password" data-password-target="input">
+            <small>
+                <a data-action="click->password#toggleVisibility" data-test="toggle-password">
+                    Toggle show/hide password
+                </a>
+            </small>
 
-            <small><a data-action="click->password#toggleVisibility">Toggle show/hide password</a></small>
-            <small class="warning">{{ model.errors.get("password") }}</small>
+            {{ errors(getFieldErrors('submitted', 'password')) }}
         </label>
 
-        <button type="submit" data-test="submit-button">Create Account</button>
+        <button type="submit">Create Account</button>
         <p>Or, login <a href="/auth/login">here</a>.</p>
     </div>
 </form>

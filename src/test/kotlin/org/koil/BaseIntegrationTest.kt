@@ -35,7 +35,7 @@ abstract class BaseIntegrationTest {
         val request = UserCreationRequest(
             fullName = "Test User [$id]",
             email = email,
-            password = password,
+            password = HashedPassword.encode(password),
             authorities = authorities,
             handle = id
         )
@@ -54,7 +54,7 @@ abstract class BaseIntegrationTest {
         val request = UserCreationRequest(
             fullName = "Test User [$id]",
             email = email,
-            password = password,
+            password = HashedPassword.encode(password),
             authorities = authorities,
             handle = "user$id"
         )

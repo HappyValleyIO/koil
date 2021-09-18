@@ -1,5 +1,4 @@
-const sizes = ['iphone-6', 'iphone-x', 'ipad-mini', 'macbook-13'];
-
+import {sizes} from "../../support/sizes";
 
 sizes.forEach(size => {
     function isDesktopStyle() {

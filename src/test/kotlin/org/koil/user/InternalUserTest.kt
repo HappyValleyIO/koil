@@ -6,6 +6,7 @@ import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
 import org.koil.auth.AuthAuthority
+import org.koil.fixtures.AccountFixtures
 import java.time.Instant
 import java.util.*
 
@@ -53,7 +54,15 @@ class InternalUserTest {
     }
 
     private fun internalTestUser(authorities: List<AuthAuthority> = listOf(AuthAuthority.ADMIN)): Account {
-        return Account(0, Instant.now(), "Test User", "stepbeek", UUID.randomUUID(), "test@example.com",
-            "SomePAss123!", null, NotificationSettings.default, authorities.map { AccountAuthority(it, Instant.now()) })
+        return Account(0,
+            Instant.now(),
+            "Test User",
+            "stepbeek",
+            UUID.randomUUID(),
+            "test@example.com",
+            AccountFixtures.existingAccount.password,
+            null,
+            NotificationSettings.default,
+            authorities.map { AccountAuthority(it, Instant.now()) })
     }
 }

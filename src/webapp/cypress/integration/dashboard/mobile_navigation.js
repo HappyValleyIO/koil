@@ -1,6 +1,4 @@
-const sizes = ['iphone-6', 'iphone-x'];
-
-sizes.forEach(size => {
+['iphone-6', 'iphone-x'].forEach(size => {
     describe(`User can open mobile menu on ${size}`, () => {
         beforeEach(() => {
             cy.createRandomAccountAndLogin()

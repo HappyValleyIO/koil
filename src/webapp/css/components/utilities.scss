@@ -6,7 +6,7 @@
 
 // Visibility modifiers
 .is-hidden {
-  display: none;
+  display: none !important;
 }
 
 // Hidden only on mobile screens

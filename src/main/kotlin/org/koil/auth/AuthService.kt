@@ -2,7 +2,7 @@ package org.koil.auth
 
 import org.koil.notifications.EmailNotificationService
 import org.koil.user.AccountRepository
-import org.springframework.security.crypto.password.PasswordEncoder
+import org.koil.user.HashedPassword
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -20,13 +20,12 @@ sealed class PasswordResetResult {
 
 interface AuthService {
     fun requestPasswordReset(email: String): PasswordResetRequestResult
-    fun resetPassword(code: UUID, email: String, password: String): PasswordResetResult
+    fun resetPassword(code: UUID, email: String, password: HashedPassword): PasswordResetResult
 }
 
 @Component
 class AuthServiceImpl(
     private val notifications: EmailNotificationService,
-    private val passwordEncoder: PasswordEncoder,
     private val accountRepository: AccountRepository
 ) : AuthService {
     override fun requestPasswordReset(email: String): PasswordResetRequestResult {
@@ -43,10 +42,10 @@ class AuthServiceImpl(
         } ?: PasswordResetRequestResult.CouldNotFindUserWithEmail
     }
 
-    override fun resetPassword(code: UUID, email: String, password: String): PasswordResetResult {
+    override fun resetPassword(code: UUID, email: String, password: HashedPassword): PasswordResetResult {
         return accountRepository.findAccountByPasswordResetCode(code)?.let {
             try {
-                val updated = it.updatePassword(passwordEncoder.encode(password))
+                val updated = it.updatePassword(password)
                 accountRepository.save(updated)
                 PasswordResetResult.Success
             } catch (e: Throwable) {

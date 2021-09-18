@@ -3,10 +3,13 @@ package org.koil.user
 import org.koil.auth.AuthAuthority
 import org.springframework.context.ApplicationEvent
 import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.Duration
 import java.time.Instant
 import java.util.*
@@ -24,6 +27,21 @@ data class AccountPasswordReset(
     val createdAt: Instant = Instant.now(),
     val expiresAt: Instant = Instant.now().plus(Duration.ofHours(3))
 )
+
+data class HashedPassword(@Column("password") val encodedPassword: String) {
+    init {
+        require(encodedPassword.startsWith("{")) {
+            "Password must be encoded to be stored in a HashedPassword object."
+        }
+    }
+
+    companion object {
+        private val encoder: PasswordEncoder = createDelegatingPasswordEncoder()
+
+        fun encode(password: String): HashedPassword =
+            HashedPassword(encoder.encode(password))
+    }
+}
 
 data class UpdateUserSettingsRequest(
     @get:NotEmpty(message = "Name cannot be empty") val name: String,
@@ -55,7 +73,7 @@ data class Account(
     val handle: String,
     val publicAccountId: UUID,
     val emailAddress: String,
-    val password: String,
+    @Embedded.Empty val password: HashedPassword,
     val stopDate: Instant?,
     @Embedded.Empty val notificationSettings: NotificationSettings,
     @MappedCollection(idColumn = "account_id") val authorities: List<AccountAuthority>,
@@ -67,8 +85,8 @@ data class Account(
     fun withPasswordReset(code: UUID): Account =
         this.copy(accountPasswordReset = AccountPasswordReset(code))
 
-    fun updatePassword(encodedPassword: String): Account =
-        this.copy(password = encodedPassword)
+    fun updatePassword(password: HashedPassword): Account =
+        this.copy(password = password)
 
     fun updateName(name: String): Account =
         this.copy(fullName = name)
