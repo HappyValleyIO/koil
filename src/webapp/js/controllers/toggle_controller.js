@@ -1,4 +1,4 @@
-import { Controller } from "stimulus";
+import {Controller} from "stimulus";
 
 export default class ToggleController extends Controller {
   static get targets() {
@@ -6,6 +6,6 @@ export default class ToggleController extends Controller {
   }
 
   toggle() {
-    this.toggleableTargets.forEach(el => el.classList.toggle("is-active"));
+      this.toggleableTargets.forEach(el => el.toggleAttribute('data-active'));
   }
 }

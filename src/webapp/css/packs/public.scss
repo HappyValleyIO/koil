@@ -1,6 +1,4 @@
-@import "~@picocss/pico/scss/pico";
-@import "~@fortawesome/fontawesome-free/css/all.css";
-@import "../components/utilities";
+@import "common";
 
 /* Grid */
 body > main {
@@ -58,6 +56,3 @@ body > footer {
   text-align: center;
 }
 
-.warning {
-  color: $red-900;
-}
