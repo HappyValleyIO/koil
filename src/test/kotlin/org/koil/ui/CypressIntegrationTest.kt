@@ -26,36 +26,38 @@ class CypressIntegrationTest : BaseIntegrationTest() {
 
     @TestFactory
     fun runCypressTests(): Collection<DynamicTest> {
-        // If this breaks then it's likely that there are multiple node installations in .gradle/nodejs for this project
-        val nodeDirectory = Files.list(Paths.get("./.gradle/nodejs")).toList().last()
-        val npx = Paths.get(nodeDirectory.toString(), "bin/npx").toAbsolutePath()
+        val cypressTestsDirectory = "src/webapp/cypress/integration"
+        val testNames = File(cypressTestsDirectory).list()
+        if (testNames.isNullOrEmpty()) {
+            throw Exception("No tests found in $cypressTestsDirectory")
+        }
 
-        val basePath = "./build/webapp/cypress/integration/"
-
-        return Files.walk(Paths.get(basePath))
+        return Files.walk(Paths.get(cypressTestsDirectory))
             .filter { Files.isRegularFile(it) }
-            .map { it.toString().substringAfter(basePath) }
+            .map { it.toString().substringAfter(cypressTestsDirectory) }
             .map { name ->
                 DynamicTest.dynamicTest(name) {
-                    val process = ProcessBuilder()
-                        .directory(File("./build/webapp/"))
-                        .command(
-                            "/bin/bash",
-                            "-c",
-                            "CYPRESS_BASE_URL=http://localhost:$port $npx cypress run --spec cypress/integration/$name"
-                        )
-                        .start()
-
-                    process.inputStream.transferTo(System.out)
+                    val process = startProcess(name)
+                    val lines = process.inputStream.bufferedReader().lines()
                     process.waitFor(15, TimeUnit.MINUTES)
 
                     assertEquals(0, process.exitValue()) {
                         """
                                 PROCESS EXIT CODE: ${process.exitValue()}
+                                ${lines.toList().joinToString("\n")}
                             """
                     }
                 }
             }
             .toList()
     }
+
+    private fun startProcess(name: String) = ProcessBuilder()
+        .directory(File("./build/webapp/"))
+        .command(
+            "/bin/bash",
+            "-c",
+            "CYPRESS_BASE_URL=http://localhost:$port npx cypress run --spec cypress/integration/$name"
+        )
+        .start()
 }
