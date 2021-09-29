@@ -42,7 +42,7 @@ class CypressIntegrationTest : BaseIntegrationTest() {
                         .command(
                             "/bin/bash",
                             "-c",
-                            "CYPRESS_BASE_URL=http://localhost:$port $npx cypress run --spec cypress/integration/$name"
+                            """CYPRESS_BASE_URL=http://localhost:$port "$npx" cypress run --spec cypress/integration/$name"""
                         )
                         .start()
 
