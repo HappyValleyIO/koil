@@ -34,15 +34,16 @@
     "ADMIN_USER_PASSWORD": {
       "description": "Password for the default administrative account",
       "value": "SecurePass123!",
-    "PROMETHEUS_PASSWORD": {
-      "description": "Password user by prometheus for http basic auth when scraping",
-      "value": "prometheus"
-    }
-  },
-  "formation": {
-    "web": {
-      "quantity": 1,
-      "size": "free"
+      "PROMETHEUS_PASSWORD": {
+        "description": "Password user by prometheus for http basic auth when scraping",
+        "value": "prometheus"
+      }
+    },
+    "formation": {
+      "web": {
+        "quantity": 1,
+        "size": "free"
+      }
     }
   }
 }

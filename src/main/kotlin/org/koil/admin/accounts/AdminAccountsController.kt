@@ -3,12 +3,11 @@ package org.koil.admin.accounts
 import org.hibernate.validator.constraints.Length
 import org.koil.admin.AdminAccountDetailsViewModel
 import org.koil.admin.AdminAccountUpdateResult
+import org.koil.admin.AdminService
 import org.koil.admin.AdminViews
-import org.koil.admin.IAdminService
-import org.koil.auth.AuthAuthority
+import org.koil.auth.EnrichedUserDetails
+import org.koil.auth.UserAuthority
 import org.koil.user.Account
-import org.koil.user.AccountAuthority
-import org.koil.user.EnrichedUserDetails
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
@@ -24,24 +23,21 @@ data class UpdateAccountRequest(
     @get:NotEmpty(message = "Name cannot be empty") val fullName: String,
     @get:Email(message = "Must be a valid email address") val email: String,
     @get:Length(min = 4, max = 16, message = "Handle must be between 4 and 16 chars long") val handle: String,
-    val authorities: List<AuthAuthority>
+    val authorities: List<UserAuthority>
 ) {
     val normalizedEmail: String = email.trim().toLowerCase()
 
     fun update(account: Account): Account =
-        account.copy(
-            fullName = fullName,
-            emailAddress = normalizedEmail,
-            handle = handle,
-            authorities = authorities.map {
-                AccountAuthority(it)
-            }
-        )
+        account
+            .withAuthorities(authorities)
+            .updateEmail(normalizedEmail)
+            .updateName(fullName)
+            .updateHandle(handle)
 }
 
 @Controller
 @RequestMapping("/admin")
-class AdminAccountsController(private val adminService: IAdminService) {
+class AdminAccountsController(private val adminService: AdminService) {
     @GetMapping("/accounts/{accountId}")
     fun adminAccountDetails(
         @AuthenticationPrincipal user: EnrichedUserDetails,

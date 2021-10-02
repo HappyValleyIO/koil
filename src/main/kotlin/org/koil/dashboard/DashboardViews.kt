@@ -1,18 +1,8 @@
 package org.koil.dashboard
 
-import org.koil.user.EnrichedUserDetails
-import org.springframework.stereotype.Component
-import org.springframework.web.servlet.ModelAndView
+import org.koil.view.ViewRenderer
 
-data class DashboardIndexViewModel(val user: EnrichedUserDetails)
-
-interface IDashboardViews {
-    fun renderIndex(model: DashboardIndexViewModel): ModelAndView
-}
-
-@Component
-class DashboardViews : IDashboardViews {
-    override fun renderIndex(model: DashboardIndexViewModel): ModelAndView {
-        return ModelAndView("pages/dashboard/index", mapOf("model" to model))
-    }
+sealed class DashboardViews<MODEL>(override val template: String) : ViewRenderer<MODEL> {
+    object Index : DashboardViews<Unit>("pages/dashboard/index")
+    object ContactUs : DashboardViews<Unit>("pages/dashboard/contact-us")
 }

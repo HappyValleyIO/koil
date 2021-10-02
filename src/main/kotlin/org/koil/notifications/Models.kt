@@ -24,9 +24,9 @@ data class AccountCreationNotificationViewModel(
 
 data class PasswordResetViewModel(
     val defaults: EmailDefaults,
-    val baseUrl: String,
     val appName: String,
-    val code: UUID
+    private val baseUrl: String,
+    private val code: UUID
 ) {
     val resetLink: String = UriComponentsBuilder.fromUriString("$baseUrl/auth/password-reset")
         .queryParam("code", code)

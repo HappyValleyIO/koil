@@ -5,7 +5,8 @@ import assertk.assertions.isEqualTo
 import org.assertj.core.internal.bytebuddy.utility.RandomString
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.koil.auth.AuthAuthority
+import org.koil.auth.EnrichedUserDetails
+import org.koil.auth.UserAuthority
 import org.koil.user.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -24,7 +25,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
                     email,
                     password = HashedPassword.encode(password),
                     "tester",
-                    listOf(AuthAuthority.ADMIN)
+                    listOf(UserAuthority.ADMIN)
                 )
             ) as UserCreationResult.CreatedUser
         val queried = userDetails.loadUserByUsername(email) as EnrichedUserDetails
@@ -61,7 +62,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
                 email,
                 password = HashedPassword.encode(password),
                 "tester",
-                listOf(AuthAuthority.ADMIN, AuthAuthority.USER)
+                listOf(UserAuthority.ADMIN, UserAuthority.USER)
             )
         ) as UserCreationResult.CreatedUser
         val queried = userDetails.loadUserByUsername(email) as EnrichedUserDetails

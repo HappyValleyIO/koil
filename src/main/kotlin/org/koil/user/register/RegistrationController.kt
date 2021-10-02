@@ -1,7 +1,11 @@
-package org.koil.auth
+package org.koil.user.register
 
 import org.hibernate.validator.constraints.Length
-import org.koil.user.*
+import org.koil.auth.EnrichedUserDetails
+import org.koil.user.HashedPassword
+import org.koil.user.UserCreationRequest
+import org.koil.user.UserCreationResult
+import org.koil.user.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -44,7 +48,7 @@ class RegistrationController(
         @RequestParam("email", defaultValue = "") email: String
     ): ModelAndView {
         return if (user == null) {
-            AuthViews.Register.render(RegistrationViewModel(email))
+            RegisterViews.Register.render(RegistrationViewModel(email))
         } else {
             ModelAndView("redirect:/dashboard")
         }
@@ -63,14 +67,14 @@ class RegistrationController(
                     ModelAndView("redirect:/dashboard")
                 }
                 is UserCreationResult.UserAlreadyExists -> {
-                    AuthViews.Register.render(
+                    RegisterViews.Register.render(
                         RegistrationViewModel(email = submitted.email, emailAlreadyTaken = true),
                         HttpStatus.BAD_REQUEST
                     )
                 }
             }
         } else {
-            AuthViews.Register.render(
+            RegisterViews.Register.render(
                 RegistrationViewModel(email = submitted.email),
                 HttpStatus.BAD_REQUEST
             )

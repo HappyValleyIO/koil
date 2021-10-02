@@ -1,7 +1,9 @@
 package org.koil
 
 import org.junit.jupiter.api.extension.ExtendWith
-import org.koil.auth.AuthAuthority
+import org.koil.auth.DefaultUserDetailsService
+import org.koil.auth.EnrichedUserDetails
+import org.koil.auth.UserAuthority
 import org.koil.user.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -22,13 +24,17 @@ abstract class BaseIntegrationTest {
     @Autowired
     lateinit var userService: UserServiceImpl
 
+
+    @Autowired
+    lateinit var userDetailsService: DefaultUserDetailsService
+
     @Autowired
     lateinit var accountRepository: AccountRepository
 
     protected fun withTestSession(
         email: String = "test+${Random().nextInt()}@getkoil.dev",
         password: String = "TestPass123!",
-        authorities: List<AuthAuthority> = listOf(AuthAuthority.USER),
+        authorities: List<UserAuthority> = listOf(UserAuthority.USER),
         foo: (EnrichedUserDetails) -> Unit
     ) {
         val id = "${Random().nextInt()}00000000".substring(0..8)
@@ -41,13 +47,13 @@ abstract class BaseIntegrationTest {
         )
 
         (userService.createUser(request) as UserCreationResult.CreatedUser)
-        userService.loadUserByUsername(email)!!.run(foo)
+        userDetailsService.loadUserByUsername(email).run(foo)
     }
 
     protected fun withTestAccount(
         email: String = "test+${Random().nextInt().toString().substring(0..4)}@getkoil.dev",
         password: String = "TestPass123!",
-        authorities: List<AuthAuthority> = listOf(AuthAuthority.USER),
+        authorities: List<UserAuthority> = listOf(UserAuthority.USER),
         foo: (Account) -> Unit
     ) {
         val id = "${Random().nextInt()}00000000".substring(0..8)

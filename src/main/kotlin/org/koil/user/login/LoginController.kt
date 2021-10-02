@@ -1,6 +1,6 @@
-package org.koil.auth
+package org.koil.user.login
 
-import org.koil.user.EnrichedUserDetails
+import org.koil.auth.EnrichedUserDetails
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
 
 @Controller
-@RequestMapping("/auth")
+@RequestMapping("/auth/login")
 class LoginController {
-    @GetMapping("/login")
+    @GetMapping
     fun viewLogin(
         @AuthenticationPrincipal principal: EnrichedUserDetails?,
         @RequestParam("redirect", required = false) redirect: String?,
@@ -19,7 +19,7 @@ class LoginController {
     ): ModelAndView {
         return if (principal == null) {
             val model = LoginViewModel(redirect = redirect != null, badCredentials = error != null)
-            AuthViews.Login.render(model)
+            LoginViews.Login.render(model)
         } else {
             return ModelAndView("redirect:/dashboard")
         }

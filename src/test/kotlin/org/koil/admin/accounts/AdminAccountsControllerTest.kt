@@ -2,7 +2,7 @@ package org.koil.admin.accounts
 
 import org.junit.jupiter.api.Test
 import org.koil.BaseIntegrationTest
-import org.koil.auth.AuthAuthority
+import org.koil.auth.UserAuthority
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
 import org.springframework.test.web.servlet.post
@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.post
 class AdminAccountsControllerTest : BaseIntegrationTest() {
     @Test
     internal fun `bad inputs result in a 400 error`() {
-        withTestSession(authorities = listOf(AuthAuthority.ADMIN)) { admin ->
+        withTestSession(authorities = listOf(UserAuthority.ADMIN)) { admin ->
             withTestAccount { account ->
                 mockMvc.post("/admin/accounts/${account.accountId}") {
                     with(csrf())

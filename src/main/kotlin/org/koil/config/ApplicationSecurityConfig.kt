@@ -1,14 +1,10 @@
 package org.koil.config
 
-import org.koil.auth.AuthAuthority
-import org.koil.auth.AuthRole
-import org.koil.user.UserServiceImpl
-import org.springframework.beans.factory.annotation.Autowired
+import org.koil.auth.UserAuthority
+import org.koil.auth.UserRole
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
-import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -25,7 +21,6 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository
 @EnableWebSecurity
 @Order(1)
 class ApplicationSecurityConfig(
-    private val userDetailsService: UserServiceImpl,
     private val passwordEncoder: PasswordEncoder,
     private val switchUserFilter: SwitchUserFilter,
     @Value("\${auth.remember-me.key}") private val key: String,
@@ -33,10 +28,9 @@ class ApplicationSecurityConfig(
     private val persistence: PersistentTokenRepository
 ) : WebSecurityConfigurerAdapter() {
 
-    @Autowired
-    @Throws(java.lang.Exception::class)
-    fun configureGlobal(auth: AuthenticationManagerBuilder) {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder)
+    override fun configure(auth: AuthenticationManagerBuilder) {
+        auth.userDetailsService(details)
+            .passwordEncoder(passwordEncoder)
     }
 
     @Throws(Exception::class)
@@ -46,8 +40,8 @@ class ApplicationSecurityConfig(
             .and()
             .addFilterAfter(switchUserFilter, FilterSecurityInterceptor::class.java)
             .authorizeRequests()
-            .antMatchers("/admin/impersonation/logout").hasAuthority(AuthRole.ADMIN_IMPERSONATING_USER.name)
-            .antMatchers("/admin/**").hasAuthority(AuthAuthority.ADMIN.name)
+            .antMatchers("/admin/impersonation/logout").hasAuthority(UserRole.ADMIN_IMPERSONATING_USER.name)
+            .antMatchers("/admin/**").hasAuthority(UserAuthority.ADMIN.name)
             .antMatchers("/dashboard/**").authenticated()
             .anyRequest().permitAll()
             .and()
@@ -67,16 +61,8 @@ class ApplicationSecurityConfig(
             .and()
             .exceptionHandling()
             .authenticationEntryPoint { _, response, _ ->
-                response.sendRedirect("/auth/login?redirect")
+                response.sendRedirect("/auth/login?redirect=true")
             }
     }
 
-    override fun configure(auth: AuthenticationManagerBuilder?) {
-        auth?.userDetailsService(userDetailsService)
-    }
-
-    @Bean
-    override fun authenticationManager(): AuthenticationManager {
-        return super.authenticationManager()
-    }
 }
