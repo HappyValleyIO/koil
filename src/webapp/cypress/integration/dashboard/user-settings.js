@@ -12,8 +12,8 @@ sizes.forEach(size => {
             cy.get('@account').then(account => {
                 cy.get('[data-test=updated]').should('not.exist')
                 cy.get('[data-test=user-settings]').within(() => {
-                    cy.get('[data-test=name-input]').should('have.value', account.name)
-                    cy.get('[data-test=email-input]').should('have.value', account.email)
+                    cy.get('input[name=name]').should('have.value', account.name)
+                    cy.get('input[name=email]').should('have.value', account.email)
 
                     cy.get('input[name=weeklySummary]').should('not.be.checked')
                     cy.get('input[name=updateOnAccountChange]').should('be.checked')
@@ -28,8 +28,8 @@ sizes.forEach(size => {
                 cy.get('[data-test=updated]').should('not.exist')
 
                 cy.get('[data-test=user-settings]').within(() => {
-                    cy.get('[data-test=name-input]').clear().type(updatedName)
-                    cy.get('[data-test=email-input]').clear().type(updatedEmail)
+                    cy.get('input[name=name]').clear().type(updatedName)
+                    cy.get('input[name=email]').clear().type(updatedEmail)
 
                     cy.get('input[name=weeklySummary]').check()
                     cy.get('input[name=updateOnAccountChange]').uncheck()
@@ -40,8 +40,8 @@ sizes.forEach(size => {
                 cy.get('[data-test=updated]').should('be.visible')
 
                 cy.get('[data-test=user-settings]').within(() => {
-                    cy.get('[data-test=name-input]').should('have.value', updatedName)
-                    cy.get('[data-test=email-input]').should('have.value', updatedEmail)
+                    cy.get('input[name=name]').should('have.value', updatedName)
+                    cy.get('input[name=email]').should('have.value', updatedEmail)
 
                     cy.get('input[name=weeklySummary]').should('be.checked')
                     cy.get('input[name=updateOnAccountChange]').should('not.be.checked')
@@ -52,7 +52,7 @@ sizes.forEach(size => {
         it(`should fail to update if email in use`, () => {
             cy.get('@account').then(account => {
                 cy.get('[data-test=user-settings]').within(() => {
-                    cy.get('[data-test=email-input]').clear().type('admin@getkoil.dev')
+                    cy.get('input[name=email]').clear().type('admin@getkoil.dev')
 
                     cy.get('button[type=submit]').click()
                 })
@@ -60,7 +60,7 @@ sizes.forEach(size => {
                 cy.get('[data-test=update-failed]').should('be.visible')
 
                 cy.get('[data-test=user-settings]').within(() => {
-                    cy.get('[data-test=email-input]').should('have.value', account.email)
+                    cy.get('input[name=email]').should('have.value', account.email)
                 })
             })
         })

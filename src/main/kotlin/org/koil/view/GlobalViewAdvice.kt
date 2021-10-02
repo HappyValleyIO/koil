@@ -1,11 +1,13 @@
 package org.koil.view
 
-import org.koil.auth.AuthRole
-import org.koil.user.EnrichedUserDetails
+import org.koil.auth.EnrichedUserDetails
+import org.koil.auth.UserRole
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.web.csrf.CsrfToken
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ModelAttribute
+import javax.servlet.http.HttpServletRequest
 
 data class GlobalViewModel(val user: EnrichedUserDetails?) {
     fun isAdmin(): Boolean =
@@ -14,7 +16,7 @@ data class GlobalViewModel(val user: EnrichedUserDetails?) {
     fun isImpersonatingUser(): Boolean {
         val auth = SecurityContextHolder.getContext().authentication
         return auth?.let {
-            auth.authorities.map { it.authority }.contains(AuthRole.ADMIN_IMPERSONATING_USER.name)
+            auth.authorities.map { it.authority }.contains(UserRole.ADMIN_IMPERSONATING_USER.name)
         } ?: false
     }
 }
@@ -29,5 +31,10 @@ class GlobalViewAdvice {
     @ModelAttribute("global")
     fun globalModel(@AuthenticationPrincipal user: EnrichedUserDetails?): GlobalViewModel {
         return GlobalViewModel(user)
+    }
+
+    @ModelAttribute("_csrf")
+    fun appendCSRFToken(request: HttpServletRequest): CsrfToken {
+        return request.getAttribute(CsrfToken::class.java.name) as CsrfToken
     }
 }

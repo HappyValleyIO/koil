@@ -1,6 +1,6 @@
 package org.koil.user
 
-import org.springframework.web.servlet.ModelAndView
+import org.koil.view.ViewRenderer
 
 data class NotificationSettingsViewModel(
     val weeklyActivity: Boolean,
@@ -31,10 +31,6 @@ data class UserSettingsViewModel(
     val updateFailed = emailInUse && updated
 }
 
-sealed class UserViews<T>(val templateName: String) {
-    fun render(model: T): ModelAndView {
-        return ModelAndView(templateName, mapOf("model" to model))
-    }
-
+sealed class UserViews<T>(override val template: String) : ViewRenderer<T> {
     object UserSettings : UserViews<UserSettingsViewModel>("pages/dashboard/user-settings")
 }

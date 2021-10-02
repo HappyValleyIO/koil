@@ -1,12 +1,12 @@
 package org.koil
 
-import org.koil.auth.AuthRole
-import org.koil.user.UserServiceImpl
+import org.koil.auth.UserRole
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableAsync
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.switchuser.SwitchUserFilter
@@ -27,13 +27,13 @@ class BeanConfig {
     }
 
     @Bean
-    fun switchUserFilter(userDetailsService: UserServiceImpl): SwitchUserFilter {
+    fun switchUserFilter(userDetailsService: UserDetailsService): SwitchUserFilter {
         return SwitchUserFilter().apply {
             setUserDetailsService(userDetailsService)
             setTargetUrl("/dashboard")
             setSwitchUserUrl("/admin/impersonation")
             setExitUserUrl("/admin/impersonation/logout")
-            setSwitchAuthorityRole(AuthRole.ADMIN_IMPERSONATING_USER.name)
+            setSwitchAuthorityRole(UserRole.ADMIN_IMPERSONATING_USER.name)
         }
     }
 }

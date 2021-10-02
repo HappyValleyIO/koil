@@ -3,7 +3,7 @@ package org.koil.admin.accounts
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
-import org.koil.auth.AuthAuthority
+import org.koil.auth.UserAuthority
 import org.koil.fixtures.AccountFixtures
 
 internal class UpdateAccountRequestTest {
@@ -15,7 +15,7 @@ internal class UpdateAccountRequestTest {
             "Updated Name",
             "updated${account.emailAddress}  ",
             "u${account.handle}",
-            AuthAuthority.values().toList()
+            UserAuthority.values().toList()
         )
 
         val result = update.update(account)

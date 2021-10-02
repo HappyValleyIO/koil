@@ -1,33 +1,21 @@
-package org.koil.auth
+package org.koil.user.password
 
 import org.koil.notifications.EmailNotificationService
 import org.koil.user.AccountRepository
 import org.koil.user.HashedPassword
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import java.util.*
 
-sealed class PasswordResetRequestResult {
-    object Success : PasswordResetRequestResult()
-    object FailedUnexpectedly : PasswordResetRequestResult()
-    object CouldNotFindUserWithEmail : PasswordResetRequestResult()
-}
-
-sealed class PasswordResetResult {
-    object Success : PasswordResetResult()
-    object InvalidCredentials : PasswordResetResult()
-    object FailedUnexpectedly : PasswordResetResult()
-}
-
-interface AuthService {
+interface PasswordService {
     fun requestPasswordReset(email: String): PasswordResetRequestResult
     fun resetPassword(code: UUID, email: String, password: HashedPassword): PasswordResetResult
 }
 
-@Component
-class AuthServiceImpl(
+@Service
+class DefaultPasswordService(
     private val notifications: EmailNotificationService,
     private val accountRepository: AccountRepository
-) : AuthService {
+) : PasswordService {
     override fun requestPasswordReset(email: String): PasswordResetRequestResult {
         // Create the unique password reset code
         return accountRepository.findAccountByEmailAddressIgnoreCase(email)?.let {

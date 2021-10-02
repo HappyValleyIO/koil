@@ -1,16 +1,16 @@
 package org.koil.admin
 
 import assertk.assertThat
+import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.koil.BaseIntegrationTest
 import org.koil.admin.accounts.UpdateAccountRequest
-import org.koil.auth.AuthAuthority
+import org.koil.auth.UserAuthority
 import org.koil.user.HashedPassword
 import org.koil.user.UserCreationRequest
 import org.koil.user.UserCreationResult
-import org.koil.user.UserServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
 import java.util.*
@@ -18,13 +18,7 @@ import java.util.*
 class AdminServiceTest : BaseIntegrationTest() {
 
     @Autowired
-    lateinit var adminService: IAdminService
-
-    @Autowired
-    lateinit var adminPersistence: IAdminPersistence
-
-    @Autowired
-    lateinit var userDetails: UserServiceImpl
+    lateinit var adminService: AdminService
 
     val password = HashedPassword.encode("SecurePass123!")
 
@@ -37,7 +31,7 @@ class AdminServiceTest : BaseIntegrationTest() {
             "Admin was successfully created"
         }
 
-        assertEquals(listOf("ADMIN"), userDetails.loadUserByUsername(email)!!.authorities.map { it.authority })
+        assertEquals(listOf("ADMIN"), userDetailsService.loadUserByUsername(email).authorities.map { it.authority })
     }
 
     @Test
@@ -58,7 +52,7 @@ class AdminServiceTest : BaseIntegrationTest() {
 
         val result = adminService.getAccounts(admin.accountId!!, Pageable.unpaged())
 
-        assertThat(result).isEqualTo(adminPersistence.getAllAccounts(Pageable.unpaged()))
+        assertThat(result).isEqualTo(accountRepository.findAll(Pageable.unpaged()))
     }
 
 
@@ -67,13 +61,13 @@ class AdminServiceTest : BaseIntegrationTest() {
         val email = "user+${Random().nextInt()}@getkoil.dev"
         (adminService.createAdminFromEmail(email, password) as UserCreationResult.CreatedUser).account
 
-        val nonAdmin = userDetails.createUser(
+        val nonAdmin = userService.createUser(
             UserCreationRequest(
                 "Stephen the tester",
                 "x$email",
                 password,
                 "tester",
-                listOf(AuthAuthority.USER)
+                listOf(UserAuthority.USER)
             )
         ) as UserCreationResult.CreatedUser
 
@@ -102,7 +96,7 @@ class AdminServiceTest : BaseIntegrationTest() {
                 "Updated Name",
                 "updated${account.emailAddress}  ",
                 "u${account.handle}",
-                AuthAuthority.values().toList()
+                UserAuthority.values().toList()
             )
 
             val result = (adminService.updateAccount(
@@ -114,7 +108,7 @@ class AdminServiceTest : BaseIntegrationTest() {
             assertThat(result.handle).isEqualTo(update.handle)
             assertThat(result.fullName).isEqualTo(update.fullName)
             assertThat(result.emailAddress).isEqualTo(update.normalizedEmail)
-            assertThat(result.authorities.map { it.authority }).isEqualTo(update.authorities)
+            assertThat(result.authorities.map { it.authority }).containsOnly(*(update.authorities.toTypedArray()))
         }
     }
 
@@ -129,7 +123,7 @@ class AdminServiceTest : BaseIntegrationTest() {
                 "Updated Name",
                 "admin@getkoil.dev",
                 "u${account.handle}",
-                AuthAuthority.values().toList()
+                UserAuthority.values().toList()
             )
 
             val result = adminService.updateAccount(

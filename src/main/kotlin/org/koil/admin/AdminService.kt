@@ -1,7 +1,7 @@
 package org.koil.admin
 
 import org.koil.admin.accounts.UpdateAccountRequest
-import org.koil.auth.AuthAuthority
+import org.koil.auth.UserAuthority
 import org.koil.user.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -14,7 +14,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
-interface IAdminService {
+interface AdminService {
     fun createAdminFromEmail(email: String, password: HashedPassword): UserCreationResult
 
     fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<Account>
@@ -27,11 +27,10 @@ interface IAdminService {
 @Component
 class AdminServiceImpl(
     private val userService: UserService,
+    private val accountRepository: AccountRepository,
     @Value("\${admin-user.email:}") private val adminEmailFromEnv: String,
     @Value("\${admin-user.password:}") private val adminPasswordFromEnv: String,
-    private val persistence: IAdminPersistence,
-    private val accountRepository: AccountRepository
-) : IAdminService, ApplicationListener<ContextRefreshedEvent> {
+) : AdminService, ApplicationListener<ContextRefreshedEvent> {
 
     companion object {
         private val LOGGER: Logger = LoggerFactory.getLogger(AdminServiceImpl::class.java)
@@ -52,7 +51,7 @@ class AdminServiceImpl(
                 email,
                 password,
                 "DefaultAdmin",
-                listOf(AuthAuthority.ADMIN)
+                listOf(UserAuthority.ADMIN)
             )
         ).also {
             if (it is UserCreationResult.CreatedUser) {
@@ -64,13 +63,13 @@ class AdminServiceImpl(
     override fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<Account> {
         checkAdminStatus(queryingAsAccount)
 
-        return persistence.getAllAccounts(pageable)
+        return accountRepository.findAll(pageable)
     }
 
     override fun getAccount(queryingAsAccount: Long, accountId: Long): Account? {
         checkAdminStatus(queryingAsAccount)
 
-        return persistence.findById(accountId)
+        return accountRepository.findByIdOrNull(accountId)
     }
 
     @Transactional

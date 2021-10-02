@@ -1,4 +1,4 @@
-package org.koil.auth
+package org.koil.user.password
 
 import org.hibernate.validator.constraints.Length
 import org.koil.user.HashedPassword
@@ -37,7 +37,7 @@ data class PasswordResetRequest(@get:Email(message = "Must be a valid email addr
 @Controller
 @RequestMapping("/auth")
 class PasswordResetController(
-    @Autowired private val auth: AuthService,
+    @Autowired private val auth: PasswordService,
 ) {
     @GetMapping("/request-password-reset")
     fun requestPasswordReset(
@@ -45,9 +45,9 @@ class PasswordResetController(
         @RequestParam("completed", defaultValue = "false") completed: Boolean
     ): ModelAndView {
         return if (completed) {
-            AuthViews.PasswordResetRequestCompleted.render(Unit)
+            PasswordResetViews.PasswordResetRequestCompleted.render(Unit)
         } else {
-            AuthViews.PasswordResetRequest.render(PasswordResetRequestModel(email = email))
+            PasswordResetViews.PasswordResetRequest.render(PasswordResetRequestModel(email = email))
         }
     }
 
@@ -59,12 +59,12 @@ class PasswordResetController(
         val model = PasswordResetRequestModel(submitted.email)
 
         return if (result.hasErrors()) {
-            AuthViews.PasswordResetRequest.render(model, HttpStatus.BAD_REQUEST)
+            PasswordResetViews.PasswordResetRequest.render(model, HttpStatus.BAD_REQUEST)
         } else {
             return when (auth.requestPasswordReset(email = submitted.email)) {
                 is PasswordResetRequestResult.Success ->
                     ModelAndView("redirect:/auth/request-password-reset?completed=true")
-                is PasswordResetRequestResult.CouldNotFindUserWithEmail -> AuthViews.PasswordResetRequest.render(
+                is PasswordResetRequestResult.CouldNotFindUserWithEmail -> PasswordResetViews.PasswordResetRequest.render(
                     model.copy(emailNotFound = true),
                     httpStatus = HttpStatus.BAD_REQUEST
                 )
@@ -77,7 +77,7 @@ class PasswordResetController(
     @GetMapping("/password-reset")
     fun resetPasswordPage(@RequestParam("code") code: UUID): ModelAndView {
         val model = ResetPasswordViewModel(code)
-        return AuthViews.ResetPassword.render(model)
+        return PasswordResetViews.ResetPassword.render(model)
     }
 
     @PostMapping("/password-reset")
@@ -91,7 +91,7 @@ class PasswordResetController(
         }
 
         return if (result.hasErrors()) {
-            AuthViews.ResetPassword.render(
+            PasswordResetViews.ResetPassword.render(
                 ResetPasswordViewModel(submitted.parsedCode()),
                 httpStatus = HttpStatus.BAD_REQUEST
             )
@@ -102,7 +102,7 @@ class PasswordResetController(
                     ModelAndView("redirect:/dashboard")
                 }
                 PasswordResetResult.InvalidCredentials -> {
-                    AuthViews.ResetPassword.render(
+                    PasswordResetViews.ResetPassword.render(
                         ResetPasswordViewModel(code = submitted.parsedCode(), badCredentials = true),
                         HttpStatus.BAD_REQUEST
                     )

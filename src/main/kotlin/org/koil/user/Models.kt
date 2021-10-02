@@ -1,20 +1,17 @@
 package org.koil.user
 
-import org.koil.auth.AuthAuthority
+import org.koil.auth.UserAuthority
 import org.springframework.context.ApplicationEvent
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.Duration
 import java.time.Instant
 import java.util.*
-import javax.validation.constraints.Email
-import javax.validation.constraints.NotEmpty
 
 data class AccountVerification(
     val verificationCode: UUID,
@@ -43,27 +40,9 @@ data class HashedPassword(@Column("password") val encodedPassword: String) {
     }
 }
 
-data class UpdateUserSettingsRequest(
-    @get:NotEmpty(message = "Name cannot be empty") val name: String,
-    @get:Email(message = "Must be a valid email address") val email: String,
-    val weeklySummary: Boolean?,
-    val updateOnAccountChange: Boolean?
-) {
-    val normalizedEmail: String = email.trim().toLowerCase()
-
-    val notificationSettings: NotificationSettings = NotificationSettings(
-        weeklyActivity = weeklySummary ?: false,
-        emailOnAccountChange = updateOnAccountChange ?: false
-    )
-
-    fun update(account: Account): Account =
-        account.updateNotificationSettings(this.notificationSettings)
-            .updateName(this.name)
-            .updateEmail(this.normalizedEmail)
-}
 
 @Table("account_authorities")
-data class AccountAuthority(val authority: AuthAuthority, val authorityGranted: Instant = Instant.now())
+data class AccountAuthority(val authority: UserAuthority, val authorityGranted: Instant)
 
 @Table("accounts")
 data class Account(
@@ -80,7 +59,7 @@ data class Account(
     @MappedCollection(idColumn = "account_id") val accountVerification: AccountVerification? = null,
     @MappedCollection(idColumn = "account_id") val accountPasswordReset: AccountPasswordReset? = null
 ) {
-    fun isAdmin(): Boolean = authorities.map { it.authority }.contains(AuthAuthority.ADMIN)
+    fun isAdmin(): Boolean = authorities.map { it.authority }.contains(UserAuthority.ADMIN)
 
     fun withPasswordReset(code: UUID): Account =
         this.copy(accountPasswordReset = AccountPasswordReset(code))
@@ -94,18 +73,32 @@ data class Account(
     fun updateEmail(email: String): Account =
         this.copy(emailAddress = email)
 
+    fun updateHandle(handle: String): Account =
+        this.copy(handle = handle)
+
     fun updateNotificationSettings(notificationSettings: NotificationSettings): Account =
         this.copy(notificationSettings = notificationSettings)
+
+    fun grantAuthority(authority: UserAuthority): Account =
+        if (this.authorities.map { it.authority }.contains(authority)) {
+            this
+        } else {
+            this.copy(authorities = this.authorities + AccountAuthority(authority, Instant.now()))
+        }
+
+    /**
+     * Grants a user only the authorities in the list provided. Any existing authorities not in the list are revoked.
+     */
+    fun withAuthorities(newAuthorities: List<UserAuthority>): Account {
+        val updated = this.copy(authorities = this.authorities.filter { newAuthorities.contains(it.authority) })
+
+        return newAuthorities.fold(updated) { account, authority ->
+            account.grantAuthority(authority)
+        }
+    }
 }
 
 data class AccountCreationEvent(val src: Any, val account: Account) : ApplicationEvent(src)
-
-data class EnrichedUserDetails(val details: UserDetails, val accountId: Long, val handle: String) :
-    UserDetails by details {
-    fun isAdmin(): Boolean {
-        return authorities.contains(AuthAuthority.ADMIN.grantedAuthority)
-    }
-}
 
 data class NotificationSettings(
     val weeklyActivity: Boolean,
@@ -116,12 +109,4 @@ data class NotificationSettings(
             NotificationSettings(weeklyActivity = false, emailOnAccountChange = true)
 
     }
-}
-
-data class NoAccountFoundUnexpectedlyException(val accountId: Long) :
-    RuntimeException("Could not find account with ID $accountId")
-
-sealed class AccountUpdateResult {
-    data class AccountUpdated(val account: Account) : AccountUpdateResult()
-    data class EmailAlreadyInUse(val email: String) : AccountUpdateResult()
 }

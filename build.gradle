@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.springframework.boot' version '2.5.2'
+    id 'org.springframework.boot' version '2.5.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.jetbrains.kotlin.plugin.spring' version "$kotlin_version"
     id 'org.jetbrains.kotlin.jvm' version "$kotlin_version"
@@ -67,8 +67,10 @@ dependencies {
     testImplementation("com.konghq:unirest-java:3.11.01")
 
     implementation("org.springframework.session:spring-session-jdbc")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("io.github.kilmajster:ngrok-spring-boot-starter:0.1")
+
     runtimeOnly("org.postgresql:postgresql")
     implementation(platform("org.testcontainers:testcontainers-bom:1.15.2"))
     testImplementation("org.testcontainers:postgresql")

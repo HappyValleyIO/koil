@@ -1,5 +1,7 @@
 {# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
 {# @pebvariable name="model" type="org.koil.user.UserSettingsViewModel" #}
+{# @pebvariable name="submitted" type="org.koil.user.UpdateUserSettingsRequest" #}
+
     {% extends "layouts/dashboard-layout" %}
     {% block title %} User Settings {% endblock %}
 {% block content %}
@@ -9,6 +11,7 @@
 </hgroup>
 <form method="post" data-test="user-settings">
     {% include 'components/csrf-field' %}
+    {% import "components/form/errors" %}
 
     <hgroup>
         <h3>Account Settings</h3>
@@ -27,12 +30,15 @@
     <label>
         <i class="fas fa-user"></i> Full Name
         <input minlength="4" maxlength="16" name="name" type="text"
-               value="{{ model.name }}" data-test="name-input">
+               value="{{ submitted.name | default(model.name) }}">
+        {{ errors(getFieldErrors('submitted', 'name')) }}
     </label>
 
     <label for="email-input">
         <i class="fas fa-envelope"></i> Email Address
-        <input name="email" type="email" value="{{ model.email }}" data-test="email-input">
+        <input name="email" type="email" value="{{ submitted.email | default(model.email) }}">
+        {{ errors(getFieldErrors('submitted', 'email')) }}
+
         {% if model.emailInUse %}
             <small class="warning" data-test="email-in-use">The updated email you wanted is already in use. Please try
                 another.</small>
@@ -61,13 +67,14 @@
 
     <label>
         <i class="fas fa-lock"></i> Old Password
-        <input class="input" name="current-password" type="password"
-               placeholder="Current password">
+        <input name="current-password" type="password">
+        {{ errors(getFieldErrors('submitted', 'password')) }}
     </label>
 
     <label>
         <i class="fas fa-lock"></i> New Password
-        <input name="new-password" type="password">
+        <input name="newPassword" type="password">
+        {{ errors(getFieldErrors('submitted', 'newPassword')) }}
     </label>
 
     <label>
