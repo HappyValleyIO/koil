@@ -11,9 +11,16 @@ import org.koil.user.*
 import org.koil.user.password.HashedPassword
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.test.context.event.ApplicationEvents
+import org.springframework.test.context.event.RecordApplicationEvents
 import org.springframework.test.util.AssertionErrors.assertEquals
+import kotlin.streams.toList
 
+@RecordApplicationEvents
 class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService) : BaseIntegrationTest() {
+
+    @Autowired
+    lateinit var applicationEvents: ApplicationEvents
 
     @Test
     fun `GIVEN an existing user WHEN logging in with correct credentials THE return a user result`() {
@@ -31,9 +38,9 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
             ) as UserCreationResult.CreatedUser
         val queried = userDetails.loadUserByUsername(email) as EnrichedUserDetails
 
-        assertEquals("Assert logged in user is same as created user", created.account.accountId, queried.accountId)
-        assertEquals("Assert logged in user is same as created user", created.account.handle, queried.handle)
-        assertEquals("Assert logged in user is same as created user", created.account.emailAddress, queried.username)
+        assertThat(queried.accountId).isEqualTo(created.account.accountId)
+        assertThat(queried.handle).isEqualTo(created.account.handle)
+        assertThat(queried.username).isEqualTo(created.account.emailAddress)
     }
 
     @Test
@@ -125,6 +132,12 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
             assertThat(result.account.notificationSettings.emailOnAccountChange).isEqualTo(request.updateOnAccountChange)
             assertThat(result.account.emailAddress).isEqualTo(request.normalizedEmail)
             assertThat(result.account.notificationSettings.weeklyActivity).isEqualTo(request.weeklySummary)
+
+            val event = applicationEvents.stream().toList().mapNotNull {
+                it as? AccountUpdateEvent
+            }.first()
+
+            assertThat(event.account).isEqualTo(result.account)
         }
     }
 

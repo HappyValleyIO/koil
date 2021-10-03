@@ -110,6 +110,7 @@ data class Account(
 }
 
 data class AccountCreationEvent(val src: Any, val account: Account) : ApplicationEvent(src)
+data class AccountUpdateEvent(val src: Any, val account: Account) : ApplicationEvent(src)
 
 data class NotificationSettings(
     val weeklyActivity: Boolean,

@@ -47,6 +47,8 @@ class UserServiceImpl(
                         }
                         .let {
                             AccountUpdateResult.AccountUpdated(it)
+                        }.also {
+                            publisher.publishEvent(AccountUpdateEvent(this, it.account))
                         }
                 }
             } ?: throw NoAccountFoundUnexpectedlyException(accountId)
