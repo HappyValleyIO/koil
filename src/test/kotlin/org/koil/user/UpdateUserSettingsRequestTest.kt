@@ -17,14 +17,16 @@ internal class UpdateUserSettingsRequestTest {
             updateOnAccountChange = !account.notificationSettings.emailOnAccountChange
         )
 
-        assertThat(request.update(account)).isEqualTo(
+        val result = request.update(account)
+        assertThat(result).isEqualTo(
             account.copy(
                 fullName = request.name,
                 emailAddress = request.email,
                 notificationSettings = NotificationSettings(
                     weeklyActivity = request.weeklySummary!!,
                     emailOnAccountChange = request.updateOnAccountChange!!
-                )
+                ),
+                accountVerification = result.accountVerification
             )
         )
     }

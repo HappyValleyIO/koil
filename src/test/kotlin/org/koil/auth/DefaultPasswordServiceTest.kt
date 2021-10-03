@@ -6,7 +6,7 @@ import assertk.assertions.isNotNull
 import assertk.assertions.isNull
 import org.junit.jupiter.api.Test
 import org.koil.BaseIntegrationTest
-import org.koil.user.HashedPassword
+import org.koil.user.password.HashedPassword
 import org.koil.user.password.PasswordResetRequestResult
 import org.koil.user.password.PasswordService
 import org.springframework.beans.factory.annotation.Autowired

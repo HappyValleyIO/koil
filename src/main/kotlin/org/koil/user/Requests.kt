@@ -1,6 +1,7 @@
 package org.koil.user
 
 import org.koil.auth.UserAuthority
+import org.koil.user.password.HashedPassword
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty
 
@@ -10,7 +11,15 @@ data class UserCreationRequest(
     val password: HashedPassword,
     val handle: String,
     val authorities: List<UserAuthority> = listOf(UserAuthority.USER)
-)
+) {
+    fun toAccount(): Account = Account.create(
+        fullName = fullName,
+        emailAddress = email,
+        handle = handle,
+        password = password,
+        authorities = authorities
+    )
+}
 
 sealed class UserCreationResult {
     data class CreatedUser(val account: Account) : UserCreationResult()

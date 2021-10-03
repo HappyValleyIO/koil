@@ -5,8 +5,6 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
-import java.time.Instant
-import java.util.*
 
 interface UserService {
     fun createUser(request: UserCreationRequest): UserCreationResult
@@ -21,24 +19,11 @@ class UserServiceImpl(
 ) : UserService {
     override fun createUser(request: UserCreationRequest): UserCreationResult {
         return if (repository.findAccountByEmailAddressIgnoreCase(request.email) == null) {
-            val authorities = request.authorities.map { AccountAuthority(it, Instant.now()) }
-            val account = Account(
-                null,
-                Instant.now(),
-                request.fullName,
-                request.handle,
-                UUID.randomUUID(),
-                request.email,
-                request.password,
-                null,
-                notificationSettings = NotificationSettings.default,
-                authorities
-            )
-            val saved = repository.save(account)
+            val account = request.toAccount().let { repository.save(it) }
 
             publisher.publishEvent(AccountCreationEvent(this, account))
 
-            UserCreationResult.CreatedUser(saved)
+            UserCreationResult.CreatedUser(account)
         } else {
             UserCreationResult.UserAlreadyExists
         }
@@ -51,13 +36,15 @@ class UserServiceImpl(
     override fun updateUser(accountId: Long, request: UpdateUserSettingsRequest): AccountUpdateResult =
         repository.findByIdOrNull(accountId)
             ?.let { account ->
-                val updated = request.update(account)
                 val emailInUse = repository.existsAccountByEmailAddressIgnoreCase(request.normalizedEmail)
 
                 if (emailInUse && request.normalizedEmail != account.emailAddress) {
                     AccountUpdateResult.EmailAlreadyInUse(request.email)
                 } else {
-                    repository.save(updated)
+                    request.update(account)
+                        .let {
+                            repository.save(it)
+                        }
                         .let {
                             AccountUpdateResult.AccountUpdated(it)
                         }

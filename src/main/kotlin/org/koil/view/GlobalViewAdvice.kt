@@ -2,6 +2,9 @@ package org.koil.view
 
 import org.koil.auth.EnrichedUserDetails
 import org.koil.auth.UserRole
+import org.koil.user.Account
+import org.koil.user.AccountRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.csrf.CsrfToken
@@ -9,9 +12,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ModelAttribute
 import javax.servlet.http.HttpServletRequest
 
-data class GlobalViewModel(val user: EnrichedUserDetails?) {
+data class GlobalViewModel(val account: Account?) {
+    fun isVerified(): Boolean = account?.isVerified() ?: false
+
     fun isAdmin(): Boolean =
-        user?.isAdmin() ?: false
+        account?.isAdmin() ?: false
 
     fun isImpersonatingUser(): Boolean {
         val auth = SecurityContextHolder.getContext().authentication
@@ -27,10 +32,13 @@ data class GlobalViewModel(val user: EnrichedUserDetails?) {
  * to know too much about the cruft in rendering a page (e.g. username in the corner).
  */
 @ControllerAdvice
-class GlobalViewAdvice {
+class GlobalViewAdvice(
+    private val accountRepository: AccountRepository
+) {
     @ModelAttribute("global")
     fun globalModel(@AuthenticationPrincipal user: EnrichedUserDetails?): GlobalViewModel {
-        return GlobalViewModel(user)
+        val account = user?.let { accountRepository.findByIdOrNull(it.accountId) }
+        return GlobalViewModel(account)
     }
 
     @ModelAttribute("_csrf")

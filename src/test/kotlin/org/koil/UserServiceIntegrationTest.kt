@@ -8,6 +8,7 @@ import org.junit.jupiter.api.assertThrows
 import org.koil.auth.EnrichedUserDetails
 import org.koil.auth.UserAuthority
 import org.koil.user.*
+import org.koil.user.password.HashedPassword
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.test.util.AssertionErrors.assertEquals
@@ -113,18 +114,17 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
         withTestAccount { account ->
             val request = UpdateUserSettingsRequest(
                 name = slug,
-                email = "$slug@example.com",
+                email = "updated${account.emailAddress}",
                 weeklySummary = !account.notificationSettings.weeklyActivity,
                 updateOnAccountChange = !account.notificationSettings.emailOnAccountChange
             )
 
-            val result = userService.updateUser(account.accountId!!, request)
+            val result = userService.updateUser(account.accountId!!, request) as AccountUpdateResult.AccountUpdated
 
-            assertThat(result).isEqualTo(
-                AccountUpdateResult.AccountUpdated(
-                    request.update(account)
-                )
-            )
+            assertThat(result.account.fullName).isEqualTo(request.name)
+            assertThat(result.account.notificationSettings.emailOnAccountChange).isEqualTo(request.updateOnAccountChange)
+            assertThat(result.account.emailAddress).isEqualTo(request.normalizedEmail)
+            assertThat(result.account.notificationSettings.weeklyActivity).isEqualTo(request.weeklySummary)
         }
     }
 

@@ -1,45 +1,19 @@
 package org.koil.user
 
+import dev.forkhandles.result4k.Result
+import dev.forkhandles.result4k.map
 import org.koil.auth.UserAuthority
+import org.koil.user.password.AccountPasswordReset
+import org.koil.user.password.HashedPassword
+import org.koil.user.verification.AccountVerification
+import org.koil.user.verification.AccountVerificationViolations
 import org.springframework.context.ApplicationEvent
 import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
-import org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
-import java.time.Duration
 import java.time.Instant
 import java.util.*
-
-data class AccountVerification(
-    val verificationCode: UUID,
-    val createdAt: Instant,
-    val expiresAt: Instant
-)
-
-data class AccountPasswordReset(
-    val resetCode: UUID,
-    val createdAt: Instant = Instant.now(),
-    val expiresAt: Instant = Instant.now().plus(Duration.ofHours(3))
-)
-
-data class HashedPassword(@Column("password") val encodedPassword: String) {
-    init {
-        require(encodedPassword.startsWith("{")) {
-            "Password must be encoded to be stored in a HashedPassword object."
-        }
-    }
-
-    companion object {
-        private val encoder: PasswordEncoder = createDelegatingPasswordEncoder()
-
-        fun encode(password: String): HashedPassword =
-            HashedPassword(encoder.encode(password))
-    }
-}
-
 
 @Table("account_authorities")
 data class AccountAuthority(val authority: UserAuthority, val authorityGranted: Instant)
@@ -53,12 +27,44 @@ data class Account(
     val publicAccountId: UUID,
     val emailAddress: String,
     @Embedded.Empty val password: HashedPassword,
-    val stopDate: Instant?,
     @Embedded.Empty val notificationSettings: NotificationSettings,
+    @Embedded.Empty val accountVerification: AccountVerification,
     @MappedCollection(idColumn = "account_id") val authorities: List<AccountAuthority>,
-    @MappedCollection(idColumn = "account_id") val accountVerification: AccountVerification? = null,
-    @MappedCollection(idColumn = "account_id") val accountPasswordReset: AccountPasswordReset? = null
+    @MappedCollection(idColumn = "account_id") val accountPasswordReset: AccountPasswordReset? = null,
+    val stopDate: Instant? = null,
 ) {
+    companion object {
+        fun create(
+            fullName: String,
+            handle: String,
+            emailAddress: String,
+            password: HashedPassword,
+            authorities: List<UserAuthority>,
+        ): Account = Account(
+            accountId = null,
+            startDate = Instant.now(),
+            fullName = fullName,
+            handle = handle,
+            publicAccountId = UUID.randomUUID(),
+            emailAddress = emailAddress,
+            password = password,
+            stopDate = null,
+            notificationSettings = NotificationSettings.default,
+            authorities = listOf(),
+            accountVerification = AccountVerification.create()
+        ).withAuthorities(authorities)
+    }
+
+    fun isVerified(): Boolean =
+        accountVerification.isVerified
+
+    fun verifyAccount(code: UUID): Result<Account, AccountVerificationViolations> {
+        return accountVerification.verify(code)
+            .map {
+                this.copy(accountVerification = it)
+            }
+    }
+
     fun isAdmin(): Boolean = authorities.map { it.authority }.contains(UserAuthority.ADMIN)
 
     fun withPasswordReset(code: UUID): Account =
@@ -70,8 +76,13 @@ data class Account(
     fun updateName(name: String): Account =
         this.copy(fullName = name)
 
-    fun updateEmail(email: String): Account =
-        this.copy(emailAddress = email)
+    fun updateEmail(email: String): Account {
+        return if (email != this.emailAddress) {
+            this.copy(emailAddress = email, accountVerification = AccountVerification.create())
+        } else {
+            this
+        }
+    }
 
     fun updateHandle(handle: String): Account =
         this.copy(handle = handle)
@@ -107,6 +118,5 @@ data class NotificationSettings(
     companion object {
         val default: NotificationSettings =
             NotificationSettings(weeklyActivity = false, emailOnAccountChange = true)
-
     }
 }
