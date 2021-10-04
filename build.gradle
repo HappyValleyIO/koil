@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.4.32'
+    ext.kotlin_version = '1.5.31'
 
     repositories {
         maven {
@@ -63,6 +63,7 @@ dependencies {
 
     implementation("io.sentry:sentry-spring-boot-starter:3.1.0")
     implementation("org.jsoup:jsoup:1.13.1")
+    implementation("dev.forkhandles:result4k:1.11.1.0")
 
     testImplementation("com.konghq:unirest-java:3.11.01")
 

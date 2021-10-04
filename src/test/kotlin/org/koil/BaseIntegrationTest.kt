@@ -5,6 +5,7 @@ import org.koil.auth.DefaultUserDetailsService
 import org.koil.auth.EnrichedUserDetails
 import org.koil.auth.UserAuthority
 import org.koil.user.*
+import org.koil.user.password.HashedPassword
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest

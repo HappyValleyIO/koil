@@ -3,6 +3,7 @@ package org.koil.admin
 import org.koil.admin.accounts.UpdateAccountRequest
 import org.koil.auth.UserAuthority
 import org.koil.user.*
+import org.koil.user.password.HashedPassword
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value

@@ -1,25 +1,46 @@
+{# @pebvariable name="model" type="org.koil.dashboard.IndexViewModel" #}
+
     {% extends "layouts/dashboard-layout" %}
-        {% block title %} Home {% endblock %}
-    {% block content %}
-    <div data-test="dashboard-index"></div>
-    <hgroup>
-        <h1>Welcome to koil!</h1>
-        <h3>Easy SaaS on the JVM</h3>
-    </hgroup>
-    <div>
-        <p>
-            Welcome to koil! This is the starter template for your project. Everything in the `/dashboard/*` path
-            is protected by authentication.
-        </p>
+    {% block title %} Home {% endblock %}
+{% block content %}
+<div data-test="dashboard-index"></div>
+<hgroup>
+    <h1>Welcome to koil!</h1>
+    <h3>Easy SaaS on the JVM</h3>
+</hgroup>
+<div>
+    <p>
+        {% if model.accountAlreadyVerified %}
+            <mark data-test="account-already-verified">
+                It looks like you tried to verify your account twice. If you didn't expect this then we recommend
+                changing your password <a href="/dashboard/user-settings">here.</a>
+            </mark>
+        {% endif %}
+        {% if model.accountVerified %}
+            <mark data-test="account-verified">
+                Account verified successfully!
+            </mark>
+        {% endif %}
+        {% if model.incorrectVerificationCode %}
+            <mark data-test="incorrect-verification-code">
+                It looks like you tried to verify your account with an incorrect code. You can request another is sent
+                <a href="/dashboard/user-settings">here.</a>
+            </mark>
+        {% endif %}
+    </p>
+    <p>
+        Welcome to koil! This is the starter template for your project. Everything in the `/dashboard/*` path
+        is protected by authentication.
+    </p>
 
-        <p>
-            Your front end code lives in <strong>src/webapp</strong> and the backend lives as it normally would.
-        </p>
+    <p>
+        Your front end code lives in <strong>src/webapp</strong> and the backend lives as it normally would.
+    </p>
 
-        <p>
-            While running in the <strong>dev</strong> profile in Spring, you can rebuild the project at any time to
-            have
-            your frontend live reload without restarting the JVM.
-        </p>
-    </div>
-    {% endblock %}
+    <p>
+        While running in the <strong>dev</strong> profile in Spring, you can rebuild the project at any time to
+        have
+        your frontend live reload without restarting the JVM.
+    </p>
+</div>
+{% endblock %}

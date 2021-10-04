@@ -1,7 +1,6 @@
 package org.koil.user.password
 
 import org.hibernate.validator.constraints.Length
-import org.koil.user.HashedPassword
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller

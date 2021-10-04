@@ -1,8 +1,9 @@
 package org.koil.fixtures
 
 import org.koil.user.Account
-import org.koil.user.HashedPassword
 import org.koil.user.NotificationSettings
+import org.koil.user.password.HashedPassword
+import org.koil.user.verification.AccountVerification
 import java.time.Instant
 import java.util.*
 
@@ -17,6 +18,7 @@ object AccountFixtures {
         password = HashedPassword.encode("TestPass123!"),
         stopDate = null,
         notificationSettings = NotificationSettings.default,
-        authorities = listOf()
+        authorities = listOf(),
+        accountVerification = AccountVerification.create()
     )
 }

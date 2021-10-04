@@ -2,7 +2,6 @@ package org.koil.user.password
 
 import org.koil.notifications.EmailNotificationService
 import org.koil.user.AccountRepository
-import org.koil.user.HashedPassword
 import org.springframework.stereotype.Service
 import java.util.*
 

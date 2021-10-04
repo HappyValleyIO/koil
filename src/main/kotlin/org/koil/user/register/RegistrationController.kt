@@ -2,10 +2,10 @@ package org.koil.user.register
 
 import org.hibernate.validator.constraints.Length
 import org.koil.auth.EnrichedUserDetails
-import org.koil.user.HashedPassword
 import org.koil.user.UserCreationRequest
 import org.koil.user.UserCreationResult
 import org.koil.user.UserService
+import org.koil.user.password.HashedPassword
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal

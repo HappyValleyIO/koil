@@ -9,7 +9,7 @@
             <li><a href="/admin" data-test="navbar-admin-link">Admin Panel</a></li>
         {% endif %}
         <li>
-            <a href="/dashboard/user-settings" data-test="user-handle">@{{ global.user.handle }}</a>
+            <a href="/dashboard/user-settings" data-test="user-handle">@{{ global.account.handle }}</a>
         </li>
         {% if global.isImpersonatingUser %}
             <li>
@@ -55,7 +55,8 @@
                         <li><a href="/admin" data-test="navbar-admin-link">Admin Panel</a></li>
                     {% endif %}
                     <li>
-                        <a href="/dashboard/user-settings" data-test="user-handle-mobile">@{{ global.user.handle }}</a>
+                        <a href="/dashboard/user-settings"
+                           data-test="user-handle-mobile">@{{ global.account.handle }}</a>
                     </li>
                     {% if global.isImpersonatingUser %}
                         <li>

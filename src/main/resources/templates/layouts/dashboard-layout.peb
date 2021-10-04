@@ -11,6 +11,9 @@
     {% include 'components/dashboard-menu' %}
 
 <main class="container">
+    {% if not global.isVerified() %}
+        <mark>It looks like you've not verified your account. Please check your email and do so.</mark>
+    {% endif %}
     <article>
             {% block content %}{% endblock %}
     </article>
