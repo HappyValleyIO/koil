@@ -1,6 +1,6 @@
 # koil
 
-![Java CI with Gradle](https://github.com/HappyValleyIO/koil/workflows/Java%20CI%20with%20Gradle/badge.svg)
+[![Build Status](https://happyvalleyoss.semaphoreci.com/badges/koil/branches/master.svg?style=shields)](https://happyvalleyoss.semaphoreci.com/projects/koil)
 
 This is a starter template for building monolithic Spring based applications using modern web tooling.
 
