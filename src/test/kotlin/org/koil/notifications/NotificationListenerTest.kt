@@ -3,7 +3,7 @@ package org.koil.notifications
 import org.junit.jupiter.api.Test
 import org.koil.BaseIntegrationTest
 import org.koil.user.Account
-import org.koil.user.AccountUpdateEvent
+import org.koil.user.EmailUpdatedEvent
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -20,7 +20,7 @@ internal class NotificationListenerTest : BaseIntegrationTest() {
     @Test
     internal fun `WHEN an account update event is received THEN send an alert`() {
         withTestAccount { account: Account ->
-            publisher.publishEvent(AccountUpdateEvent(this, account))
+            publisher.publishEvent(EmailUpdatedEvent(this, account))
 
             Mockito.verify(notificationService, Mockito.times(1))
                 .sendAccountUpdateConfirmation(account)
@@ -31,7 +31,7 @@ internal class NotificationListenerTest : BaseIntegrationTest() {
     internal fun `WHEN an account creation event is received THEN send an alert`() {
         withTestAccount { account: Account ->
             Mockito.verify(notificationService, Mockito.times(1))
-                .sendAccountCreationConfirmation(account)
+                .sendAccountCreationConfirmation(account.copy(accountId = null))
         }
     }
 }
