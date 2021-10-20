@@ -17,3 +17,18 @@
 .without-margin {
   margin: 0;
 }
+
+.profile-image {
+  height: var(--profile-image-size, 3rem);
+  width: var(--profile-image-size, 3rem);
+  border-radius: 50%;
+}
+
+// Gives some spacing to a span with text after the image
+.profile-image + span {
+  padding-left: 1rem;
+}
+
+.large {
+  --profile-image-size: 6rem;
+}

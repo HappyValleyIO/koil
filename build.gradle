@@ -24,7 +24,7 @@ apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'idea'
 
-group = "org.springframework"
+group = "org.koil"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 java.targetCompatibility = JavaVersion.VERSION_11
@@ -61,11 +61,13 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation("io.sentry:sentry-spring-boot-starter:3.1.0")
-    implementation("org.jsoup:jsoup:1.13.1")
-    implementation("dev.forkhandles:result4k:1.11.1.0")
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.9'
+    implementation("com.squareup.okhttp3:okhttp:4.8.1")
+    implementation("org.imgscalr:imgscalr-lib:4.2")
 
-    testImplementation("com.konghq:unirest-java:3.11.01")
+    implementation('io.sentry:sentry-spring-boot-starter:5.2.1')
+    implementation('org.jsoup:jsoup:1.14.3')
+    implementation('dev.forkhandles:result4k:1.11.2.0')
 
     implementation("org.springframework.session:spring-session-jdbc")
 
@@ -78,9 +80,10 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude group: "org.junit.vintage", module: "junit-vintage-engine"
     }
-    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.21")
+    testImplementation('com.willowtreeapps.assertk:assertk-jvm:0.25')
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.apache.commons:commons-lang3:3.12.0")
+    testImplementation 'net.java.dev.jna:jna:5.7.0' // Required for testcontainers to function on m1 mac
 }
 
 test {

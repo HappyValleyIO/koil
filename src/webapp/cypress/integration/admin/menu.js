@@ -19,7 +19,6 @@ sizes.forEach(size => {
             cy.visit('/dashboard')
 
             if (isDesktopStyle()) {
-                cy.get('[data-test=navbar-admin-link]').should('be.visible')
                 cy.get('[data-test=dashboard-menu-admin-link]').should('be.visible')
             } else {
                 cy.get('[data-test=menu-button]').click()
@@ -33,7 +32,6 @@ sizes.forEach(size => {
             cy.createRandomAccountAndLogin()
 
             if (isDesktopStyle()) {
-                cy.get('[data-test=navbar-admin-link]').should('not.exist')
                 cy.get('[data-test=dashboard-menu-admin-link]').should('not.exist')
             } else {
                 cy.get('[data-test=menu-button]').click()
@@ -55,36 +53,6 @@ sizes.forEach(size => {
                 url: '/admin'
             }).then(response => {
                 expect(response.status).to.eq(403)
-            })
-        })
-
-        it('should allow an admin to impersonate another user', () => {
-            cy.loginAsAdmin()
-            cy.get('@account').then(account => {
-                cy.visit("/admin?size=10000")
-                cy.get(`[data-test="account-row-${account.email}"]`)
-                    .within(() => {
-                        cy.get('[data-test=user-details]').click()
-                    })
-                cy.get('[data-test=impersonate]').click()
-                cy.get('[data-test=dashboard-index]').should('exist')
-
-                if (isDesktopStyle()) {
-                    cy.get('[data-test=user-handle]').contains(`@${account.username}`)
-                    cy.get('[data-test=end-impersonation]').should('be.visible').click()
-                    cy.get('[data-test=end-impersonation]').should('not.exist')
-                    cy.get('[data-test=user-handle]').contains(`@DefaultAdmin`)
-                } else {
-                    cy.get('[data-test=menu-button]').click()
-                    cy.get('[data-test=user-handle-mobile]').contains(`@${account.username}`)
-                    cy.get('[data-test=mobile-navbar]').within(() => {
-                        cy.get('[data-test=end-impersonation-mobile]').should('be.visible').click()
-                        cy.get('[data-test=end-impersonation-mobile]').should('not.exist')
-                    })
-
-                    cy.get('[data-test=menu-button]').click()
-                    cy.get('[data-test=user-handle-mobile]').contains('@DefaultAdmin')
-                }
             })
         })
     })
