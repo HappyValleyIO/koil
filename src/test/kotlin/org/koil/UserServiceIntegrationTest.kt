@@ -134,7 +134,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
             assertThat(result.account.notificationSettings.weeklyActivity).isEqualTo(request.weeklySummary)
 
             val event = applicationEvents.stream().toList().mapNotNull {
-                it as? AccountUpdateEvent
+                it as? EmailUpdatedEvent
             }.first()
 
             assertThat(event.account).isEqualTo(result.account)

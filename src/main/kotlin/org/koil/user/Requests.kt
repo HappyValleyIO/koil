@@ -32,7 +32,7 @@ data class UpdateUserSettingsRequest(
     val weeklySummary: Boolean?,
     val updateOnAccountChange: Boolean?
 ) {
-    val normalizedEmail: String = email.trim().toLowerCase()
+    val normalizedEmail: String = email.trim().lowercase()
 
     val notificationSettings: NotificationSettings = NotificationSettings(
         weeklyActivity = weeklySummary ?: false,

@@ -53,7 +53,7 @@ abstract class PaginatedViewModel<T>(val page: Page<T>) {
             .getOrderFor(property)
             ?.direction
             ?.let { "($it)" }
-            ?.toLowerCase()
+            ?.lowercase()
             ?: ""
     }
 

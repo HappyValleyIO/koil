@@ -25,7 +25,7 @@ data class UpdateAccountRequest(
     @get:Length(min = 4, max = 16, message = "Handle must be between 4 and 16 chars long") val handle: String,
     val authorities: List<UserAuthority>
 ) {
-    val normalizedEmail: String = email.trim().toLowerCase()
+    val normalizedEmail: String = email.trim().lowercase()
 
     fun update(account: Account): Account =
         account

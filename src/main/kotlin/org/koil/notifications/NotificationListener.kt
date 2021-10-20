@@ -1,7 +1,7 @@
 package org.koil.notifications
 
 import org.koil.user.AccountCreationEvent
-import org.koil.user.AccountUpdateEvent
+import org.koil.user.EmailUpdatedEvent
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
@@ -15,7 +15,7 @@ class NotificationListener(val notifications: NotificationService) {
     }
 
     @EventListener
-    fun onAccountUpdate(event: AccountUpdateEvent) {
+    fun onAccountUpdate(event: EmailUpdatedEvent) {
         notifications.sendAccountUpdateConfirmation(event.account)
     }
 }

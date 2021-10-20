@@ -9,6 +9,7 @@ import org.koil.user.verification.AccountVerification
 import org.koil.user.verification.AccountVerificationViolations
 import org.springframework.context.ApplicationEvent
 import org.springframework.data.annotation.Id
+import org.springframework.data.domain.AbstractAggregateRoot
 import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
@@ -31,8 +32,8 @@ data class Account(
     @Embedded.Empty val accountVerification: AccountVerification,
     @MappedCollection(idColumn = "account_id") val authorities: List<AccountAuthority>,
     @MappedCollection(idColumn = "account_id") val accountPasswordReset: AccountPasswordReset? = null,
-    val stopDate: Instant? = null,
-) {
+    val stopDate: Instant? = null
+) : AbstractAggregateRoot<Account>() {
     companion object {
         fun create(
             fullName: String,
@@ -55,46 +56,58 @@ data class Account(
         ).withAuthorities(authorities)
     }
 
+    init {
+        if (accountId == null) {
+            registerEvent(AccountCreationEvent(this, this))
+        }
+    }
+
     fun isVerified(): Boolean =
         accountVerification.isVerified
 
     fun verifyAccount(code: UUID): Result<Account, AccountVerificationViolations> {
         return accountVerification.verify(code)
             .map {
-                this.copy(accountVerification = it)
+                this.copy(accountVerification = it).andEventsFrom(this)
             }
     }
 
     fun isAdmin(): Boolean = authorities.map { it.authority }.contains(UserAuthority.ADMIN)
 
     fun withPasswordReset(code: UUID): Account =
-        this.copy(accountPasswordReset = AccountPasswordReset(code))
+        this.copy(accountPasswordReset = AccountPasswordReset(code)).andEventsFrom(this)
 
     fun updatePassword(password: HashedPassword): Account =
-        this.copy(password = password)
+        this.copy(password = password).andEventsFrom(this)
 
     fun updateName(name: String): Account =
-        this.copy(fullName = name)
+        this.copy(fullName = name).andEventsFrom(this)
 
     fun updateEmail(email: String): Account {
         return if (email != this.emailAddress) {
             this.copy(emailAddress = email, accountVerification = AccountVerification.create())
+                .andEventsFrom(this)
+                .also {
+                    it.registerEvent(EmailUpdatedEvent(this, it))
+                }
         } else {
             this
         }
     }
 
     fun updateHandle(handle: String): Account =
-        this.copy(handle = handle)
+        this.copy(handle = handle).andEventsFrom(this)
+
 
     fun updateNotificationSettings(notificationSettings: NotificationSettings): Account =
-        this.copy(notificationSettings = notificationSettings)
+        this.copy(notificationSettings = notificationSettings).andEventsFrom(this)
 
     fun grantAuthority(authority: UserAuthority): Account =
         if (this.authorities.map { it.authority }.contains(authority)) {
             this
         } else {
             this.copy(authorities = this.authorities + AccountAuthority(authority, Instant.now()))
+                .andEventsFrom(this)
         }
 
     /**
@@ -102,6 +115,7 @@ data class Account(
      */
     fun withAuthorities(newAuthorities: List<UserAuthority>): Account {
         val updated = this.copy(authorities = this.authorities.filter { newAuthorities.contains(it.authority) })
+            .andEventsFrom(this)
 
         return newAuthorities.fold(updated) { account, authority ->
             account.grantAuthority(authority)
@@ -110,7 +124,7 @@ data class Account(
 }
 
 data class AccountCreationEvent(val src: Any, val account: Account) : ApplicationEvent(src)
-data class AccountUpdateEvent(val src: Any, val account: Account) : ApplicationEvent(src)
+data class EmailUpdatedEvent(val src: Any, val account: Account) : ApplicationEvent(src)
 
 data class NotificationSettings(
     val weeklyActivity: Boolean,

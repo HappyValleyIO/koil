@@ -1,6 +1,5 @@
 package org.koil.user
 
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Isolation
@@ -14,14 +13,11 @@ interface UserService {
 
 @Component
 class UserServiceImpl(
-    private val repository: AccountRepository,
-    private val publisher: ApplicationEventPublisher
+    private val repository: AccountRepository
 ) : UserService {
     override fun createUser(request: UserCreationRequest): UserCreationResult {
         return if (repository.findAccountByEmailAddressIgnoreCase(request.email) == null) {
             val account = request.toAccount().let { repository.save(it) }
-
-            publisher.publishEvent(AccountCreationEvent(this, account))
 
             UserCreationResult.CreatedUser(account)
         } else {
@@ -43,12 +39,7 @@ class UserServiceImpl(
                 } else {
                     request.update(account)
                         .let {
-                            repository.save(it)
-                        }
-                        .let {
-                            AccountUpdateResult.AccountUpdated(it)
-                        }.also {
-                            publisher.publishEvent(AccountUpdateEvent(this, it.account))
+                            AccountUpdateResult.AccountUpdated(repository.save(it))
                         }
                 }
             } ?: throw NoAccountFoundUnexpectedlyException(accountId)
