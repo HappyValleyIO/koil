@@ -6,26 +6,25 @@ import com.amazonaws.services.s3.model.AmazonS3Exception
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
 import com.amazonaws.services.s3.model.PutObjectRequest
-import org.springframework.beans.factory.annotation.Value
 import java.io.InputStream
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
 
 interface Storage {
-    fun saveImage(id: UUID, file: InputStream, contentType: String)
-    fun getPresignedImageUrl(id: UUID): String
+    fun saveObject(id: UUID, file: InputStream, contentType: String)
+    fun getPresignedObjectUrl(id: UUID): String
 }
 
 class S3Storage(
     private val s3Client: AmazonS3,
-    @Value("\${s3.buckets.image}") private val bucketName: String
+    private val bucketName: String
 ) : Storage {
     init {
         createBucketIfNotExists()
     }
 
-    override fun saveImage(id: UUID, file: InputStream, contentType: String) {
+    override fun saveObject(id: UUID, file: InputStream, contentType: String) {
         val metadata = ObjectMetadata()
         metadata.contentLength = file.available().toLong()
         metadata.contentType = contentType
@@ -35,7 +34,7 @@ class S3Storage(
         s3Client.putObject(request)
     }
 
-    override fun getPresignedImageUrl(id: UUID): String {
+    override fun getPresignedObjectUrl(id: UUID): String {
         val request = GeneratePresignedUrlRequest(bucketName, id.toString(), HttpMethod.GET)
             .withExpiration(Date.from(Instant.now().plus(7, ChronoUnit.DAYS)))
 

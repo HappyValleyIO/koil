@@ -5,29 +5,33 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 
 interface ProfileImageService {
-    fun saveImageForUser(accountId: Long, file: MultipartFile): AccountImage
+    fun saveProfileImage(accountId: Long, file: MultipartFile): ProfileImage
 
-    fun getImageUrlForUser(accountId: Long): String
+    fun getProfileImageUrl(accountId: Long): String
 }
 
 @Service
 class PersistedProfileImageService(
     private val storage: Storage,
-    private val repository: AccountImageRepository,
-    private val imageResizer: ImageResizer
+    private val repository: ProfileImageRepository,
+    private val imageNormalizer: ImageNormalizer
 ) : ProfileImageService {
     @Transactional
-    override fun saveImageForUser(accountId: Long, file: MultipartFile): AccountImage {
-        val accountImage = repository.findAccountImageByAccountId(accountId)
-            ?: AccountImage.createForAccount(accountId).let(repository::save)
+    override fun saveProfileImage(accountId: Long, file: MultipartFile): ProfileImage {
+        val profileImage = repository.findProfileImageByAccountId(accountId)
+            ?: ProfileImage.createForAccount(accountId).let(repository::save)
 
-        return accountImage.also {
-            storage.saveImage(accountImage.publicId, imageResizer.resize(file.inputStream), file.contentType ?: "")
+        return profileImage.also {
+            storage.saveObject(
+                profileImage.publicId,
+                imageNormalizer.normalize(file.inputStream),
+                file.contentType ?: ""
+            )
         }
     }
 
-    override fun getImageUrlForUser(accountId: Long): String =
-        repository.findAccountImageByAccountId(accountId)?.let { image ->
-            storage.getPresignedImageUrl(image.publicId)
+    override fun getProfileImageUrl(accountId: Long): String =
+        repository.findProfileImageByAccountId(accountId)?.let { image ->
+            storage.getPresignedObjectUrl(image.publicId)
         } ?: "/img/placeholder-user-image.png"
 }

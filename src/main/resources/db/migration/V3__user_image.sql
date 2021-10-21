@@ -1,4 +1,4 @@
-CREATE TABLE account_image
+CREATE TABLE profile_image
 (
     id         BIGSERIAL     NOT NULL,
     public_id  UUID UNIQUE   NOT NULL,

@@ -6,16 +6,16 @@ import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
 import java.util.*
 
-@Table("account_image")
-data class AccountImage(
+@Table("profile_image")
+data class ProfileImage(
     @Id val id: Long?,
     val publicId: UUID,
     val accountId: Long,
     @LastModifiedDate val updatedAt: Instant
 ) {
     companion object {
-        fun createForAccount(accountId: Long): AccountImage =
-            AccountImage(
+        fun createForAccount(accountId: Long): ProfileImage =
+            ProfileImage(
                 id = null,
                 publicId = UUID.randomUUID(),
                 accountId = accountId,

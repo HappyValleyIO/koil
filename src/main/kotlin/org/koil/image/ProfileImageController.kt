@@ -16,12 +16,12 @@ import java.net.URI
 
 @Controller
 @RequestMapping("/dashboard/user-settings/image")
-class AccountImageController(
+class ProfileImageController(
     private val profileImageService: ProfileImageService
 ) {
     @GetMapping
     fun getImageUrl(@AuthenticationPrincipal user: EnrichedUserDetails): ResponseEntity<Unit> {
-        val image = profileImageService.getImageUrlForUser(user.accountId)
+        val image = profileImageService.getProfileImageUrl(user.accountId)
 
         return ResponseEntity.status(HttpStatus.FOUND)
             .location(URI(image))
@@ -33,7 +33,7 @@ class AccountImageController(
         @AuthenticationPrincipal user: EnrichedUserDetails,
         @RequestParam("file") file: MultipartFile
     ): ModelAndView {
-        profileImageService.saveImageForUser(
+        profileImageService.saveProfileImage(
             user.accountId,
             file
         )

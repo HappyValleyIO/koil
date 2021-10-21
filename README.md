@@ -6,7 +6,7 @@ This is a starter template for building monolithic Spring based applications usi
 
 ## Getting started
 
-We expect a postgres instance to be vailabel for testing on port 5432 that allows connections from user `postgres` with
+We expect a postgres instance to be available for testing on port 5432 that allows connections from user `postgres` with
 an empty password.
 
 For running in dev mode, we expect a minio instance to be running locally. You can spin this up by using the

@@ -23,9 +23,9 @@ class StorageTest {
     internal fun `can upload and retrieve a file`() {
         val id = UUID.randomUUID()
 
-        storage.saveImage(id, example, "image/jpeg")
+        storage.saveObject(id, example, "image/jpeg")
 
-        val link = storage.getPresignedImageUrl(id)
+        val link = storage.getPresignedObjectUrl(id)
 
         assertThat(link).isNotEmpty()
     }
