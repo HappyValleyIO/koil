@@ -2,6 +2,7 @@ package org.koil.image
 
 import assertk.assertThat
 import assertk.assertions.isNotEmpty
+import com.amazonaws.regions.Regions
 import org.junit.jupiter.api.Test
 import org.koil.config.BeanConfig
 import org.koil.fixtures.MinioContainer
@@ -13,7 +14,8 @@ class StorageTest {
     val s3Client = BeanConfig().s3Client(
         s3AccessKey = MinioContainer.minioAccessKey,
         s3SecretKey = MinioContainer.minioSecretKey,
-        s3Endpoint = minio.getEndpoint()
+        s3Endpoint = minio.getEndpoint(),
+        s3Region = Regions.US_EAST_1.name
     )
 
     val storage = S3Storage(s3Client, "test-bucket")

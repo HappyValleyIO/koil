@@ -5,7 +5,6 @@ import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration
-import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import org.koil.auth.UserRole
@@ -47,6 +46,7 @@ class BeanConfig {
         @Value("\${cloud.aws.credentials.access-key}") s3AccessKey: String,
         @Value("\${cloud.aws.credentials.secret-key}") s3SecretKey: String,
         @Value("\${s3.endpoint}") s3Endpoint: String,
+        @Value("\${s3.region}") s3Region: String,
     ): AmazonS3 {
         val credentials: AWSCredentials = BasicAWSCredentials(s3AccessKey, s3SecretKey)
         val clientConfiguration = ClientConfiguration()
@@ -54,7 +54,7 @@ class BeanConfig {
 
         return AmazonS3ClientBuilder
             .standard()
-            .withEndpointConfiguration(EndpointConfiguration(s3Endpoint, Regions.US_EAST_1.name))
+            .withEndpointConfiguration(EndpointConfiguration(s3Endpoint, s3Region))
             .withPathStyleAccessEnabled(true)
             .withClientConfiguration(clientConfiguration)
             .withCredentials(AWSStaticCredentialsProvider(credentials))
@@ -65,6 +65,6 @@ class BeanConfig {
     @Profile("!test")
     fun storage(
         s3Client: AmazonS3,
-        @Value("\${s3.buckets.image}") bucketName: String
+        @Value("\${s3.bucket-name}") bucketName: String
     ): Storage = S3Storage(s3Client, bucketName)
 }
