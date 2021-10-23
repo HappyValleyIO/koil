@@ -62,6 +62,19 @@
     </div>
 </form>
 
+<form method="post" enctype="multipart/form-data" action="/dashboard/user-settings/image" data-turbo="false">
+    {% include 'components/csrf-field' %}
+    <h3>Profile Image</h3>
+    <img class="profile-image large" src="/dashboard/user-settings/image" alt="User profile image">
+
+    <label>
+        Account Image
+        <input type="file" name="file" accept="image/*" required>
+    </label>
+
+    <button type="submit">Save changes</button>
+</form>
+
 <form method="post" action="/dashboard/user-settings/change-password">
     <h3>Change Password</h3>
 

@@ -5,9 +5,11 @@
         <li><h1>Koil.</h1></li>
     </ul>
     <ul class="is-hidden-mobile" data-test="desktop-navbar">
-        {% if global.isAdmin %}
-            <li><a href="/admin" data-test="navbar-admin-link">Admin Panel</a></li>
-        {% endif %}
+        <li>
+            <a href="/dashboard/user-settings" data-test="user-image">
+                <img class="profile-image" src="/dashboard/user-settings/image" alt="User profile image">
+            </a>
+        </li>
         <li>
             <a href="/dashboard/user-settings" data-test="user-handle">@{{ global.account.handle }}</a>
         </li>
@@ -55,8 +57,11 @@
                         <li><a href="/admin" data-test="navbar-admin-link">Admin Panel</a></li>
                     {% endif %}
                     <li>
-                        <a href="/dashboard/user-settings"
-                           data-test="user-handle-mobile">@{{ global.account.handle }}</a>
+                        <a href="/dashboard/user-settings" data-test="user-image-mobile">
+                            <img class="profile-image" src="/dashboard/user-settings/image"
+                                 alt="{{ global.account.handle }}">
+                            <span data-test="user-handle-mobile">@{{ global.account.handle }}</span>
+                        </a>
                     </li>
                     {% if global.isImpersonatingUser %}
                         <li>

@@ -6,11 +6,16 @@ This is a starter template for building monolithic Spring based applications usi
 
 ## Getting started
 
-Tests will spin up their own independent containers using test containers.
+We expect a postgres instance to be available for testing on port 5432 that allows connections from user `postgres` with
+an empty password.
+
+For running in dev mode, we expect a minio instance to be running locally. You can spin this up by using the
+docker-compose file in the root of the directory.
 
 ## Developing
 
-I recommend installing the [Pebble Intellij plugin](https://github.com/bjansen/pebble-intellij). Note there are post-installation instructions on the github page for the plugin.
+I recommend installing the [Pebble Intellij plugin](https://github.com/bjansen/pebble-intellij). Note there are
+post-installation instructions on the github page for the plugin.
 
 You can type `var` and hit Crtl + Space to have it autocomplete a type hint at the top of the file, like:
 
@@ -31,7 +36,8 @@ Another step toward great dev flow is to mark the base language of pebble files 
 
 Spring DevTools comes with LiveReload out of the box. http://livereload.com/
 
-While running in the `dev` profile, a line of javascript is added to each page that will open a websocket to the server so that it can refresh the page on updates.
+While running in the `dev` profile, a line of javascript is added to each page that will open a websocket to the server
+so that it can refresh the page on updates.
 
 ## Emails
 
@@ -43,16 +49,18 @@ We use [mkdocs](https://www.mkdocs.org/) to build this documentation.
 
 ## Install dependencies
 
-You'll need python, pip and mkdocs installed to work on these docs. 
+You'll need python, pip and mkdocs installed to work on these docs.
 
-I would use the [pyenv-installer](https://github.com/pyenv/pyenv-installer) to install py-env. Then install a recent version of python:
+I would use the [pyenv-installer](https://github.com/pyenv/pyenv-installer) to install py-env. Then install a recent
+version of python:
 
 ```
 pyenv install 3.8.2
 pyenv global 3.8.2
 ```
 
-Followed by an appropriate version of pip by following the instructions [here](https://pip.pypa.io/en/stable/installing/).
+Followed by an appropriate version of pip by following the
+instructions [here](https://pip.pypa.io/en/stable/installing/).
 
 Then install the dependencies by running `pip install -r requirements.txt` in the `docs` folder.
 
