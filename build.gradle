@@ -74,9 +74,9 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("io.github.kilmajster:ngrok-spring-boot-starter:0.1")
 
-    runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly('org.postgresql:postgresql:42.2.24.jre7')
     implementation(platform("org.testcontainers:testcontainers-bom:1.15.2"))
-    testImplementation("org.testcontainers:postgresql")
+    testImplementation('org.testcontainers:postgresql:1.16.0')
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude group: "org.junit.vintage", module: "junit-vintage-engine"
     }

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.parallel.ExecutionMode
 import org.koil.BaseIntegrationTest
 import org.springframework.boot.web.server.LocalServerPort
 import java.io.File
+import java.io.InputStream
+import java.io.SequenceInputStream
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
@@ -46,12 +48,14 @@ class CypressIntegrationTest : BaseIntegrationTest() {
                         )
                         .start()
 
-                    process.inputStream.transferTo(System.out)
+                    val streamOutput: InputStream = SequenceInputStream(process.inputStream, process.errorStream)
+                    streamOutput.transferTo(System.out)
                     process.waitFor(15, TimeUnit.MINUTES)
 
                     assertEquals(0, process.exitValue()) {
                         """
                                 PROCESS EXIT CODE: ${process.exitValue()}
+                                                    ${streamOutput.bufferedReader().lines().toList().joinToString("\n")}
                             """
                     }
                 }
