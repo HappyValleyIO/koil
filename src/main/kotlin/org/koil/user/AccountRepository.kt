@@ -1,5 +1,7 @@
 package org.koil.user
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.transaction.annotation.Transactional
@@ -11,6 +13,8 @@ interface AccountRepository : PagingAndSortingRepository<Account, Long> {
     fun existsAccountByEmailAddressIgnoreCase(email: String): Boolean
 
     fun findAccountByEmailAddressIgnoreCase(email: String): Account?
+
+    fun findAccountsByCompanyId(companyId: Long, pageable: Pageable): Page<Account>
 
     @Query(
         """

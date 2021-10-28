@@ -3,66 +3,62 @@ package org.koil.admin
 import assertk.assertThat
 import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
-import org.junit.jupiter.api.Assertions.*
+import net.bytebuddy.utility.RandomString
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.koil.BaseIntegrationTest
 import org.koil.admin.accounts.UpdateAccountRequest
 import org.koil.auth.UserAuthority
+import org.koil.company.CompanyCreationResult
+import org.koil.company.CompanyRepository
+import org.koil.company.CompanySetupRequest
 import org.koil.user.UserCreationRequest
 import org.koil.user.UserCreationResult
 import org.koil.user.password.HashedPassword
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
 import java.util.*
+import kotlin.streams.toList
 
 class AdminServiceTest : BaseIntegrationTest() {
 
     @Autowired
     lateinit var adminService: AdminService
 
+    @Autowired
+    lateinit var companyRepository: CompanyRepository
+
     val password = HashedPassword.encode("SecurePass123!")
 
     @Test
-    fun `GIVEN no existing admin user WHEN attempting to create admin THEN return success`() {
-        val email = "user+${Random().nextInt()}@getkoil.dev"
-        val result = adminService.createAdminFromEmail(email, password)
+    fun `GIVEN existing accounts WHEN querying for all accounts as an company owner THEN return them`() {
+        val createdCompany = createDummyTestCompany()
 
-        assertTrue(result is UserCreationResult.CreatedUser) {
-            "Admin was successfully created"
-        }
+        val result = adminService.getAccounts(createdCompany.adminAccount.accountId!!, Pageable.unpaged())
 
-        assertEquals(listOf("ADMIN"), userDetailsService.loadUserByUsername(email).authorities.map { it.authority })
+        assertThat(result.get().toList()).isEqualTo(accountRepository.findAll().filter{ it.companyId == createdCompany.company.companyId })
     }
 
     @Test
-    fun `GIVEN an admin user exists WHEN attempting to create admin THEN fail`() {
-        val email = "user+${Random().nextInt()}@getkoil.dev"
-        adminService.createAdminFromEmail(email, password)
-        val result = adminService.createAdminFromEmail(email, password)
+    fun `GIVEN existing accounts WHEN querying for all accounts as an admin THEN return all accounts for all companies`() {
+        val adminAccountId = accountRepository.findAll().filter { it.isAdmin() }.first().accountId
+        createDummyTestCompany()
+        createDummyTestCompany()
 
-        assertTrue(result is UserCreationResult.UserAlreadyExists) {
-            "Admin already exists"
-        }
+        val result = adminService.getAccounts(adminAccountId!!, Pageable.unpaged())
+
+        assertThat(result.get().toList().sortedBy { it.accountId }).isEqualTo(accountRepository.findAll().sortedBy { it.accountId })
     }
-
-    @Test
-    fun `GIVEN existing accounts WHEN querying for all accounts as an admin THEN return them`() {
-        val email = "user+${Random().nextInt()}@getkoil.dev"
-        val admin = (adminService.createAdminFromEmail(email, password) as UserCreationResult.CreatedUser).account
-
-        val result = adminService.getAccounts(admin.accountId!!, Pageable.unpaged())
-
-        assertThat(result).isEqualTo(accountRepository.findAll(Pageable.unpaged()))
-    }
-
 
     @Test
     fun `GIVEN existing accounts WHEN querying for all accounts as a non-admin THEN throw an error`() {
         val email = "user+${Random().nextInt()}@getkoil.dev"
-        (adminService.createAdminFromEmail(email, password) as UserCreationResult.CreatedUser).account
+        val signupLink = createDummyTestCompany().company.signupLink
 
         val nonAdmin = userService.createUser(
             UserCreationRequest(
+                signupLink,
                 "Stephen the tester",
                 "x$email",
                 password,
@@ -78,8 +74,7 @@ class AdminServiceTest : BaseIntegrationTest() {
 
     @Test
     fun `GIVEN existing accounts WHEN querying for all accounts as a non-existent user THEN throw an error`() {
-        val email = "user+${Random().nextInt()}@getkoil.dev"
-        (adminService.createAdminFromEmail(email, password) as UserCreationResult.CreatedUser).account
+        createDummyTestCompany()
 
         assertThrows(IllegalArgumentException::class.java) {
             adminService.getAccounts(Long.MAX_VALUE, Pageable.unpaged())
@@ -88,8 +83,7 @@ class AdminServiceTest : BaseIntegrationTest() {
 
     @Test
     internal fun `GIVEN existing account WHEN updating with available details THEN successfully update`() {
-        val email = "user+${Random().nextInt()}@getkoil.dev"
-        val admin = (adminService.createAdminFromEmail(email, password) as UserCreationResult.CreatedUser).account
+        val createdCompany = createDummyTestCompany()
 
         withTestAccount { account ->
             val update = UpdateAccountRequest(
@@ -100,7 +94,7 @@ class AdminServiceTest : BaseIntegrationTest() {
             )
 
             val result = (adminService.updateAccount(
-                admin.accountId!!,
+                createdCompany.adminAccount.accountId!!,
                 account.accountId!!,
                 update
             ) as AdminAccountUpdateResult.AccountUpdateSuccess).account
@@ -114,9 +108,7 @@ class AdminServiceTest : BaseIntegrationTest() {
 
     @Test
     internal fun `GIVEN existing account WHEN updating with taken email THEN return failure`() {
-        val email = "user+${Random().nextInt()}@getkoil.dev"
-        val admin =
-            (adminService.createAdminFromEmail(email, password) as UserCreationResult.CreatedUser).account
+        val admin = createDummyTestCompany().adminAccount
 
         withTestAccount { account ->
             val update = UpdateAccountRequest(
@@ -138,9 +130,7 @@ class AdminServiceTest : BaseIntegrationTest() {
 
     @Test
     internal fun `GIVEN existing account WHEN updating with nothing changed THEN return success`() {
-        val email = "user+${Random().nextInt()}@getkoil.dev"
-        val admin =
-            (adminService.createAdminFromEmail(email, password) as UserCreationResult.CreatedUser).account
+        val admin = createDummyTestCompany().adminAccount
 
         withTestAccount { account ->
             val update = UpdateAccountRequest(
@@ -166,9 +156,7 @@ class AdminServiceTest : BaseIntegrationTest() {
 
     @Test
     internal fun `GIVEN existing account WHEN updating as non-admin THEN fail`() {
-        val email = "user+${Random().nextInt()}@getkoil.dev"
-        val admin =
-            (adminService.createAdminFromEmail(email, password) as UserCreationResult.CreatedUser).account
+        val admin = createDummyTestCompany().adminAccount
 
         withTestAccount { account ->
             val update = UpdateAccountRequest(
@@ -186,5 +174,18 @@ class AdminServiceTest : BaseIntegrationTest() {
                 )
             }
         }
+    }
+
+    private fun createDummyTestCompany(): CompanyCreationResult.CreatedCompany {
+        val companyCreationResult = companyService.setupCompany(
+            CompanySetupRequest(
+                companyName = "TestCompany",
+                fullName = "User Main",
+                email = "user${RandomString.make()}@getkoil.dev",
+                password = HashedPassword.encode("Password123!"),
+                handle = RandomString.make()
+            )
+        )
+        return (companyCreationResult as CompanyCreationResult.CreatedCompany)
     }
 }

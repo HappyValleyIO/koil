@@ -53,7 +53,7 @@
             <details open>
                 <summary>My Account</summary>
                 <ul>
-                    {% if global.isAdmin %}
+                    {% if global.isCompanyOwner %}
                         <li><a href="/admin" data-test="navbar-admin-link">Admin Panel</a></li>
                     {% endif %}
                     <li>

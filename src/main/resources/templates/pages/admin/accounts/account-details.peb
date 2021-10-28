@@ -1,5 +1,6 @@
 {# @pebvariable name="model" type="org.koil.admin.AdminAccountDetailsViewModel" #}
 {# @pebvariable name="submitted" type="org.koil.admin.accounts.UpdateAccountRequest" #}
+{# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
 
     {% extends "layouts/admin-layout" %}
     {% block title %} Admin | {{ model.account.fullName }} {% endblock %}

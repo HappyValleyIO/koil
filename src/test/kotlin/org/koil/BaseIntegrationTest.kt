@@ -4,6 +4,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.koil.auth.DefaultUserDetailsService
 import org.koil.auth.EnrichedUserDetails
 import org.koil.auth.UserAuthority
+import org.koil.company.CompanyService
+import org.koil.company.CompanySetupRequest
 import org.koil.user.*
 import org.koil.user.password.HashedPassword
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,6 +36,9 @@ abstract class BaseIntegrationTest {
     @Autowired
     lateinit var accountRepository: AccountRepository
 
+    @Autowired
+    lateinit var companyService: CompanyService
+
     protected fun withTestSession(
         email: String = "test+${Random().nextInt()}@getkoil.dev",
         password: String = "TestPass123!",
@@ -41,15 +46,13 @@ abstract class BaseIntegrationTest {
         foo: (EnrichedUserDetails) -> Unit
     ) {
         val id = "${Random().nextInt()}00000000".substring(0..8)
-        val request = UserCreationRequest(
+        companyService.setupCompany(CompanySetupRequest(companyName = "Company$id",
             fullName = "Test User [$id]",
             email = email,
             password = HashedPassword.encode(password),
             authorities = authorities,
-            handle = id
-        )
-
-        (userService.createUser(request) as UserCreationResult.CreatedUser)
+            handle = "user$id"
+        ))
         userDetailsService.loadUserByUsername(email).run(foo)
     }
 
@@ -60,15 +63,13 @@ abstract class BaseIntegrationTest {
         foo: (Account) -> Unit
     ) {
         val id = "${Random().nextInt()}00000000".substring(0..8)
-        val request = UserCreationRequest(
+        companyService.setupCompany(CompanySetupRequest(companyName = "Company$id",
             fullName = "Test User [$id]",
             email = email,
             password = HashedPassword.encode(password),
             authorities = authorities,
             handle = "user$id"
-        )
-
-        (userService.createUser(request) as UserCreationResult.CreatedUser)
+        ))
         accountRepository.findAccountByEmailAddressIgnoreCase(email)!!.run(foo)
     }
 }

@@ -47,7 +47,7 @@ class AdminAccountsController(private val adminService: AdminService) {
         val account = adminService.getAccount(user.accountId, accountId)
 
         return if (account != null) {
-            AdminViews.AdminAccountDetailsView.render(AdminAccountDetailsViewModel(account, updated))
+            AdminViews.AdminAccountDetailsView.render(AdminAccountDetailsViewModel(account, updated, canBeAdmin = user.isAdmin))
         } else {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource")
         }

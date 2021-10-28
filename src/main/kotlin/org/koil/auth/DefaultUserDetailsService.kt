@@ -15,6 +15,7 @@ class DefaultUserDetailsService(
             return EnrichedUserDetails(
                 account.accountId ?: throw RuntimeException("Unexpectedly null accountId for existing account!"),
                 account.handle,
+                account.isAdmin(),
                 User.builder()
                     .username(account.emailAddress)
                     .password(account.password.encodedPassword)

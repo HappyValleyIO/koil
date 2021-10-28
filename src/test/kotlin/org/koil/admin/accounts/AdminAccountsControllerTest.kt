@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.post
 class AdminAccountsControllerTest : BaseIntegrationTest() {
     @Test
     internal fun `bad inputs result in a 400 error`() {
-        withTestSession(authorities = listOf(UserAuthority.ADMIN)) { admin ->
+        withTestSession(authorities = listOf(UserAuthority.COMPANY_OWNER)) { admin ->
             withTestAccount { account ->
                 mockMvc.post("/admin/accounts/${account.accountId}") {
                     with(csrf())

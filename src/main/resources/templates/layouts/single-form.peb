@@ -18,7 +18,7 @@
                 </a>
             </li>
             <li>
-                <a class="button is-primary" href="/auth/register">
+                <a class="button is-primary" href="/auth/register/company">
                     Sign up
                 </a>
             </li>

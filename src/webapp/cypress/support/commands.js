@@ -32,11 +32,11 @@ function loadPageForCSRF(url) {
         })
 }
 
-Cypress.Commands.add('createAccount', (name, username, email, passwd) => {
-    loadPageForCSRF('/auth/register')
+Cypress.Commands.add('createAccount', (name, username, email, passwd, signupLink) => {
+    loadPageForCSRF('/auth/register/employee')
         .then(csrf => {
             cy.request({
-                url: '/auth/register',
+                url: '/auth/register/employee',
                 form: true,
                 method: 'POST',
                 body: {
@@ -44,6 +44,7 @@ Cypress.Commands.add('createAccount', (name, username, email, passwd) => {
                     email: email,
                     handle: username,
                     password: passwd,
+                    signupLink: signupLink,
                     '_csrf': csrf
                 }
             })
@@ -60,16 +61,20 @@ Cypress.Commands.add('createRandomAccount', () => {
     const passwd = 'SomeSecurePassword123!'
     const name = `Test User ${slug}`
 
-    cy.createAccount(name, username, email, passwd)
-        .then(() => {
-            return {
-                name: name,
-                email: email,
-                passwd: passwd,
-                username: username,
-                slug: slug
-            }
-        }).as('account')
+    cy.getDefaultCompanySignupLink().then((signupLink) => {
+        cy.log("PRINTING: "+signupLink)
+        cy.createAccount(name, username, email, passwd, signupLink)
+            .then(() => {
+                return {
+                    name: name,
+                    email: email,
+                    passwd: passwd,
+                    username: username,
+                    slug: slug
+                }
+            }).as('account')
+    })
+
 })
 
 Cypress.Commands.add('createRandomAccountAndLogin', () => {
@@ -95,5 +100,14 @@ Cypress.Commands.add('accountDetailsForEmail', (email) => {
     return cy.request({
         url: `/dev/account?email=${encodeURIComponent(email)}`,
         method: 'GET',
+    })
+})
+
+Cypress.Commands.add('getDefaultCompanySignupLink', () => {
+    return cy.request({
+        url: `/dev/company`,
+        method: 'GET',
+    }).then(response => {
+        return response.body
     })
 })

@@ -76,15 +76,15 @@ class AccountTest {
     fun `GIVEN a user without authority WHEN granting authority THEN succeed`() {
         val user = internalTestUser(authorities = listOf())
 
-        val updated = user.grantAuthority(UserAuthority.ADMIN)
-        assertThat(updated.authorities.map { it.authority }).containsExactly(UserAuthority.ADMIN)
+        val updated = user.grantAuthority(UserAuthority.COMPANY_OWNER)
+        assertThat(updated.authorities.map { it.authority }).containsExactly(UserAuthority.COMPANY_OWNER)
     }
 
     @Test
     fun `GIVEN a user with authority WHEN granting authority THEN make no modification`() {
-        val user = internalTestUser(authorities = listOf(UserAuthority.ADMIN))
+        val user = internalTestUser(authorities = listOf(UserAuthority.COMPANY_OWNER))
 
-        val updated = user.grantAuthority(UserAuthority.ADMIN)
+        val updated = user.grantAuthority(UserAuthority.COMPANY_OWNER)
         assertThat(updated).isEqualTo(user)
     }
 
@@ -92,21 +92,21 @@ class AccountTest {
     fun `GIVEN a user without the ADMIN authority WHEN checking if admin THEN return false`() {
         val user = internalTestUser(listOf(UserAuthority.USER))
 
-        assertThat(user.isAdmin()).isFalse()
+        assertThat(user.isCompanyOwner()).isFalse()
     }
 
     @Test
     fun `GIVEN a user with the ADMIN authority WHEN checking if admin THEN return true`() {
-        val user = internalTestUser(listOf(UserAuthority.ADMIN))
+        val user = internalTestUser(listOf(UserAuthority.COMPANY_OWNER))
 
-        assertThat(user.isAdmin()).isTrue()
+        assertThat(user.isCompanyOwner()).isTrue()
     }
 
     @Test
     fun `GIVEN a user with multiple authorities including ADMIN WHEN checking if admin THEN return true`() {
-        val user = internalTestUser(listOf(UserAuthority.USER, UserAuthority.ADMIN))
+        val user = internalTestUser(listOf(UserAuthority.USER, UserAuthority.COMPANY_OWNER))
 
-        assertThat(user.isAdmin()).isTrue()
+        assertThat(user.isCompanyOwner()).isTrue()
     }
 
     @Test
@@ -115,6 +115,7 @@ class AccountTest {
 
         assertThat(user).isEqualTo(
             Account(
+                companyId = 0,
                 accountId = user.accountId,
                 fullName = user.fullName,
                 emailAddress = user.emailAddress,
@@ -130,8 +131,9 @@ class AccountTest {
         )
     }
 
-    private fun internalTestUser(authorities: List<UserAuthority> = listOf(UserAuthority.ADMIN)): Account {
+    private fun internalTestUser(authorities: List<UserAuthority> = listOf(UserAuthority.COMPANY_OWNER)): Account {
         return Account(
+            0,
             0,
             Instant.now(),
             "Test User",

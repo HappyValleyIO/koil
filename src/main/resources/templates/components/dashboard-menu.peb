@@ -10,7 +10,7 @@
                 <li><a href="/dashboard/user-settings" data-controller="nav">My Settings</a></li>
             </ul>
         </details>
-        {% if global.isAdmin %}
+        {% if global.isCompanyOwner %}
             <details open>
                 <summary>Admin menu</summary>
                 <ul>

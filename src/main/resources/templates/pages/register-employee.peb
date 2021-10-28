@@ -5,12 +5,14 @@
     {% block title %} Login {% endblock %}
 
 {% block content %}
-<form action="/auth/register" method="post" data-test="register-form">
+<form action="/auth/register/employee" method="post" data-test="register-form">
     <h3>Register Here</h3>
     {% include 'components/csrf-field' %}
     {% import 'components/form/errors' %}
 
     <div>
+        <input type="hidden" name="signupLink" maxlength="16" minlength="4"
+               value="{{ model.signupLink }}">
         <label>
             <i class="fas fa-user-tie"></i> Name
             <input type="text" name="name" value="{{ submitted.name }}">

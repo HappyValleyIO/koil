@@ -1,5 +1,6 @@
 package org.koil.user
 
+import org.koil.company.CompanyRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Isolation
@@ -13,11 +14,13 @@ interface UserService {
 
 @Component
 class UserServiceImpl(
-    private val repository: AccountRepository
+    private val repository: AccountRepository,
+    private val companyRepository: CompanyRepository
 ) : UserService {
     override fun createUser(request: UserCreationRequest): UserCreationResult {
         return if (repository.findAccountByEmailAddressIgnoreCase(request.email) == null) {
-            val account = request.toAccount().let { repository.save(it) }
+            val companyId = companyRepository.findCompanyBySignupLink(request.signupLink)?.companyId ?: return UserCreationResult.InvalidSignupLink
+            val account = request.toAccount(companyId).let { repository.save(it) }
 
             UserCreationResult.CreatedUser(account)
         } else {

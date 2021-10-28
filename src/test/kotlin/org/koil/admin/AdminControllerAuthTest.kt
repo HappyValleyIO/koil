@@ -11,7 +11,7 @@ class AdminControllerAuthTest : BaseIntegrationTest() {
 
     @Test
     fun `GIVEN an admin user WHEN requesting the admin dashboard THEN return OK`() {
-        withTestSession(authorities = listOf(UserAuthority.ADMIN)) { admin ->
+        withTestSession(authorities = listOf(UserAuthority.COMPANY_OWNER)) { admin ->
             mockMvc.perform(get("/admin").with(user(admin)))
                 .andExpect(status().isOk)
         }

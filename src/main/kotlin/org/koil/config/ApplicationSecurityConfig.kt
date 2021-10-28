@@ -41,7 +41,7 @@ class ApplicationSecurityConfig(
             .addFilterAfter(switchUserFilter, FilterSecurityInterceptor::class.java)
             .authorizeRequests()
             .antMatchers("/admin/impersonation/logout").hasAuthority(UserRole.ADMIN_IMPERSONATING_USER.name)
-            .antMatchers("/admin/**").hasAuthority(UserAuthority.ADMIN.name)
+            .antMatchers("/admin/**").hasAuthority(UserAuthority.COMPANY_OWNER.name)
             .antMatchers("/dashboard/**").authenticated()
             .anyRequest().permitAll()
             .and()
