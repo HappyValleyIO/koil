@@ -6,6 +6,7 @@ import java.util.*
 
 @Transactional
 interface CompanyRepository : PagingAndSortingRepository<Company, Long>{
-
     fun findCompanyBySignupLink(signupLink: UUID): Company?
+
+    fun findCompanyByCompanyId(companyId: Long): Company?
 }

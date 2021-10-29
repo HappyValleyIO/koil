@@ -1,0 +1,75 @@
+{# @pebvariable name="model" type="org.koil.dashboard.org.OrgAccountDetailsViewModel" #}
+{# @pebvariable name="submitted" type="org.koil.dashboard.org.accounts.UpdateAccountRequest" #}
+{# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
+
+    {% extends "layouts/dashboard-layout" %}
+    {% block title %} Manager User | {{ model.account.fullName }} {% endblock %}
+    {% import "components/help-tooltip" %}
+    {% import "components/form/errors" %}
+
+{% block content %}
+<div>
+    <small><a href="/dashboard/org">Back to all accounts</a></small>
+
+    {% if model.updated %}
+        <hgroup>
+            <h3>User Details</h3>
+            <h4>
+            <mark data-test="update-confirmed">User account was updated successfully.</mark>
+        </h4>
+        </hgroup>
+     {% else %}
+        <h3>User Details</h3>
+    {% endif %}
+
+    <form method="POST" data-test="user-details-form">
+        {% include "components/csrf-field" %}
+        <label>
+            Full Name
+            <input type="text" name="fullName" maxlength="64"
+                   value="{{ submitted.fullName | default(model.account.fullName) }}"
+                   required>
+
+            {{ errors(getFieldErrors('submitted', 'fullName')) }}
+        </label>
+
+        <label>
+            Email Address
+            <input type="email" name="email" value="{{ submitted.email | default(model.account.emailAddress) }}"
+                   required>
+            {{ errors(getFieldErrors('submitted', 'email')) }}
+            {% if model.emailAlreadyTaken %}
+                <small class="warning" data-test="email-taken">
+                    It looks like this email is already taken. Please try another.
+                </small>
+            {% endif %}
+        </label>
+
+        <label>
+            Handle
+            <input type="text" name="handle" maxlength="16" minlength="4"
+                   value="{{ submitted.handle | default(model.account.handle) }}" required>
+            {{ errors(getFieldErrors('submitted', 'handle')) }}
+        </label>
+
+        <fieldset>
+            <legend> Roles & Authorities
+                {{ helptooltip(text="What can this user do?") }}
+            </legend>
+            {% for role in model.possibleAuthorities %}
+                <label>
+                    <input type="checkbox" name="authorities" value="{{ role.first }}" {% if role.second %}
+                           checked
+                    {% endif %}>
+                    {{role.first}}
+                </label>
+            {% endfor %}
+        </fieldset>
+
+        <div class="grid">
+            <button type="submit">Update User</button>
+            <button type="reset" class="secondary">Clear</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

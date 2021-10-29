@@ -6,8 +6,8 @@ import org.koil.view.PaginatedViewModel
 import org.koil.view.ViewRenderer
 import org.springframework.data.domain.Page
 
-data class AdminIndexViewModel(val userName: String, val accounts: Page<Account>) :
-    PaginatedViewModel<Account>(accounts)
+data class AdminIndexViewModel(val userName: String, val accounts: Page<AccountEnriched>) :
+    PaginatedViewModel<AccountEnriched>(accounts)
 
 data class AdminAccountDetailsViewModel(
     val account: Account,

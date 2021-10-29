@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 
 interface CompanyService {
     fun setupCompany(request: CompanySetupRequest): CompanyCreationResult
+    fun getAllCompanies(): List<Company>
 }
 
 @Component
@@ -29,6 +30,10 @@ class CompanyServiceImpl(
             LOGGER.error("Failed to setup company and admin user with exception [$exception]", exception)
             CompanyCreationResult.CreationFailed
         }
+    }
+
+    override fun getAllCompanies(): List<Company> {
+        return repository.findAll().toList()
     }
 
     @Transactional

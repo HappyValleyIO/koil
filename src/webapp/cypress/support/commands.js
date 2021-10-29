@@ -51,7 +51,26 @@ Cypress.Commands.add('createAccount', (name, username, email, passwd, signupLink
         })
 })
 
-Cypress.Commands.add('createRandomAccount', () => {
+Cypress.Commands.add('createCompanyAccount', (companyName, name, username, email, passwd) => {
+    loadPageForCSRF('/auth/register/company')
+        .then(csrf => {
+            cy.request({
+                url: '/auth/register/company',
+                form: true,
+                method: 'POST',
+                body: {
+                    companyName: companyName,
+                    name: name,
+                    email: email,
+                    handle: username,
+                    password: passwd,
+                    '_csrf': csrf
+                }
+            })
+        })
+})
+
+Cypress.Commands.add('createRandomAccount', (requestedSignupLink) => {
     const slug = Math.random()
         .toString(36)
         .substring(7)
@@ -61,8 +80,7 @@ Cypress.Commands.add('createRandomAccount', () => {
     const passwd = 'SomeSecurePassword123!'
     const name = `Test User ${slug}`
 
-    cy.getDefaultCompanySignupLink().then((signupLink) => {
-        cy.log("PRINTING: "+signupLink)
+    cy.getCompanySignupLink(requestedSignupLink).then((signupLink) => {
         cy.createAccount(name, username, email, passwd, signupLink)
             .then(() => {
                 return {
@@ -74,7 +92,29 @@ Cypress.Commands.add('createRandomAccount', () => {
                 }
             }).as('account')
     })
+})
 
+Cypress.Commands.add('createRandomCompanyAccount', () => {
+    const slug = Math.random()
+        .toString(36)
+        .substring(7)
+
+    const email = `test+${slug}@getkoil.dev`
+    const username = slug
+    const passwd = 'SomeSecurePassword123!'
+    const name = `Test User ${slug}`
+    const companyName = `Test Company ${slug}`
+
+    cy.createCompanyAccount(companyName, name, username, email, passwd)
+        .then(() => {
+            return {
+                name: name,
+                email: email,
+                passwd: passwd,
+                username: username,
+                slug: slug
+            }
+        }).as('account')
 })
 
 Cypress.Commands.add('createRandomAccountAndLogin', () => {
@@ -103,9 +143,10 @@ Cypress.Commands.add('accountDetailsForEmail', (email) => {
     })
 })
 
-Cypress.Commands.add('getDefaultCompanySignupLink', () => {
+Cypress.Commands.add('getCompanySignupLink', (companyName) => {
+    const companyUrl = companyName ? `/dev/company/${companyName}` : '/dev/company'
     return cy.request({
-        url: `/dev/company`,
+        url: companyUrl,
         method: 'GET',
     }).then(response => {
         return response.body

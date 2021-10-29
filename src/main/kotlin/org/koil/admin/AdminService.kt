@@ -23,7 +23,7 @@ interface AdminService {
 
     fun createDefaultAdminCompany(companyName: String): CompanyCreationResult
 
-    fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<Account>
+    fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<AccountEnriched>
 
     fun getAccount(queryingAsAccount: Long, accountId: Long): Account?
 
@@ -69,41 +69,25 @@ class AdminServiceImpl(
         return companyCreationResult
     }
 
-    override fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<Account> {
-        val account = getAccount(queryingAsAccount)
+    override fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<AccountEnriched> {
+        validateAdminStatus(queryingAsAccount)
 
-        require(account.isAdmin() || account.isCompanyOwner()) {
-            "Attempting to retrieve accounts as a non-admin user!"
-        }
+        val accounts = accountRepository.findAll(pageable)
 
-        return if (account.isAdmin()) {
-            validateAdminStatus(account)
-            accountRepository.findAll(pageable)
-        } else {
-            validateCompanyOwnerStatus(account)
-            accountRepository.findAccountsByCompanyId(account.companyId, pageable)
+        val companyNameMap = companyService.getAllCompanies().associate { it.companyId to it.companyName }
+
+        return accounts.map {
+            val companyName = companyNameMap[it.companyId]
+            check(companyName != null) {
+                "Attempting to match an account to the company name it belongs to. The company name was missing for the companyId of the account. This should be completely impossible due to our db setup."
+            }
+            AccountEnriched(it, companyName)
         }
     }
 
     override fun getAccount(queryingAsAccount: Long, accountId: Long): Account? {
-        val account = getAccount(queryingAsAccount)
-
-        require(account.isAdmin() || account.isCompanyOwner()) {
-            "Attempting to retrieve another account as a non-admin user!"
-        }
-
-        validateCompanyOwnerStatus(account)
-
-
-        val lookupAccount = accountRepository.findByIdOrNull(accountId)
-
-        if (!account.isAdmin()) {
-            require(lookupAccount == null || lookupAccount.companyId == account.companyId) {
-                "Attempting to retrieve an account for a company that the user does not belong to!"
-            }
-        }
-
-        return lookupAccount
+        validateAdminStatus(queryingAsAccount)
+        return accountRepository.findByIdOrNull(accountId)
     }
 
     @Transactional
@@ -112,23 +96,10 @@ class AdminServiceImpl(
         userToUpdate: Long,
         request: UpdateAccountRequest
     ): AdminAccountUpdateResult {
-        val requestorAccount = getAccount(requestor)
-
-        require(requestorAccount.isAdmin() || requestorAccount.isCompanyOwner()) {
-            "Attempting to update an account as a non-admin user!"
-        }
+        validateAdminStatus(requestor)
 
         val account: Account = accountRepository.findByIdOrNull(userToUpdate)
             ?: return AdminAccountUpdateResult.CouldNotFindAccount
-
-        if(!requestorAccount.isAdmin()){
-            require(account.companyId == requestorAccount.companyId){
-                "Attempting to update an account for a company the user does not belong to."
-            }
-            require(!request.authorities.contains(UserAuthority.ADMIN)){
-                "Non Admin attempting to escalate privileges to Admin role."
-            }
-        }
 
         val emailInUse = accountRepository.existsAccountByEmailAddressIgnoreCase(request.normalizedEmail)
 
@@ -141,23 +112,8 @@ class AdminServiceImpl(
         }
     }
 
-    private fun getAccount(queryingAsAccount: Long): Account {
+    private fun validateAdminStatus(queryingAsAccount: Long) {
         val account = accountRepository.findByIdOrNull(queryingAsAccount)
-        require(account != null) {
-            "Could not locate the account for the accountId provided. This should be impossible."
-        }
-        return account
-    }
-
-    private fun validateCompanyOwnerStatus(account: Account?) {
-        val isCompanyOwner = account?.isCompanyOwner() ?: false
-
-        require(isCompanyOwner) {
-            "Attempting to retrieve account as a non-admin user!"
-        }
-    }
-
-    private fun validateAdminStatus(account: Account?) {
         val isAdmin = account?.isAdmin() ?: false
 
         require(isAdmin) {

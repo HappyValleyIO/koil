@@ -1,4 +1,4 @@
-package org.koil.admin
+package org.koil.dashboard.org
 
 import org.junit.jupiter.api.Test
 import org.koil.BaseIntegrationTest
@@ -7,20 +7,20 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-class AdminControllerAuthTest : BaseIntegrationTest() {
+class OrgControllerAuthTest : BaseIntegrationTest() {
 
     @Test
     fun `GIVEN a COMPANY_OWNER user WHEN requesting the admin dashboard THEN return OK`() {
         withTestSession(authorities = listOf(UserAuthority.COMPANY_OWNER)) { admin ->
-            mockMvc.perform(get("/admin").with(user(admin)))
-                .andExpect(status().isForbidden)
+            mockMvc.perform(get("/dashboard/org").with(user(admin)))
+                .andExpect(status().isOk)
         }
     }
 
     @Test
     fun `GIVEN a USER user WHEN requesting the admin dashboard THEN return OK`() {
         withTestSession(authorities = listOf(UserAuthority.USER)) { admin ->
-            mockMvc.perform(get("/admin").with(user(admin)))
+            mockMvc.perform(get("/dashboard/org").with(user(admin)))
                 .andExpect(status().isForbidden)
         }
     }
@@ -28,8 +28,8 @@ class AdminControllerAuthTest : BaseIntegrationTest() {
     @Test
     fun `GIVEN an ADMIN user WHEN requesting the admin dashboard THEN return OK`() {
         withTestSession(authorities = listOf(UserAuthority.ADMIN)) { admin ->
-            mockMvc.perform(get("/admin").with(user(admin)))
-                .andExpect(status().isOk)
+            mockMvc.perform(get("/dashboard/org").with(user(admin)))
+                .andExpect(status().isForbidden)
         }
     }
 

@@ -11,7 +11,7 @@ sizes.forEach(size => {
         describe(`with valid signup url`, () => {
 
             it(`should accept a new user sign up for valid email and password`, () => {
-                cy.getDefaultCompanySignupLink().then( signupLink => {
+                cy.getCompanySignupLink().then( signupLink => {
                     cy.visit("/auth/register/employee?signupLink="+signupLink)
                     const slug = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
                     cy.get('[data-test=register-form]').within(() => {
@@ -28,7 +28,7 @@ sizes.forEach(size => {
             })
 
             it('should show password when toggled', () => {
-                cy.getDefaultCompanySignupLink().then( signupLink => {
+                cy.getCompanySignupLink().then( signupLink => {
                     cy.visit("/auth/register/employee?signupLink=" + signupLink)
 
                     cy.get('[data-test=register-form]').within(() => {
@@ -41,7 +41,7 @@ sizes.forEach(size => {
             })
 
             it(`should return an error when email already taken`, () => {
-                cy.getDefaultCompanySignupLink().then( signupLink => {
+                cy.getCompanySignupLink().then( signupLink => {
                     cy.createRandomAccount()
                     cy.clearCookies()
                     cy.get('@account').then(account => {

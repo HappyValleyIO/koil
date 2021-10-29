@@ -100,7 +100,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
 
         assertEquals(
             "USER and ADMIN authorities present",
-            listOf("USER", "COMPANY_ADMIN").sorted(),
+            listOf("USER", "COMPANY_OWNER").sorted(),
             queried.authorities.map { it.authority }.sorted()
         )
     }

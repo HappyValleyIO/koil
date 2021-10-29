@@ -1,4 +1,4 @@
-package org.koil.admin.accounts
+package org.koil.dashboard.org.accounts
 
 import org.junit.jupiter.api.Test
 import org.koil.BaseIntegrationTest
@@ -7,12 +7,12 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
 import org.springframework.test.web.servlet.post
 
-class AdminAccountsControllerTest : BaseIntegrationTest() {
+class OrgAccountsControllerTest : BaseIntegrationTest() {
     @Test
     internal fun `bad inputs result in a 400 error`() {
-        withTestSession(authorities = listOf(UserAuthority.ADMIN)) { admin ->
+        withTestSession(authorities = listOf(UserAuthority.COMPANY_OWNER)) { admin ->
             withTestAccount { account ->
-                mockMvc.post("/admin/accounts/${account.accountId}") {
+                mockMvc.post("/dashboard/org/accounts/${admin.accountId}") {
                     with(csrf())
                     with(user(admin))
 
