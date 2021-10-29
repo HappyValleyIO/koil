@@ -2,7 +2,7 @@ import {sizes} from "../../support/sizes";
 
 sizes.forEach(size => {
 
-    describe(`Employee User sign up flows on ${size}`, () => {
+    describe(`Individual User sign up flows on ${size}`, () => {
 
         beforeEach(() => {
             cy.viewport(size)
@@ -12,7 +12,7 @@ sizes.forEach(size => {
 
             it(`should accept a new user sign up for valid email and password`, () => {
                 cy.getCompanySignupLink().then( signupLink => {
-                    cy.visit("/auth/register/employee?signupLink="+signupLink)
+                    cy.visit("/auth/register/individual?signupLink="+signupLink)
                     const slug = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
                     cy.get('[data-test=register-form]').within(() => {
                         cy.get('input[name=name]').type('Test User');
@@ -29,7 +29,7 @@ sizes.forEach(size => {
 
             it('should show password when toggled', () => {
                 cy.getCompanySignupLink().then( signupLink => {
-                    cy.visit("/auth/register/employee?signupLink=" + signupLink)
+                    cy.visit("/auth/register/individual?signupLink=" + signupLink)
 
                     cy.get('[data-test=register-form]').within(() => {
                         cy.get('input[name=password]').should('have.attr', 'type', 'password')
@@ -45,7 +45,7 @@ sizes.forEach(size => {
                     cy.createRandomAccount()
                     cy.clearCookies()
                     cy.get('@account').then(account => {
-                        cy.visit("/auth/register/employee?signupLink="+signupLink)
+                        cy.visit("/auth/register/individual?signupLink="+signupLink)
                         const slug = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
                         cy.get('[data-test=register-form]').within(() => {
                             cy.get('[data-test=email-error]').should('not.exist')
@@ -66,7 +66,7 @@ sizes.forEach(size => {
 
         describe (`with no signup url`, () => {
             it(`should redirect to the company registration page`, () => {
-                cy.visit("/auth/register/employee")
+                cy.visit("/auth/register/individual")
                 cy.url().should('include', '/auth/register/company')
             })
         })

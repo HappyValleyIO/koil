@@ -24,7 +24,7 @@ import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 
-data class EmployeeRegistrationAttempt(
+data class IndividualRegistrationAttempt(
     @get:Email(message = "Must be a valid email address") val email: String,
     @get:Length(min = 4, max = 16, message = "Handle must be between 4 and 16 chars long")
     @get:Pattern(
@@ -71,8 +71,8 @@ class RegistrationController(
     @Autowired private val users: UserService,
     @Autowired private val companies: CompanyService
 ) {
-    @GetMapping("/register/employee")
-    fun registerEmployee(
+    @GetMapping("/register/individual")
+    fun registerIndividual(
         @AuthenticationPrincipal user: EnrichedUserDetails?,
         @RequestParam("email", defaultValue = "") email: String,
         @RequestParam("signupLink") signupLink: UUID?,
@@ -82,7 +82,7 @@ class RegistrationController(
         } else if (signupLink == null) {
             ModelAndView("redirect:/auth/register/company?email=$email")
         } else {
-            RegisterViews.RegisterEmployee.render(RegistrationViewModel(email, signupLink = signupLink))
+            RegisterViews.RegisterIndividual.render(RegistrationViewModel(email, signupLink = signupLink))
         }
     }
 
@@ -131,10 +131,10 @@ class RegistrationController(
         }
     }
 
-    @PostMapping("/register/employee")
-    fun registerEmployeeSubmit(
+    @PostMapping("/register/individual")
+    fun registerIndividualSubmit(
         request: HttpServletRequest,
-        @Valid @ModelAttribute("submitted") submitted: EmployeeRegistrationAttempt,
+        @Valid @ModelAttribute("submitted") submitted: IndividualRegistrationAttempt,
         result: BindingResult
     ): ModelAndView {
         return if (!result.hasErrors()) {
@@ -145,7 +145,7 @@ class RegistrationController(
                 }
                 is UserCreationResult.UserAlreadyExists,
                 is UserCreationResult.InvalidSignupLink -> {
-                    RegisterViews.RegisterEmployee.render(
+                    RegisterViews.RegisterIndividual.render(
                         RegistrationViewModel(
                             email = submitted.email,
                             emailAlreadyTaken = true,
@@ -156,7 +156,7 @@ class RegistrationController(
                 }
             }
         } else {
-            RegisterViews.RegisterEmployee.render(
+            RegisterViews.RegisterIndividual.render(
                 RegistrationViewModel(email = submitted.email, signupLink = submitted.signupLink),
                 HttpStatus.BAD_REQUEST
             )

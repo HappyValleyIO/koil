@@ -11,14 +11,14 @@ import kotlin.random.Random
 
 class RegistrationControllerTest : BaseIntegrationTest() {
     companion object {
-        const val registerEmployeeEndpoint = "/auth/register/employee"
+        const val registerIndividualEndpoint = "/auth/register/individual"
         const val registerCompanyEndpoint = "/auth/register/company"
     }
 
     @Test
-    internal fun `GIVEN user is already logged in WHEN visiting employee register page THEN redirect to dashboard`() {
+    internal fun `GIVEN user is already logged in WHEN visiting individual register page THEN redirect to dashboard`() {
         withTestSession { session ->
-            mockMvc.get(registerEmployeeEndpoint) {
+            mockMvc.get(registerIndividualEndpoint) {
                 with(SecurityMockMvcRequestPostProcessors.user(session))
             }.andExpect {
                 status {
@@ -50,8 +50,8 @@ class RegistrationControllerTest : BaseIntegrationTest() {
     }
 
     @Test
-    internal fun `GIVEN user is not logged in WHEN attempting to register as employee with bad input THEN return bad request`() {
-        mockMvc.post(registerEmployeeEndpoint) {
+    internal fun `GIVEN user is not logged in WHEN attempting to register as individual with bad input THEN return bad request`() {
+        mockMvc.post(registerIndividualEndpoint) {
             with(csrf())
             param("email", "${Random.nextInt()}")
             param("handle", "t")

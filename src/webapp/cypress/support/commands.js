@@ -33,10 +33,10 @@ function loadPageForCSRF(url) {
 }
 
 Cypress.Commands.add('createAccount', (name, username, email, passwd, signupLink) => {
-    loadPageForCSRF('/auth/register/employee')
+    loadPageForCSRF('/auth/register/individual')
         .then(csrf => {
             cy.request({
-                url: '/auth/register/employee',
+                url: '/auth/register/individual',
                 form: true,
                 method: 'POST',
                 body: {

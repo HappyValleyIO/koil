@@ -15,7 +15,7 @@ data class CompanyRegistrationViewModel(
 )
 
 sealed class RegisterViews<T>(override val template: String) : ViewRenderer<T> {
-    object RegisterEmployee : RegisterViews<RegistrationViewModel>("pages/register-employee")
+    object RegisterIndividual : RegisterViews<RegistrationViewModel>("pages/register-individual")
     object RegisterCompany : RegisterViews<CompanyRegistrationViewModel>("pages/register-company")
 }
 
