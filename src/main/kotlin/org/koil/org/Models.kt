@@ -13,7 +13,11 @@ data class Organization(
     val startDate: Instant,
     val stopDate: Instant?,
     val signupLink: UUID
-)
+){
+    fun organizationIdOrThrow(): Long{
+        return organizationId ?: throw IllegalStateException("The Organization Id cannot be null for a created organization.")
+    }
+}
 
 sealed class OrgAccountUpdateResult {
     data class AccountUpdateSuccess(val account: Account) : OrgAccountUpdateResult()

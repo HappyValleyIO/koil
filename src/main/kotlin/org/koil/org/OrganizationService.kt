@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 
 interface OrganizationService {
@@ -48,18 +49,21 @@ class OrganizationServiceImpl(
         return organizationRepository.findAll().toList()
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     fun createOrganizationAndUser(request: OrganizationSetupRequest): OrganizationCreatedResult {
+        val emailInUse = (accountRepository.findAccountByEmailAddressIgnoreCase(request.email) != null)
+        if (emailInUse) {
+            return OrganizationCreatedResult.UserCreationFailed(UserCreationResult.UserAlreadyExists)
+        }
+
         val organization = organizationRepository.save(request.toOrganization())
 
-        return when (val adminUserCreationResult = userService.createUser(request.toUserCreationRequest(organization.signupLink))) {
-            is UserCreationResult.CreatedUser -> OrganizationCreatedResult.CreatedOrganization(
-                organization,
-                adminUserCreationResult.account
-            )
-            UserCreationResult.InvalidSignupLink -> OrganizationCreatedResult.UserCreationFailed(adminUserCreationResult)
-            UserCreationResult.UserAlreadyExists -> OrganizationCreatedResult.UserCreationFailed(adminUserCreationResult)
-        }
+        val userToCreate = request
+            .toUserCreationRequest(organization.signupLink)
+            .toAccount(organizationId = organization.organizationIdOrThrow())
+        val createdUser = accountRepository.save(userToCreate)
+
+        return OrganizationCreatedResult.CreatedOrganization(organization, createdUser)
     }
 
     override fun getOrganizationDetails(queryingAsAccount: Long): Organization {
