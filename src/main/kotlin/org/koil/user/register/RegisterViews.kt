@@ -16,6 +16,6 @@ data class OrganizationRegistrationViewModel(
 
 sealed class RegisterViews<T>(override val template: String) : ViewRenderer<T> {
     object RegisterIndividual : RegisterViews<RegistrationViewModel>("pages/register-individual")
-    object RegsterOrganization : RegisterViews<OrganizationRegistrationViewModel>("pages/register-organization")
+    object RegisterOrganization : RegisterViews<OrganizationRegistrationViewModel>("pages/register-organization")
 }
 

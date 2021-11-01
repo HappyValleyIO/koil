@@ -94,7 +94,7 @@ class RegistrationController(
         return if (user != null) {
             ModelAndView("redirect:/dashboard")
         } else {
-            RegisterViews.RegsterOrganization.render(OrganizationRegistrationViewModel(email))
+            RegisterViews.RegisterOrganization.render(OrganizationRegistrationViewModel(email))
         }
     }
 
@@ -111,20 +111,20 @@ class RegistrationController(
                     ModelAndView("redirect:/dashboard")
                 }
                 is OrganizationCreatedResult.UserCreationFailed -> {
-                    RegisterViews.RegsterOrganization.render(
+                    RegisterViews.RegisterOrganization.render(
                         OrganizationRegistrationViewModel(email = submitted.email, emailAlreadyTaken = true),
                         HttpStatus.BAD_REQUEST
                     )
                 }
                 is OrganizationCreatedResult.CreationFailed -> {
-                    RegisterViews.RegsterOrganization.render(
+                    RegisterViews.RegisterOrganization.render(
                         OrganizationRegistrationViewModel(email = submitted.email, emailAlreadyTaken = true),
                         HttpStatus.INTERNAL_SERVER_ERROR
                     )
                 }
             }
         } else {
-            RegisterViews.RegsterOrganization.render(
+            RegisterViews.RegisterOrganization.render(
                 OrganizationRegistrationViewModel(email = submitted.email),
                 HttpStatus.BAD_REQUEST
             )
