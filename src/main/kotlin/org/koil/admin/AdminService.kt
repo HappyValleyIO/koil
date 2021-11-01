@@ -74,7 +74,8 @@ class AdminServiceImpl(
 
         val accounts = accountRepository.findAll(pageable)
 
-        val organizationMap = organizationService.getAllOrganizations().associate { it.organizationId to it.organizationName }
+        val organizationMap = organizationService.getAllOrganizations(accounts.toList().map { it.organizationId })
+            .associate { it.organizationId to it.organizationName }
 
         return accounts.map {
             val orgName = organizationMap[it.organizationId]

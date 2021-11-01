@@ -1,12 +1,10 @@
 package org.koil.org
 
-import org.koil.admin.AdminServiceImpl
 import org.koil.auth.UserAuthority
 import org.koil.dashboard.org.accounts.UpdateAccountRequest
 import org.koil.user.Account
 import org.koil.user.AccountRepository
 import org.koil.user.UserCreationResult
-import org.koil.user.UserService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
@@ -18,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 
 interface OrganizationService {
     fun setupOrganization(request: OrganizationSetupRequest): OrganizationCreatedResult
-    fun getAllOrganizations(): List<Organization>
+    fun getAllOrganizations(organizationIds: List<Long>): List<Organization>
     fun getOrganizationDetails(queryingAsAccount: Long): Organization
     fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<Account>
     fun getAccount(queryingAsAccount: Long, accountId: Long): Account?
@@ -44,8 +42,8 @@ class OrganizationServiceImpl(
         }
     }
 
-    override fun getAllOrganizations(): List<Organization> {
-        return organizationRepository.findAll().toList()
+    override fun getAllOrganizations(organizationIds: List<Long>): List<Organization> {
+        return organizationRepository.findAllById(organizationIds).toList()
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)

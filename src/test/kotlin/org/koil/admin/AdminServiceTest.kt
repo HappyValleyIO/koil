@@ -48,10 +48,10 @@ class AdminServiceTest : BaseIntegrationTest() {
 
         val result = adminService.getAccounts(admin.accountId!!, Pageable.unpaged())
 
-        val companies = organizationService.getAllOrganizations().associate { it.organizationId to it.organizationName }
+        val organizations = organizationRepository.findAll().associate { it.organizationId to it.organizationName }
         assertThat(result.get().toList().sortedBy { it.account.accountId }).isEqualTo(
             accountRepository.findAll().sortedBy { it.accountId }
-                .map { AccountEnriched(it, companies[it.organizationId]!!) })
+                .map { AccountEnriched(it, organizations[it.organizationId]!!) })
     }
 
     @Test
