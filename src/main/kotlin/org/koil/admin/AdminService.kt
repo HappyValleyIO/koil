@@ -36,6 +36,20 @@ class AdminServiceImpl(
     @Value("\${admin-user.password:}") private val adminPasswordFromEnv: String,
 ) : AdminService, ApplicationListener<ContextRefreshedEvent> {
 
+    init{
+        require(adminOrganizationName.isNotEmpty()){
+            "You cannot start up the application with an empty admin organization name. Set the admin-organization.name variable."
+        }
+
+        require(adminEmailFromEnv.isNotEmpty()){
+            "You cannot start up the application with an empty admin email. Set the admin-user.email variable."
+        }
+
+        require(adminPasswordFromEnv.isNotEmpty()){
+            "You cannot start up the application with an empty admin password. Set the admin-user.password variable."
+        }
+    }
+
     companion object {
         private val LOGGER: Logger = LoggerFactory.getLogger(AdminServiceImpl::class.java)
     }
