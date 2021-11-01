@@ -126,6 +126,10 @@ data class Account(
             account.grantAuthority(authority)
         }
     }
+
+    fun belongsTo(organizationId: Long): Boolean{
+        return this.organizationId == organizationId
+    }
 }
 
 data class AccountCreationEvent(val src: Any, val account: Account) : ApplicationEvent(src)

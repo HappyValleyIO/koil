@@ -89,7 +89,7 @@ class OrganizationServiceImpl(
             ?: return OrgAccountUpdateResult.CouldNotFindAccount
 
         if (!requestorAccount.isAdmin()) {
-            require(account.organizationId == requestorAccount.organizationId) {
+            require(account.belongsTo(requestorAccount.organizationId)) {
                 "Attempting to update an account for an organization the user does not belong to."
             }
             require(!request.authorities.contains(UserAuthority.ADMIN)) {
