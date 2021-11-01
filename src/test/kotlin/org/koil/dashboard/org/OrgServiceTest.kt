@@ -1,4 +1,4 @@
-package org.koil.admin
+package org.koil.dashboard.org
 
 import assertk.assertThat
 import assertk.assertions.containsOnly
@@ -7,11 +7,9 @@ import net.bytebuddy.utility.RandomString
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.koil.BaseIntegrationTest
-import org.koil.admin.accounts.UpdateAccountRequest
 import org.koil.auth.UserAuthority
-import org.koil.org.OrganizationCreatedResult
-import org.koil.org.OrganizationRepository
-import org.koil.org.OrganizationSetupRequest
+import org.koil.dashboard.org.accounts.UpdateAccountRequest
+import org.koil.org.*
 import org.koil.user.Account
 import org.koil.user.UserCreationRequest
 import org.koil.user.UserCreationResult
@@ -21,10 +19,10 @@ import org.springframework.data.domain.Pageable
 import java.util.*
 import kotlin.streams.toList
 
-class AdminServiceTest : BaseIntegrationTest() {
+class OrgServiceTest : BaseIntegrationTest() {
 
     @Autowired
-    lateinit var adminService: AdminService
+    lateinit var orgService: OrganizationService
 
     @Autowired
     lateinit var organizationRepository: OrganizationRepository
@@ -32,26 +30,14 @@ class AdminServiceTest : BaseIntegrationTest() {
     val password = HashedPassword.encode("SecurePass123!")
 
     @Test
-    fun `GIVEN existing accounts WHEN querying for all accounts an ORG_OWNER THEN an illegal argument exception is thrown`() {
+    fun `GIVEN existing accounts WHEN querying for all accounts as an org owner THEN return all accounts for all companies`() {
         val createdOrg = createDummyTestOrganization()
-
-        assertThrows(IllegalArgumentException::class.java) {
-            adminService.getAccounts(createdOrg.adminAccount.accountId!!, Pageable.unpaged())
-        }
-    }
-
-    @Test
-    fun `GIVEN existing accounts WHEN querying for all accounts as an admin THEN return all accounts for all companies`() {
-        val admin = getAdminUser()
-        createDummyTestOrganization()
         createDummyTestOrganization()
 
-        val result = adminService.getAccounts(admin.accountId!!, Pageable.unpaged())
+        val result = orgService.getAccounts(createdOrg.adminAccount.accountId!!, Pageable.unpaged())
 
-        val organizations = organizationRepository.findAll().associate { it.organizationId to it.organizationName }
-        assertThat(result.get().toList().sortedBy { it.account.accountId }).isEqualTo(
-            accountRepository.findAll().sortedBy { it.accountId }
-                .map { AccountEnriched(it, organizations[it.organizationId]!!) })
+        assertThat(result.get().toList().sortedBy { it.accountId }).isEqualTo(
+            accountRepository.findAll().toList().filter{it.organizationId == createdOrg.adminAccount.organizationId}.sortedBy { it.accountId })
     }
 
     @Test
@@ -71,14 +57,14 @@ class AdminServiceTest : BaseIntegrationTest() {
         ) as UserCreationResult.CreatedUser
 
         assertThrows(IllegalArgumentException::class.java) {
-            adminService.getAccounts(nonAdmin.account.accountId!!, Pageable.unpaged())
+            orgService.getAccounts(nonAdmin.account.accountId!!, Pageable.unpaged())
         }
     }
 
     @Test
     fun `GIVEN existing accounts WHEN querying for all accounts as a non-existent user THEN throw an error`() {
         assertThrows(IllegalArgumentException::class.java) {
-            adminService.getAccounts(Long.MAX_VALUE, Pageable.unpaged())
+            orgService.getAccounts(Long.MAX_VALUE, Pageable.unpaged())
         }
     }
 
@@ -93,11 +79,11 @@ class AdminServiceTest : BaseIntegrationTest() {
                 UserAuthority.values().toList()
             )
 
-            val result = (adminService.updateAccount(
+            val result = (orgService.updateAccount(
                 admin.accountId!!,
                 account.accountId!!,
                 update
-            ) as AdminAccountUpdateResult.AccountUpdateSuccess).account
+            ) as OrgAccountUpdateResult.AccountUpdateSuccess).account
 
             assertThat(result.handle).isEqualTo(update.handle)
             assertThat(result.fullName).isEqualTo(update.fullName)
@@ -118,13 +104,13 @@ class AdminServiceTest : BaseIntegrationTest() {
                 UserAuthority.values().toList()
             )
 
-            val result = adminService.updateAccount(
+            val result = orgService.updateAccount(
                 admin.accountId!!,
                 account.accountId!!,
                 update
             )
 
-            assertThat(result).isEqualTo(AdminAccountUpdateResult.EmailAlreadyTaken(account))
+            assertThat(result).isEqualTo(OrgAccountUpdateResult.EmailAlreadyTaken(account))
         }
     }
 
@@ -140,15 +126,15 @@ class AdminServiceTest : BaseIntegrationTest() {
                 account.authorities.map { it.authority }
             )
 
-            val result = adminService.updateAccount(
+            val result = orgService.updateAccount(
                 admin.accountId!!,
                 account.accountId!!,
                 update
             )
 
-            val authorities = (result as AdminAccountUpdateResult.AccountUpdateSuccess).account.authorities
+            val authorities = (result as OrgAccountUpdateResult.AccountUpdateSuccess).account.authorities
 
-            assertThat(result).isEqualTo(AdminAccountUpdateResult.AccountUpdateSuccess(account.copy(authorities = authorities)))
+            assertThat(result).isEqualTo(OrgAccountUpdateResult.AccountUpdateSuccess(account.copy(authorities = authorities)))
             assertThat(authorities.map { it.authority }).isEqualTo(account.authorities.map { it.authority })
         }
     }
@@ -167,7 +153,7 @@ class AdminServiceTest : BaseIntegrationTest() {
             )
 
             assertThrows(IllegalArgumentException::class.java) {
-                adminService.updateAccount(
+                orgService.updateAccount(
                     account.accountId!!,
                     admin.accountId!!,
                     update
@@ -177,11 +163,11 @@ class AdminServiceTest : BaseIntegrationTest() {
     }
 
     private fun getAdminUser(): Account {
-        return accountRepository.findAll().filter { it.isAdmin() }.first()!!
+        return accountRepository.findAll().first { it.isAdmin() }!!
     }
 
     private fun createDummyTestOrganization(): OrganizationCreatedResult.CreatedOrganization {
-        val organizationCreatedResult = organizationService.setupOrganization(
+        val organizationCreationResult = organizationService.setupOrganization(
             OrganizationSetupRequest(
                 organizationName = "TestCompany",
                 fullName = "User Main",
@@ -190,6 +176,6 @@ class AdminServiceTest : BaseIntegrationTest() {
                 handle = RandomString.make()
             )
         )
-        return (organizationCreatedResult as OrganizationCreatedResult.CreatedOrganization)
+        return (organizationCreationResult as OrganizationCreatedResult.CreatedOrganization)
     }
 }

@@ -1,12 +1,12 @@
-package org.koil.admin.accounts
+package org.koil.dashboard.org.accounts
 
 import org.hibernate.validator.constraints.Length
-import org.koil.admin.AdminAccountDetailsViewModel
-import org.koil.admin.AdminAccountUpdateResult
-import org.koil.admin.AdminService
-import org.koil.admin.AdminViews
 import org.koil.auth.EnrichedUserDetails
 import org.koil.auth.UserAuthority
+import org.koil.dashboard.org.OrgAccountDetailsViewModel
+import org.koil.dashboard.org.OrgViews
+import org.koil.org.OrgAccountUpdateResult
+import org.koil.org.OrganizationService
 import org.koil.user.Account
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -33,21 +33,25 @@ data class UpdateAccountRequest(
             .updateEmail(normalizedEmail)
             .updateName(fullName)
             .updateHandle(handle)
+
+    fun containsOnlyAllowedAuthorities(): Boolean {
+        return !authorities.contains(UserAuthority.ADMIN)
+    }
 }
 
 @Controller
-@RequestMapping("/admin")
-class AdminAccountsController(private val adminService: AdminService) {
+@RequestMapping("/dashboard/org")
+class OrgAccountsController(private val orgService: OrganizationService) {
     @GetMapping("/accounts/{accountId}")
     fun adminAccountDetails(
         @AuthenticationPrincipal user: EnrichedUserDetails,
         @PathVariable("accountId") accountId: Long,
         @RequestParam("updated", defaultValue = "false") updated: Boolean
     ): ModelAndView {
-        val account = adminService.getAccount(user.accountId, accountId)
+        val account = orgService.getAccount(user.accountId, accountId)
 
         return if (account != null) {
-            AdminViews.AdminAccountDetailsView.render(AdminAccountDetailsViewModel(account, updated, canBeAdmin = user.isAdmin()))
+            OrgViews.OrgAccountDetailsOverview.render(OrgAccountDetailsViewModel(account, updated))
         } else {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource")
         }
@@ -61,25 +65,25 @@ class AdminAccountsController(private val adminService: AdminService) {
         bindingResult: BindingResult
     ): ModelAndView {
         if (bindingResult.hasErrors()) {
-            val account = adminService.getAccount(user.accountId, accountId)
+            val account = orgService.getAccount(user.accountId, accountId)
                 ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource")
 
-            return AdminViews.AdminAccountDetailsView.render(AdminAccountDetailsViewModel(account, false))
+            return OrgViews.OrgAccountDetailsOverview.render(OrgAccountDetailsViewModel(account, false))
                 .apply { status = HttpStatus.BAD_REQUEST }
         }
 
-        return when (val result = adminService.updateAccount(user.accountId, accountId, submitted)) {
-            is AdminAccountUpdateResult.AccountUpdateSuccess -> {
-                ModelAndView("redirect:/admin/accounts/$accountId?updated=true")
+        return when (val result = orgService.updateAccount(user.accountId, accountId, submitted)) {
+            is OrgAccountUpdateResult.AccountUpdateSuccess -> {
+                ModelAndView("redirect:/dashboard/org/accounts/$accountId?updated=true")
             }
-            AdminAccountUpdateResult.CouldNotFindAccount -> {
+            OrgAccountUpdateResult.CouldNotFindAccount -> {
                 throw ResponseStatusException(
                     HttpStatus.NOT_FOUND,
                     "Unable to find resource"
                 )
             }
-            is AdminAccountUpdateResult.EmailAlreadyTaken -> AdminViews.AdminAccountDetailsView.render(
-                AdminAccountDetailsViewModel(result.account, updated = false, emailAlreadyTaken = true)
+            is OrgAccountUpdateResult.EmailAlreadyTaken -> OrgViews.OrgAccountDetailsOverview.render(
+                OrgAccountDetailsViewModel(result.account, updated = false, emailAlreadyTaken = true)
             )
                 .apply { status = HttpStatus.BAD_REQUEST }
         }

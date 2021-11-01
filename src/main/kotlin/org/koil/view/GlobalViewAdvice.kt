@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest
 data class GlobalViewModel(val account: Account?) {
     fun isVerified(): Boolean = account?.isVerified() ?: false
 
+    fun isOrganizationOwner(): Boolean =
+        account?.isOrganizationOwner() ?: false
+
     fun isAdmin(): Boolean =
         account?.isAdmin() ?: false
 

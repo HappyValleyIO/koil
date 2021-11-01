@@ -22,6 +22,7 @@ data class AccountAuthority(val authority: UserAuthority, val authorityGranted: 
 @Table("accounts")
 data class Account(
     @Id val accountId: Long?,
+    val organizationId: Long,
     val startDate: Instant,
     val fullName: String,
     val handle: String,
@@ -36,6 +37,7 @@ data class Account(
 ) : AbstractAggregateRoot<Account>() {
     companion object {
         fun create(
+            organizationId: Long,
             fullName: String,
             handle: String,
             emailAddress: String,
@@ -43,6 +45,7 @@ data class Account(
             authorities: List<UserAuthority>,
         ): Account = Account(
             accountId = null,
+            organizationId = organizationId,
             startDate = Instant.now(),
             fullName = fullName,
             handle = handle,
@@ -71,6 +74,8 @@ data class Account(
                 this.copy(accountVerification = it).andEventsFrom(this)
             }
     }
+
+    fun isOrganizationOwner(): Boolean = authorities.map { it.authority }.contains(UserAuthority.ORG_OWNER)
 
     fun isAdmin(): Boolean = authorities.map { it.authority }.contains(UserAuthority.ADMIN)
 
@@ -120,6 +125,10 @@ data class Account(
         return newAuthorities.fold(updated) { account, authority ->
             account.grantAuthority(authority)
         }
+    }
+
+    fun belongsTo(organizationId: Long): Boolean{
+        return this.organizationId == organizationId
     }
 }
 

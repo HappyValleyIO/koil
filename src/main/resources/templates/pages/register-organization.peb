@@ -1,16 +1,22 @@
-{# @pebvariable name="model" type="org.koil.auth.RegistrationViewModel" #}
-{# @pebvariable name="submitted" type="org.koil.auth.RegistrationAttempt" #}
+{# @pebvariable name="model" type="org.koil.user.register.OrganizationRegistrationViewModel" #}
+{# @pebvariable name="submitted" type="org.koil.user.register.OrganizationRegistrationAttempt" #}
 
     {% extends "layouts/single-form" %}
     {% block title %} Login {% endblock %}
 
 {% block content %}
-<form action="/auth/register" method="post" data-test="register-form">
+<form action="/auth/register/organization" method="post" data-test="register-form">
     <h3>Register Here</h3>
     {% include 'components/csrf-field' %}
     {% import 'components/form/errors' %}
 
     <div>
+        <label>
+            <i class="fas fa-user-tie"></i> Organization Name
+            <input type="text" name="organizationName" value="{{ submitted.organizationName }}">
+
+            {{ errors(getFieldErrors('submitted', 'organizationName')) }}
+        </label>
         <label>
             <i class="fas fa-user-tie"></i> Name
             <input type="text" name="name" value="{{ submitted.name }}">

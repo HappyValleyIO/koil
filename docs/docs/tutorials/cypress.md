@@ -129,7 +129,7 @@ have a data-test attribute:
                 <div class="menu">
                     <ul class="menu-list">
                         <li><a href="/auth/login">Login</a></li>
-                        <li><a href="/auth/register">Sign Up</a></li>
+                        <li><a href="/auth/register/organization">Sign Up</a></li>
                     </ul>
                 </div>
             </div>

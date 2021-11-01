@@ -32,14 +32,34 @@ function loadPageForCSRF(url) {
         })
 }
 
-Cypress.Commands.add('createAccount', (name, username, email, passwd) => {
-    loadPageForCSRF('/auth/register')
+Cypress.Commands.add('createAccount', (name, username, email, passwd, signupLink) => {
+    loadPageForCSRF('/auth/register/individual')
         .then(csrf => {
             cy.request({
-                url: '/auth/register',
+                url: '/auth/register/individual',
                 form: true,
                 method: 'POST',
                 body: {
+                    name: name,
+                    email: email,
+                    handle: username,
+                    password: passwd,
+                    signupLink: signupLink,
+                    '_csrf': csrf
+                }
+            })
+        })
+})
+
+Cypress.Commands.add('createOrganizationAccount', (organizationName, name, username, email, passwd) => {
+    loadPageForCSRF('/auth/register/organization')
+        .then(csrf => {
+            cy.request({
+                url: '/auth/register/organization',
+                form: true,
+                method: 'POST',
+                body: {
+                    organizationName: organizationName,
                     name: name,
                     email: email,
                     handle: username,
@@ -50,7 +70,7 @@ Cypress.Commands.add('createAccount', (name, username, email, passwd) => {
         })
 })
 
-Cypress.Commands.add('createRandomAccount', () => {
+Cypress.Commands.add('createRandomAccount', (requestedSignupLink) => {
     const slug = Math.random()
         .toString(36)
         .substring(7)
@@ -60,7 +80,32 @@ Cypress.Commands.add('createRandomAccount', () => {
     const passwd = 'SomeSecurePassword123!'
     const name = `Test User ${slug}`
 
-    cy.createAccount(name, username, email, passwd)
+    cy.getOrganizationSignupLink(requestedSignupLink).then((signupLink) => {
+        cy.createAccount(name, username, email, passwd, signupLink)
+            .then(() => {
+                return {
+                    name: name,
+                    email: email,
+                    passwd: passwd,
+                    username: username,
+                    slug: slug
+                }
+            }).as('account')
+    })
+})
+
+Cypress.Commands.add('createRandomOrganizationAccount', () => {
+    const slug = Math.random()
+        .toString(36)
+        .substring(7)
+
+    const email = `test+${slug}@getkoil.dev`
+    const username = slug
+    const passwd = 'SomeSecurePassword123!'
+    const name = `Test User ${slug}`
+    const orgName = `Test Company ${slug}`
+
+    cy.createOrganizationAccount(orgName, name, username, email, passwd)
         .then(() => {
             return {
                 name: name,
@@ -95,5 +140,15 @@ Cypress.Commands.add('accountDetailsForEmail', (email) => {
     return cy.request({
         url: `/dev/account?email=${encodeURIComponent(email)}`,
         method: 'GET',
+    })
+})
+
+Cypress.Commands.add('getOrganizationSignupLink', (name) => {
+    const organizationUrl = name ? `/dev/organization/${name}` : '/dev/organization'
+    return cy.request({
+        url: organizationUrl,
+        method: 'GET',
+    }).then(response => {
+        return response.body
     })
 })

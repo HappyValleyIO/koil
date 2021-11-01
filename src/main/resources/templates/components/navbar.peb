@@ -26,7 +26,7 @@
             <li class="without-padding">
                 <form method="POST" action="/logout">
                     {% include 'components/csrf-field' %}
-                    <button class="btn-slim">
+                    <button class="btn-slim" data-test="logout-button">
                         Log out
                     </button>
                 </form>
@@ -53,6 +53,9 @@
             <details open>
                 <summary>My Account</summary>
                 <ul>
+                    {% if global.isOrganizationOwner and not global.isAdmin %}
+                        <li><a href="/dashboard/org" data-test="navbar-org-link">Manage Org</a></li>
+                    {% endif %}
                     {% if global.isAdmin %}
                         <li><a href="/admin" data-test="navbar-admin-link">Admin Panel</a></li>
                     {% endif %}
@@ -76,7 +79,7 @@
                         <li class="without-padding">
                             <form method="POST" action="/logout">
                                 {% include 'components/csrf-field' %}
-                                <button class="btn-slim">
+                                <button class="btn-slim" data-test="logout-mobile">
                                     Log out
                                 </button>
                             </form>

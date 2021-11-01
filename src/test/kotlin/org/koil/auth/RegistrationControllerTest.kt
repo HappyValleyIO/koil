@@ -6,17 +6,19 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import java.util.*
 import kotlin.random.Random
 
 class RegistrationControllerTest : BaseIntegrationTest() {
     companion object {
-        const val registerEndpoint = "/auth/register"
+        const val registerIndividualEndpoint = "/auth/register/individual"
+        const val registerOrganizationEndpoint = "/auth/register/organization"
     }
 
     @Test
-    internal fun `GIVEN user is already logged in WHEN visiting register page THEN redirect to dashboard`() {
+    internal fun `GIVEN user is already logged in WHEN visiting individual register page THEN redirect to dashboard`() {
         withTestSession { session ->
-            mockMvc.get(registerEndpoint) {
+            mockMvc.get(registerIndividualEndpoint) {
                 with(SecurityMockMvcRequestPostProcessors.user(session))
             }.andExpect {
                 status {
@@ -31,19 +33,59 @@ class RegistrationControllerTest : BaseIntegrationTest() {
     }
 
     @Test
-    internal fun `GIVEN user is not logged in WHEN attempting to register with bad input THEN return bad request`() {
-        mockMvc.post(registerEndpoint) {
+    internal fun `GIVEN user is already logged in WHEN visiting organization register page THEN redirect to dashboard`() {
+        withTestSession { session ->
+            mockMvc.get(registerOrganizationEndpoint) {
+                with(SecurityMockMvcRequestPostProcessors.user(session))
+            }.andExpect {
+                status {
+                    is3xxRedirection()
+                }
+
+                header {
+                    string("location", "/dashboard")
+                }
+            }
+        }
+    }
+
+    @Test
+    internal fun `GIVEN user is not logged in WHEN attempting to register as individual with bad input THEN return bad request`() {
+        mockMvc.post(registerIndividualEndpoint) {
             with(csrf())
             param("email", "${Random.nextInt()}")
             param("handle", "t")
             param("password", "abc")
             param("name", "")
+            param("signupLink", UUID.randomUUID().toString())
+        }.andExpect {
         }.andExpect {
             status {
                 is4xxClientError()
             }
             model {
                 attributeHasFieldErrors("submitted", "password", "handle", "name", "email")
+            }
+        }
+    }
+
+    @Test
+    internal fun `GIVEN user is not logged in WHEN attempting to register as org with bad input THEN return bad request`() {
+        mockMvc.post(registerOrganizationEndpoint) {
+            with(csrf())
+            param("email", "${Random.nextInt()}")
+            param("handle", "t")
+            param("password", "abc")
+            param("name", "")
+            param("organizationName", "")
+            param("signupLink", UUID.randomUUID().toString())
+        }.andExpect {
+        }.andExpect {
+            status {
+                is4xxClientError()
+            }
+            model {
+                attributeHasFieldErrors("submitted", "password", "handle", "name", "email", "organizationName")
             }
         }
     }

@@ -1,0 +1,58 @@
+{# @pebvariable name="model" type="org.koil.dashboard.org.OrgIndexViewModel" #}
+    {% extends "layouts/dashboard-layout" %}
+    {% block title %} {{ model.getOrganizationName }} | OrgView {% endblock %}
+
+{% block content %}
+<section>
+    <hgroup>
+        <h2 data-test="organization-name">{{ model.getOrganizationName }}</h2>
+        <h3 data-test="organization-signup-link">Signup Code: {{ model.getOrganizationSignupLink }}</h3>
+    </hgroup>
+    <h3>All User Accounts</h3>
+    <table class="table is-striped">
+        <thead>
+        <tr>
+            <th><a href="{{ model.sortBy("fullName") }}">Full Name {{ model.sortDirection("fullName") }}</a></th>
+            <th class="is-hidden-mobile"><a
+                    href="{{ model.sortBy("isOrganizationOwner") }}">Owner {{ model.sortDirection("isOrganizationOwner") }}</a></th>
+            <th class="is-hidden-mobile"><a
+                    href="{{ model.sortBy("emailAddress") }}">Email {{ model.sortDirection("emailAddress") }}</a></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+                {% for account in model.accounts %}
+            <tr data-test="account-row-{{ account.emailAddress }}">
+                <td>{{ account.fullName }}</td>
+                <td class="is-hidden-mobile">{{ account.isOrganizationOwner }}</td>
+                <td class="is-hidden-mobile">{{ account.emailAddress }}</td>
+                <td><a href="/dashboard/org/accounts/{{ account.accountId }}" data-test="user-details">Details</a></td>
+            </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+    <div class="grid is-justify-centered">
+        <div>
+            Results per page:
+            <a href="?size=20">20</a>
+            <a href="?size=50">50</a>
+            <a href="?size=100">100</a>
+            <a href="?size=500">500</a>
+        </div>
+        <div>
+            {% if model.hasPrevious() %}
+                <a href="{{ model.firstPage() }}"> <i class="fas fa-fast-backward" title="First"></i> </a>
+                <a href="{{ model.previousPage() }}"> <i class="fas fa-step-backward" title="Previous"></i> </a>
+            {% endif %}
+
+            {{ model.pageNumber }} of {{ model.totalPages }}
+            (Showing {{ model.numberOfElements }} rows)
+            {% if model.hasNext() %}
+                <a href="{{ model.nextPage() }}"><i class="fas fa-step-forward" title="Next"></i></a>
+                <a href="{{ model.lastPage() }}"><i class="fas fa-fast-forward" title="Last"></i></a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -7,3 +7,5 @@ sealed class AdminAccountUpdateResult {
     data class EmailAlreadyTaken(val account: Account) : AdminAccountUpdateResult()
     object CouldNotFindAccount : AdminAccountUpdateResult()
 }
+
+data class AccountEnriched(val account: Account, val organizationName: String)

@@ -9,6 +9,7 @@ import java.util.*
 
 object AccountFixtures {
     val existingAccount = Account(
+        organizationId = 1,
         accountId = 123,
         startDate = Instant.now(),
         fullName = "Test User",

@@ -2,17 +2,20 @@ package org.koil.user
 
 import org.koil.auth.UserAuthority
 import org.koil.user.password.HashedPassword
+import java.util.*
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty
 
 data class UserCreationRequest(
+    val signupLink: UUID,
     val fullName: String,
     val email: String,
     val password: HashedPassword,
     val handle: String,
     val authorities: List<UserAuthority> = listOf(UserAuthority.USER)
 ) {
-    fun toAccount(): Account = Account.create(
+    fun toAccount(organizationId: Long): Account = Account.create(
+        organizationId = organizationId,
         fullName = fullName,
         emailAddress = email,
         handle = handle,
@@ -23,6 +26,7 @@ data class UserCreationRequest(
 
 sealed class UserCreationResult {
     data class CreatedUser(val account: Account) : UserCreationResult()
+    object InvalidSignupLink : UserCreationResult()
     object UserAlreadyExists : UserCreationResult()
 }
 

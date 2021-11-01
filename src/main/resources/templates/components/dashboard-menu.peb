@@ -3,16 +3,25 @@
 <aside class="is-hidden-mobile">
     <nav>
         <details open>
-            <summary>Menu title</summary>
+            <summary>Main Menu</summary>
             <ul>
                 <li><a href="/dashboard/" data-controller="nav">Home</a></li>
                 <li><a href="/dashboard/contact-us" data-controller="nav">Contact Us</a></li>
                 <li><a href="/dashboard/user-settings" data-controller="nav">My Settings</a></li>
             </ul>
         </details>
+        {% if global.isOrganizationOwner and not global.isAdmin %}
+            <details open>
+                <summary>Organization menu</summary>
+                <ul>
+                    <li><a href="/dashboard/org" data-test="dashboard-menu-org-link" data-controller="nav">Manage</a>
+                    </li>
+                </ul>
+            </details>
+        {% endif %}
         {% if global.isAdmin %}
             <details open>
-                <summary>Admin menu</summary>
+                <summary>Admin Menu</summary>
                 <ul>
                     <li><a href="/admin" data-test="dashboard-menu-admin-link" data-controller="nav">Admin Panel</a>
                     </li>

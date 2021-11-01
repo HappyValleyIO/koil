@@ -1,8 +1,20 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp" schema public;
+CREATE
+EXTENSION IF NOT EXISTS "uuid-ossp" schema public;
+
+CREATE TABLE organization
+(
+    organization_id   BIGSERIAL PRIMARY KEY,
+    organization_name varchar(255) NOT NULL,
+    start_date        TIMESTAMP    NOT NULL DEFAULT NOW(),
+    stop_date         TIMESTAMP,
+    signup_link       UUID UNIQUE  NOT NULL,
+    updated_at         TIMESTAMP    NOT NULL DEFAULT NOW()
+);
 
 CREATE TABLE accounts
 (
     account_id                BIGSERIAL PRIMARY KEY,
+    organization_id           BIGINT       NOT NULL REFERENCES organization (organization_id) ON DELETE CASCADE,
     start_date                TIMESTAMP    NOT NULL DEFAULT NOW(),
     full_name                 varchar(64)  NOT NULL,
     handle                    VARCHAR(16)  NOT NULL,

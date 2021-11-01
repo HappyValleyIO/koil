@@ -2,7 +2,11 @@ package org.koil.admin
 
 import org.koil.admin.accounts.UpdateAccountRequest
 import org.koil.auth.UserAuthority
-import org.koil.user.*
+import org.koil.org.OrganizationCreatedResult
+import org.koil.org.OrganizationService
+import org.koil.org.OrganizationSetupRequest
+import org.koil.user.Account
+import org.koil.user.AccountRepository
 import org.koil.user.password.HashedPassword
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -16,9 +20,7 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 interface AdminService {
-    fun createAdminFromEmail(email: String, password: HashedPassword): UserCreationResult
-
-    fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<Account>
+    fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<AccountEnriched>
 
     fun getAccount(queryingAsAccount: Long, accountId: Long): Account?
 
@@ -27,11 +29,26 @@ interface AdminService {
 
 @Component
 class AdminServiceImpl(
-    private val userService: UserService,
     private val accountRepository: AccountRepository,
+    private val organizationService: OrganizationService,
+    @Value("\${admin-organization.name:}") private val adminOrganizationName: String,
     @Value("\${admin-user.email:}") private val adminEmailFromEnv: String,
     @Value("\${admin-user.password:}") private val adminPasswordFromEnv: String,
 ) : AdminService, ApplicationListener<ContextRefreshedEvent> {
+
+    init{
+        require(adminOrganizationName.isNotEmpty()){
+            "You cannot start up the application with an empty admin organization name. Set the admin-organization.name variable."
+        }
+
+        require(adminEmailFromEnv.isNotEmpty()){
+            "You cannot start up the application with an empty admin email. Set the admin-user.email variable."
+        }
+
+        require(adminPasswordFromEnv.isNotEmpty()){
+            "You cannot start up the application with an empty admin password. Set the admin-user.password variable."
+        }
+    }
 
     companion object {
         private val LOGGER: Logger = LoggerFactory.getLogger(AdminServiceImpl::class.java)
@@ -41,35 +58,47 @@ class AdminServiceImpl(
         if ((adminEmailFromEnv.isNotEmpty() && adminPasswordFromEnv.isNotEmpty())
             && accountRepository.findAccountByEmailAddressIgnoreCase(adminEmailFromEnv) == null
         ) {
-            createAdminFromEmail(adminEmailFromEnv, HashedPassword.encode(adminPasswordFromEnv))
+            createDefaultAdminOrganization()
         }
     }
 
-    override fun createAdminFromEmail(email: String, password: HashedPassword): UserCreationResult {
-        return userService.createUser(
-            UserCreationRequest(
-                "Default Admin",
-                email,
-                password,
-                "DefaultAdmin",
-                listOf(UserAuthority.ADMIN)
+    private fun createDefaultAdminOrganization(): OrganizationCreatedResult {
+        val organizationCreatedResult = organizationService.setupOrganization(
+            OrganizationSetupRequest(
+                organizationName = adminOrganizationName,
+                fullName = "Default Admin",
+                email = adminEmailFromEnv,
+                password = HashedPassword.encode(adminPasswordFromEnv),
+                handle = "DefaultAdmin",
+                authorities = listOf(UserAuthority.ADMIN, UserAuthority.ORG_OWNER)
             )
-        ).also {
-            if (it is UserCreationResult.CreatedUser) {
-                LOGGER.info("Created an admin account with email {}", email)
-            }
+        )
+
+        if (organizationCreatedResult !is OrganizationCreatedResult.CreatedOrganization) {
+            LOGGER.error("Failed to create initial Organization so initial Administrator will not be created. Organization Creation Result [$organizationCreatedResult]")
         }
+        return organizationCreatedResult
     }
 
-    override fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<Account> {
-        checkAdminStatus(queryingAsAccount)
+    override fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<AccountEnriched> {
+        validateAdminStatus(queryingAsAccount)
 
-        return accountRepository.findAll(pageable)
+        val accounts = accountRepository.findAll(pageable)
+
+        val organizationMap = organizationService.getAllOrganizations(accounts.toList().map { it.organizationId })
+            .associate { it.organizationId to it.organizationName }
+
+        return accounts.map {
+            val orgName = organizationMap[it.organizationId]
+            check(orgName != null) {
+                "Attempting to match an account to the organization name it belongs to. The organization name was missing for the organizationId of the account. This should be completely impossible due to our db setup."
+            }
+            AccountEnriched(it, orgName)
+        }
     }
 
     override fun getAccount(queryingAsAccount: Long, accountId: Long): Account? {
-        checkAdminStatus(queryingAsAccount)
-
+        validateAdminStatus(queryingAsAccount)
         return accountRepository.findByIdOrNull(accountId)
     }
 
@@ -79,10 +108,11 @@ class AdminServiceImpl(
         userToUpdate: Long,
         request: UpdateAccountRequest
     ): AdminAccountUpdateResult {
-        checkAdminStatus(requestor)
+        validateAdminStatus(requestor)
 
         val account: Account = accountRepository.findByIdOrNull(userToUpdate)
             ?: return AdminAccountUpdateResult.CouldNotFindAccount
+
         val emailInUse = accountRepository.existsAccountByEmailAddressIgnoreCase(request.normalizedEmail)
 
         return if (!emailInUse || account.emailAddress == request.normalizedEmail) {
@@ -94,8 +124,9 @@ class AdminServiceImpl(
         }
     }
 
-    private fun checkAdminStatus(queryingAsAccount: Long) {
-        val isAdmin = accountRepository.findByIdOrNull(queryingAsAccount)?.isAdmin() ?: false
+    private fun validateAdminStatus(queryingAsAccount: Long) {
+        val account = accountRepository.findByIdOrNull(queryingAsAccount)
+        val isAdmin = account?.isAdmin() ?: false
 
         require(isAdmin) {
             "Attempting to retrieve account as a non-admin user!"

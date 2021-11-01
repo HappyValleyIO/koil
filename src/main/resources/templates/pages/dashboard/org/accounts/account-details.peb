@@ -1,24 +1,26 @@
-{# @pebvariable name="model" type="org.koil.admin.AdminAccountDetailsViewModel" #}
-{# @pebvariable name="submitted" type="org.koil.admin.accounts.UpdateAccountRequest" #}
+{# @pebvariable name="model" type="org.koil.dashboard.org.OrgAccountDetailsViewModel" #}
+{# @pebvariable name="submitted" type="org.koil.dashboard.org.accounts.UpdateAccountRequest" #}
 {# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
 
-    {% extends "layouts/admin-layout" %}
-    {% block title %} Admin | {{ model.account.fullName }} {% endblock %}
+    {% extends "layouts/dashboard-layout" %}
+    {% block title %} Manager User | {{ model.account.fullName }} {% endblock %}
     {% import "components/help-tooltip" %}
     {% import "components/form/errors" %}
 
 {% block content %}
 <div>
-    <small><a href="/admin">Back to all accounts</a></small>
-    <hgroup>
-        <h3>User Details</h3>
+    <small><a href="/dashboard/org">Back to all accounts</a></small>
 
-        {% if model.updated %}
+    {% if model.updated %}
+        <hgroup>
+            <h3>User Details</h3>
             <h4>
-                <mark data-test="update-confirmed">User account was updated successfully.</mark>
-            </h4>
-        {% endif %}
-    </hgroup>
+            <mark data-test="update-confirmed">User account was updated successfully.</mark>
+        </h4>
+        </hgroup>
+     {% else %}
+        <h3>User Details</h3>
+    {% endif %}
 
     <form method="POST" data-test="user-details-form">
         {% include "components/csrf-field" %}
@@ -66,17 +68,8 @@
 
         <div class="grid">
             <button type="submit">Update User</button>
-            <button type="reset" class="secondary">Cancel</button>
+            <button type="reset" class="secondary">Clear</button>
         </div>
-    </form>
-
-    <h3>Actions</h3>
-    <form action="/admin/impersonation" method="POST">
-        {% include 'components/csrf-field' %}
-        <label>
-            <input type="hidden" name="username" value="{{ model.account.emailAddress }}">
-        </label>
-        <button type="submit" data-test="impersonate">Impersonate</button>
     </form>
 </div>
 {% endblock %}
