@@ -7,7 +7,8 @@ CREATE TABLE organization
     organization_name varchar(255) NOT NULL,
     start_date        TIMESTAMP    NOT NULL DEFAULT NOW(),
     stop_date         TIMESTAMP,
-    signup_link       UUID UNIQUE  NOT NULL
+    signup_link       UUID UNIQUE  NOT NULL,
+    updatedAt         TIMESTAMP    NOT NULL DEFAULT NOW(),
 );
 
 CREATE TABLE accounts
