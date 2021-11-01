@@ -23,7 +23,8 @@ data class OrganizationSetupRequest(
             organizationName = organizationName,
             startDate = Instant.now(),
             stopDate = null,
-            signupLink = UUID.randomUUID()
+            signupLink = UUID.randomUUID(),
+            updatedAt = Instant.now()
         )
     }
 

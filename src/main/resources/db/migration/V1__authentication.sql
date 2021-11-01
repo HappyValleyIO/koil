@@ -8,7 +8,7 @@ CREATE TABLE organization
     start_date        TIMESTAMP    NOT NULL DEFAULT NOW(),
     stop_date         TIMESTAMP,
     signup_link       UUID UNIQUE  NOT NULL,
-    updatedAt         TIMESTAMP    NOT NULL DEFAULT NOW(),
+    updated_at         TIMESTAMP    NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE accounts

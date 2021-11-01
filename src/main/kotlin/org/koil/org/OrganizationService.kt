@@ -92,7 +92,7 @@ class OrganizationServiceImpl(
             require(account.belongsTo(requestorAccount.organizationId)) {
                 "Attempting to update an account for an organization the user does not belong to."
             }
-            require(!request.containsOnlyAllowedAuthorities()){
+            require(request.containsOnlyAllowedAuthorities()){
                 "Requested contained escalated privileges that are not allowed to be granted by non Admin users."
             }
         }
