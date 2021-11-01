@@ -28,12 +28,11 @@ interface OrganizationService {
 @Component
 class OrganizationServiceImpl(
     private val organizationRepository: OrganizationRepository,
-    private val userService: UserService,
     private val accountRepository: AccountRepository,
 ) : OrganizationService {
 
     companion object {
-        private val LOGGER: Logger = LoggerFactory.getLogger(AdminServiceImpl::class.java)
+        private val LOGGER: Logger = LoggerFactory.getLogger(OrganizationServiceImpl::class.java)
     }
 
     override fun setupOrganization(request: OrganizationSetupRequest): OrganizationCreatedResult {
