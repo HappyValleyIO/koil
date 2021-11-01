@@ -69,7 +69,7 @@ data class OrganizationRegistrationAttempt(
 @RequestMapping("/auth")
 class RegistrationController(
     @Autowired private val users: UserService,
-    @Autowired private val companies: OrganizationService
+    @Autowired private val organizationService: OrganizationService
 ) {
     @GetMapping("/register/individual")
     fun registerIndividual(
@@ -105,7 +105,7 @@ class RegistrationController(
         result: BindingResult
     ): ModelAndView {
         return if (!result.hasErrors()) {
-            when (companies.setupOrganization(submitted.toSetupRequest())) {
+            when (organizationService.setupOrganization(submitted.toSetupRequest())) {
                 is OrganizationCreatedResult.CreatedOrganization -> {
                     request.login(submitted.email, submitted.password)
                     ModelAndView("redirect:/dashboard")
@@ -116,12 +116,7 @@ class RegistrationController(
                         HttpStatus.BAD_REQUEST
                     )
                 }
-                is OrganizationCreatedResult.CreationFailed -> {
-                    RegisterViews.RegisterOrganization.render(
-                        OrganizationRegistrationViewModel(email = submitted.email, emailAlreadyTaken = true),
-                        HttpStatus.INTERNAL_SERVER_ERROR
-                    )
-                }
+                is OrganizationCreatedResult.CreationFailed -> throw RuntimeException("The organization creation has failed completely unexpectedly. This shouldn't have been able to happen.")
             }
         } else {
             RegisterViews.RegisterOrganization.render(
