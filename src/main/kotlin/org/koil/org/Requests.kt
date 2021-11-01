@@ -1,4 +1,4 @@
-package org.koil.company
+package org.koil.org
 
 import org.koil.auth.UserAuthority
 import org.koil.user.Account
@@ -8,19 +8,19 @@ import org.koil.user.password.HashedPassword
 import java.time.Instant
 import java.util.*
 
-data class CompanySetupRequest(
-    val companyName: String,
+data class OrganizationSetupRequest(
+    val organizationName: String,
     val fullName: String,
     val email: String,
     val password: HashedPassword,
     val handle: String,
-    val authorities: List<UserAuthority> = listOf(UserAuthority.COMPANY_OWNER)
+    val authorities: List<UserAuthority> = listOf(UserAuthority.ORG_OWNER)
 
 ) {
-    fun toCompany(): Company {
-        return Company(
-            companyId = null,
-            companyName = companyName,
+    fun toOrganization(): Organization {
+        return Organization(
+            organizationId = null,
+            organizationName = organizationName,
             startDate = Instant.now(),
             stopDate = null,
             signupLink = UUID.randomUUID()
@@ -37,8 +37,8 @@ data class CompanySetupRequest(
     )
 }
 
-sealed class CompanyCreationResult {
-    data class CreatedCompany(val company: Company, val adminAccount: Account) : CompanyCreationResult()
-    data class UserCreationFailed(val userCreationResult: UserCreationResult) : CompanyCreationResult()
-    object CreationFailed: CompanyCreationResult()
+sealed class OrganizationCreatedResult {
+    data class CreatedOrganization(val organization: Organization, val adminAccount: Account) : OrganizationCreatedResult()
+    data class UserCreationFailed(val userCreationResult: UserCreationResult) : OrganizationCreatedResult()
+    object CreationFailed: OrganizationCreatedResult()
 }

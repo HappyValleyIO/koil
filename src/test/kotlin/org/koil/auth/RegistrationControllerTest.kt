@@ -12,7 +12,7 @@ import kotlin.random.Random
 class RegistrationControllerTest : BaseIntegrationTest() {
     companion object {
         const val registerIndividualEndpoint = "/auth/register/individual"
-        const val registerCompanyEndpoint = "/auth/register/company"
+        const val registerOrganizationEndpoint = "/auth/register/organization"
     }
 
     @Test
@@ -33,9 +33,9 @@ class RegistrationControllerTest : BaseIntegrationTest() {
     }
 
     @Test
-    internal fun `GIVEN user is already logged in WHEN visiting company register page THEN redirect to dashboard`() {
+    internal fun `GIVEN user is already logged in WHEN visiting organization register page THEN redirect to dashboard`() {
         withTestSession { session ->
-            mockMvc.get(registerCompanyEndpoint) {
+            mockMvc.get(registerOrganizationEndpoint) {
                 with(SecurityMockMvcRequestPostProcessors.user(session))
             }.andExpect {
                 status {
@@ -70,14 +70,14 @@ class RegistrationControllerTest : BaseIntegrationTest() {
     }
 
     @Test
-    internal fun `GIVEN user is not logged in WHEN attempting to register as company with bad input THEN return bad request`() {
-        mockMvc.post(registerCompanyEndpoint) {
+    internal fun `GIVEN user is not logged in WHEN attempting to register as org with bad input THEN return bad request`() {
+        mockMvc.post(registerOrganizationEndpoint) {
             with(csrf())
             param("email", "${Random.nextInt()}")
             param("handle", "t")
             param("password", "abc")
             param("name", "")
-            param("companyName", "")
+            param("organizationName", "")
             param("signupLink", UUID.randomUUID().toString())
         }.andExpect {
         }.andExpect {
@@ -85,7 +85,7 @@ class RegistrationControllerTest : BaseIntegrationTest() {
                 is4xxClientError()
             }
             model {
-                attributeHasFieldErrors("submitted", "password", "handle", "name", "email", "companyName")
+                attributeHasFieldErrors("submitted", "password", "handle", "name", "email", "organizationName")
             }
         }
     }

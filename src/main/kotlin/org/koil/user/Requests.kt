@@ -14,8 +14,8 @@ data class UserCreationRequest(
     val handle: String,
     val authorities: List<UserAuthority> = listOf(UserAuthority.USER)
 ) {
-    fun toAccount(companyId: Long): Account = Account.create(
-        companyId = companyId,
+    fun toAccount(organizationId: Long): Account = Account.create(
+        organizationId = organizationId,
         fullName = fullName,
         emailAddress = email,
         handle = handle,

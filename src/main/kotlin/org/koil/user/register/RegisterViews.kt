@@ -9,13 +9,13 @@ data class RegistrationViewModel(
     val signupLink: UUID
 )
 
-data class CompanyRegistrationViewModel(
+data class OrganizationRegistrationViewModel(
     val email: String,
     val emailAlreadyTaken: Boolean = false
 )
 
 sealed class RegisterViews<T>(override val template: String) : ViewRenderer<T> {
     object RegisterIndividual : RegisterViews<RegistrationViewModel>("pages/register-individual")
-    object RegisterCompany : RegisterViews<CompanyRegistrationViewModel>("pages/register-company")
+    object RegsterOrganization : RegisterViews<OrganizationRegistrationViewModel>("pages/register-organization")
 }
 

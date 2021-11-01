@@ -2,9 +2,9 @@ package org.koil.user.register
 
 import org.hibernate.validator.constraints.Length
 import org.koil.auth.EnrichedUserDetails
-import org.koil.company.CompanyCreationResult
-import org.koil.company.CompanyService
-import org.koil.company.CompanySetupRequest
+import org.koil.org.OrganizationCreatedResult
+import org.koil.org.OrganizationService
+import org.koil.org.OrganizationSetupRequest
 import org.koil.user.UserCreationRequest
 import org.koil.user.UserCreationResult
 import org.koil.user.UserService
@@ -44,7 +44,7 @@ data class IndividualRegistrationAttempt(
     )
 }
 
-data class CompanyRegistrationAttempt(
+data class OrganizationRegistrationAttempt(
     @get:Email(message = "Must be a valid email address") val email: String,
     @get:Length(min = 4, max = 16, message = "Handle must be between 4 and 16 chars long")
     @get:Pattern(
@@ -53,11 +53,11 @@ data class CompanyRegistrationAttempt(
     ) val handle: String,
     @get:Length(min = 8, message = "Password must be at least 8 characters long") val password: String,
     @get:NotEmpty(message = "Name cannot be empty") val name: String,
-    @get:NotEmpty(message = "Company Name cannot be empty")
-    val companyName: String
+    @get:NotEmpty(message = "Organization Name cannot be empty")
+    val organizationName: String
 ) {
-    fun toSetupRequest(): CompanySetupRequest = CompanySetupRequest(
-        companyName = companyName,
+    fun toSetupRequest(): OrganizationSetupRequest = OrganizationSetupRequest(
+        organizationName = organizationName,
         fullName = name,
         email = email,
         password = HashedPassword.encode(password),
@@ -69,7 +69,7 @@ data class CompanyRegistrationAttempt(
 @RequestMapping("/auth")
 class RegistrationController(
     @Autowired private val users: UserService,
-    @Autowired private val companies: CompanyService
+    @Autowired private val companies: OrganizationService
 ) {
     @GetMapping("/register/individual")
     fun registerIndividual(
@@ -80,52 +80,52 @@ class RegistrationController(
         return if (user != null) {
             ModelAndView("redirect:/dashboard")
         } else if (signupLink == null) {
-            ModelAndView("redirect:/auth/register/company?email=$email")
+            ModelAndView("redirect:/auth/register/organization?email=$email")
         } else {
             RegisterViews.RegisterIndividual.render(RegistrationViewModel(email, signupLink = signupLink))
         }
     }
 
-    @GetMapping("/register/company")
-    fun registerCompany(
+    @GetMapping("/register/organization")
+    fun registerOrganization(
         @AuthenticationPrincipal user: EnrichedUserDetails?,
         @RequestParam("email", defaultValue = "") email: String,
     ): ModelAndView {
         return if (user != null) {
             ModelAndView("redirect:/dashboard")
         } else {
-            RegisterViews.RegisterCompany.render(CompanyRegistrationViewModel(email))
+            RegisterViews.RegsterOrganization.render(OrganizationRegistrationViewModel(email))
         }
     }
 
-    @PostMapping("/register/company")
-    fun registerCompanySubmit(
+    @PostMapping("/register/organization")
+    fun registerOrganizationSubmit(
         request: HttpServletRequest,
-        @Valid @ModelAttribute("submitted") submitted: CompanyRegistrationAttempt,
+        @Valid @ModelAttribute("submitted") submitted: OrganizationRegistrationAttempt,
         result: BindingResult
     ): ModelAndView {
         return if (!result.hasErrors()) {
-            when (companies.setupCompany(submitted.toSetupRequest())) {
-                is CompanyCreationResult.CreatedCompany -> {
+            when (companies.setupOrganization(submitted.toSetupRequest())) {
+                is OrganizationCreatedResult.CreatedOrganization -> {
                     request.login(submitted.email, submitted.password)
                     ModelAndView("redirect:/dashboard")
                 }
-                is CompanyCreationResult.UserCreationFailed -> {
-                    RegisterViews.RegisterCompany.render(
-                        CompanyRegistrationViewModel(email = submitted.email, emailAlreadyTaken = true),
+                is OrganizationCreatedResult.UserCreationFailed -> {
+                    RegisterViews.RegsterOrganization.render(
+                        OrganizationRegistrationViewModel(email = submitted.email, emailAlreadyTaken = true),
                         HttpStatus.BAD_REQUEST
                     )
                 }
-                is CompanyCreationResult.CreationFailed -> {
-                    RegisterViews.RegisterCompany.render(
-                        CompanyRegistrationViewModel(email = submitted.email, emailAlreadyTaken = true),
+                is OrganizationCreatedResult.CreationFailed -> {
+                    RegisterViews.RegsterOrganization.render(
+                        OrganizationRegistrationViewModel(email = submitted.email, emailAlreadyTaken = true),
                         HttpStatus.INTERNAL_SERVER_ERROR
                     )
                 }
             }
         } else {
-            RegisterViews.RegisterCompany.render(
-                CompanyRegistrationViewModel(email = submitted.email),
+            RegisterViews.RegsterOrganization.render(
+                OrganizationRegistrationViewModel(email = submitted.email),
                 HttpStatus.BAD_REQUEST
             )
         }

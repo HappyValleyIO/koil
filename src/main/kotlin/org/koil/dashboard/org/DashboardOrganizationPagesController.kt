@@ -1,6 +1,7 @@
 package org.koil.dashboard.org
 
 import org.koil.auth.EnrichedUserDetails
+import org.koil.org.OrganizationService
 import org.springframework.data.domain.Pageable
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
@@ -11,16 +12,16 @@ import org.springframework.web.servlet.ModelAndView
 
 @Controller
 @RequestMapping("/dashboard/org")
-class OrgController(private val orgService: OrgService) {
+class DashboardOrganizationPagesController(private val organizationService: OrganizationService) {
 
     @GetMapping
     fun adminHome(@AuthenticationPrincipal user: EnrichedUserDetails, pageable: Pageable): ModelAndView {
-        val accounts = orgService.getAccounts(user.accountId, pageable)
-        val company = orgService.getCompanyDetails(user.accountId)
+        val accounts = organizationService.getAccounts(user.accountId, pageable)
+        val organization = organizationService.getOrganizationDetails(user.accountId)
 
         val model = OrgIndexViewModel(
-            companyName = company.companyName,
-            companySignupLink = company.signupLink,
+            organizationName = organization.organizationName,
+            organizationSignupLink = organization.signupLink,
             userName = user.handle,
             accounts = accounts
         )

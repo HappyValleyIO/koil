@@ -1,12 +1,12 @@
 {# @pebvariable name="model" type="org.koil.dashboard.org.OrgIndexViewModel" #}
     {% extends "layouts/dashboard-layout" %}
-    {% block title %} {{ model.companyName }} | OrgView {% endblock %}
+    {% block title %} {{ model.getOrganizationName }} | OrgView {% endblock %}
 
 {% block content %}
 <section>
     <hgroup>
-        <h2 data-test="company-name">{{ model.companyName }}</h2>
-        <h3 data-test="company-signup-link">Signup Code: {{ model.companySignupLink }}</h3>
+        <h2 data-test="organization-name">{{ model.getOrganizationName }}</h2>
+        <h3 data-test="organization-signup-link">Signup Code: {{ model.getOrganizationSignupLink }}</h3>
     </hgroup>
     <h3>All User Accounts</h3>
     <table class="table is-striped">
@@ -14,7 +14,7 @@
         <tr>
             <th><a href="{{ model.sortBy("fullName") }}">Full Name {{ model.sortDirection("fullName") }}</a></th>
             <th class="is-hidden-mobile"><a
-                    href="{{ model.sortBy("isCompanyOwner") }}">Owner {{ model.sortDirection("isCompanyOwner") }}</a></th>
+                    href="{{ model.sortBy("isOrganizationOwner") }}">Owner {{ model.sortDirection("isOrganizationOwner") }}</a></th>
             <th class="is-hidden-mobile"><a
                     href="{{ model.sortBy("emailAddress") }}">Email {{ model.sortDirection("emailAddress") }}</a></th>
             <th></th>
@@ -24,7 +24,7 @@
                 {% for account in model.accounts %}
             <tr data-test="account-row-{{ account.emailAddress }}">
                 <td>{{ account.fullName }}</td>
-                <td class="is-hidden-mobile">{{ account.isCompanyOwner }}</td>
+                <td class="is-hidden-mobile">{{ account.isOrganizationOwner }}</td>
                 <td class="is-hidden-mobile">{{ account.emailAddress }}</td>
                 <td><a href="/dashboard/org/accounts/{{ account.accountId }}" data-test="user-details">Details</a></td>
             </tr>

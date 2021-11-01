@@ -7,7 +7,7 @@ import org.koil.view.ViewRenderer
 import org.springframework.data.domain.Page
 import java.util.*
 
-data class OrgIndexViewModel(val companyName: String, val companySignupLink: UUID, val userName: String, val accounts: Page<Account>) :
+data class OrgIndexViewModel(val organizationName: String, val organizationSignupLink: UUID, val userName: String, val accounts: Page<Account>) :
     PaginatedViewModel<Account>(accounts)
 
 data class OrgAccountDetailsViewModel(

@@ -4,7 +4,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 
 enum class UserAuthority {
     ADMIN,
-    COMPANY_OWNER,
+    ORG_OWNER,
     USER;
 
     val grantedAuthority: SimpleGrantedAuthority = SimpleGrantedAuthority(name)

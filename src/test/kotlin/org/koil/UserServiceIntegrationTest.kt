@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.koil.auth.EnrichedUserDetails
 import org.koil.auth.UserAuthority
-import org.koil.company.CompanyCreationResult
-import org.koil.company.CompanySetupRequest
+import org.koil.org.OrganizationCreatedResult
+import org.koil.org.OrganizationSetupRequest
 import org.koil.user.*
 import org.koil.user.password.HashedPassword
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,15 +28,15 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
     fun `GIVEN an existing user WHEN logging in with correct credentials THE return a user result`() {
         val email = "stephen+${RandomString.make()}@getkoil.dev"
         val password = "SomePassword456!"
-        val created = (companyService.setupCompany(
-            CompanySetupRequest(
-                companyName = "Company74",
+        val created = (organizationService.setupOrganization(
+            OrganizationSetupRequest(
+                organizationName = "Company74",
                 fullName = "Admin User",
                 email = email,
                 password = HashedPassword.encode(password),
                 handle = "Admin"
             )
-        )as CompanyCreationResult.CreatedCompany)
+        )as OrganizationCreatedResult.CreatedOrganization)
 
         val queried = userDetails.loadUserByUsername(email) as EnrichedUserDetails
 
@@ -49,18 +49,18 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
     fun `GIVEN no user for principal WHEN creating a new user THEN ensure they only have USER authority by default`() {
         val email = "stephen+${RandomString.make()}@getkoil.dev"
         val password = "SomePassword456!"
-        val company = (companyService.setupCompany(
-            CompanySetupRequest(
-                companyName = "Company1",
+        val organization = (organizationService.setupOrganization(
+            OrganizationSetupRequest(
+                organizationName = "Company1",
                 fullName = "Admin user",
                 email = "admin${RandomString.make()}@getkoil.dev",
                 password = HashedPassword.encode(password),
                 handle = "admin"
             )
-        )as CompanyCreationResult.CreatedCompany).company
+        )as OrganizationCreatedResult.CreatedOrganization).organization
         userService.createUser(
             UserCreationRequest(
-                company.signupLink,
+                organization.signupLink,
                 "Stephen the tester",
                 email,
                 password = HashedPassword.encode(password),
@@ -76,31 +76,31 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
     fun `GIVEN no user for principal WHEN creating a new user with admin THEN ensure they have USER and ADMIN rights authorities`() {
         val email = "stephen+${RandomString.make()}@getkoil.dev"
         val password = "SomePassword456!"
-        val company = (companyService.setupCompany(
-            CompanySetupRequest(
-                companyName = "Company1",
+        val organization = (organizationService.setupOrganization(
+            OrganizationSetupRequest(
+                organizationName = "Company1",
                 fullName = "Admin user",
                 email = "adminEmail+${RandomString.make()}",
                 password = HashedPassword.encode(password),
                 handle = "admin"
             )
-        )as CompanyCreationResult.CreatedCompany).company
+        )as OrganizationCreatedResult.CreatedOrganization).organization
 
         userService.createUser(
             UserCreationRequest(
-                company.signupLink,
+                organization.signupLink,
                 "Stephen the tester",
                 email,
                 password = HashedPassword.encode(password),
                 "tester",
-                listOf(UserAuthority.COMPANY_OWNER, UserAuthority.USER)
+                listOf(UserAuthority.ORG_OWNER, UserAuthority.USER)
             )
         ) as UserCreationResult.CreatedUser
         val queried = userDetails.loadUserByUsername(email) as EnrichedUserDetails
 
         assertEquals(
             "USER and ADMIN authorities present",
-            listOf("USER", "COMPANY_OWNER").sorted(),
+            listOf("USER", "ORG_OWNER").sorted(),
             queried.authorities.map { it.authority }.sorted()
         )
     }
@@ -109,19 +109,19 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
     fun `GIVEN user with chosen email already exists WHEN create user THEN do not allow use of this email`() {
         val slug = RandomString.make()
 
-        val company = (companyService.setupCompany(
-            CompanySetupRequest(
-                companyName = "Company1",
+        val organization = (organizationService.setupOrganization(
+            OrganizationSetupRequest(
+                organizationName = "Company1",
                 fullName = "Admin user",
                 email = "adminEmail${RandomString.make()}@getkoil.dev",
                 password = HashedPassword.encode( "SomePassword456!"),
                 handle = "admin"
             )
-        )as CompanyCreationResult.CreatedCompany).company
+        )as OrganizationCreatedResult.CreatedOrganization).organization
 
         userService.createUser(
             UserCreationRequest(
-                company.signupLink,
+                organization.signupLink,
                 "Mr. Existing",
                 "existing$slug",
                 password = HashedPassword.encode("password1!"),
@@ -131,7 +131,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
 
         userService.createUser(
             UserCreationRequest(
-                company.signupLink,
+                organization.signupLink,
                 "Mr. Existing",
                 "existing$slug",
                 password = HashedPassword.encode("password1!"),
@@ -141,7 +141,7 @@ class UserServiceIntegrationTest(@Autowired val userDetails: UserDetailsService)
 
         userService.createUser(
             UserCreationRequest(
-                company.signupLink,
+                organization.signupLink,
                 "Mr. Existing",
                 "Existing$slug",
                 password = HashedPassword.encode("password1!"),

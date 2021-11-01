@@ -2,9 +2,9 @@ package org.koil.admin
 
 import org.koil.admin.accounts.UpdateAccountRequest
 import org.koil.auth.UserAuthority
-import org.koil.company.CompanyCreationResult
-import org.koil.company.CompanyService
-import org.koil.company.CompanySetupRequest
+import org.koil.org.OrganizationCreatedResult
+import org.koil.org.OrganizationService
+import org.koil.org.OrganizationSetupRequest
 import org.koil.user.Account
 import org.koil.user.AccountRepository
 import org.koil.user.password.HashedPassword
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 
 interface AdminService {
 
-    fun createDefaultAdminCompany(companyName: String): CompanyCreationResult
+    fun createDefaultAdminOrganization(organizatioName: String): OrganizationCreatedResult
 
     fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<AccountEnriched>
 
@@ -33,8 +33,8 @@ interface AdminService {
 @Component
 class AdminServiceImpl(
     private val accountRepository: AccountRepository,
-    private val companyService: CompanyService,
-    @Value("\${admin-company.name:}") private val adminCompanyName: String,
+    private val organizationService: OrganizationService,
+    @Value("\${admin-organization.name:}") private val adminOrganizationName: String,
     @Value("\${admin-user.email:}") private val adminEmailFromEnv: String,
     @Value("\${admin-user.password:}") private val adminPasswordFromEnv: String,
 ) : AdminService, ApplicationListener<ContextRefreshedEvent> {
@@ -47,26 +47,26 @@ class AdminServiceImpl(
         if ((adminEmailFromEnv.isNotEmpty() && adminPasswordFromEnv.isNotEmpty())
             && accountRepository.findAccountByEmailAddressIgnoreCase(adminEmailFromEnv) == null
         ) {
-            createDefaultAdminCompany(adminCompanyName)
+            createDefaultAdminOrganization(adminOrganizationName)
         }
     }
 
-    override fun createDefaultAdminCompany(companyName: String): CompanyCreationResult {
-        val companyCreationResult = companyService.setupCompany(
-            CompanySetupRequest(
-                companyName = adminCompanyName,
+    override fun createDefaultAdminOrganization(organizatioName: String): OrganizationCreatedResult {
+        val organizationCreatedResult = organizationService.setupOrganization(
+            OrganizationSetupRequest(
+                organizationName = adminOrganizationName,
                 fullName = "Default Admin",
                 email = adminEmailFromEnv,
                 password = HashedPassword.encode(adminPasswordFromEnv),
                 handle = "DefaultAdmin",
-                authorities = listOf(UserAuthority.ADMIN, UserAuthority.COMPANY_OWNER)
+                authorities = listOf(UserAuthority.ADMIN, UserAuthority.ORG_OWNER)
             )
         )
 
-        if (companyCreationResult !is CompanyCreationResult.CreatedCompany) {
-            LOGGER.error("Failed to create initial Company so initial Administrator will not be created. Company Creation Result [$companyCreationResult]")
+        if (organizationCreatedResult !is OrganizationCreatedResult.CreatedOrganization) {
+            LOGGER.error("Failed to create initial Organization so initial Administrator will not be created. Organization Creation Result [$organizationCreatedResult]")
         }
-        return companyCreationResult
+        return organizationCreatedResult
     }
 
     override fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<AccountEnriched> {
@@ -74,14 +74,14 @@ class AdminServiceImpl(
 
         val accounts = accountRepository.findAll(pageable)
 
-        val companyNameMap = companyService.getAllCompanies().associate { it.companyId to it.companyName }
+        val organizationMap = organizationService.getAllOrganizations().associate { it.organizationId to it.organizationName }
 
         return accounts.map {
-            val companyName = companyNameMap[it.companyId]
-            check(companyName != null) {
-                "Attempting to match an account to the company name it belongs to. The company name was missing for the companyId of the account. This should be completely impossible due to our db setup."
+            val orgName = organizationMap[it.organizationId]
+            check(orgName != null) {
+                "Attempting to match an account to the organization name it belongs to. The organization name was missing for the organizationId of the account. This should be completely impossible due to our db setup."
             }
-            AccountEnriched(it, companyName)
+            AccountEnriched(it, orgName)
         }
     }
 

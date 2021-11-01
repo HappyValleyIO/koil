@@ -4,8 +4,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.koil.auth.DefaultUserDetailsService
 import org.koil.auth.EnrichedUserDetails
 import org.koil.auth.UserAuthority
-import org.koil.company.CompanyService
-import org.koil.company.CompanySetupRequest
+import org.koil.org.OrganizationService
+import org.koil.org.OrganizationSetupRequest
 import org.koil.user.*
 import org.koil.user.password.HashedPassword
 import org.springframework.beans.factory.annotation.Autowired
@@ -37,7 +37,7 @@ abstract class BaseIntegrationTest {
     lateinit var accountRepository: AccountRepository
 
     @Autowired
-    lateinit var companyService: CompanyService
+    lateinit var organizationService: OrganizationService
 
     protected fun withTestSession(
         email: String = "test+${Random().nextInt()}@getkoil.dev",
@@ -46,7 +46,7 @@ abstract class BaseIntegrationTest {
         foo: (EnrichedUserDetails) -> Unit
     ) {
         val id = "${Random().nextInt()}00000000".substring(0..8)
-        companyService.setupCompany(CompanySetupRequest(companyName = "Company$id",
+        organizationService.setupOrganization(OrganizationSetupRequest(organizationName = "Company$id",
             fullName = "Test User [$id]",
             email = email,
             password = HashedPassword.encode(password),
@@ -63,7 +63,7 @@ abstract class BaseIntegrationTest {
         foo: (Account) -> Unit
     ) {
         val id = "${Random().nextInt()}00000000".substring(0..8)
-        companyService.setupCompany(CompanySetupRequest(companyName = "Company$id",
+        organizationService.setupOrganization(OrganizationSetupRequest(organizationName = "Company$id",
             fullName = "Test User [$id]",
             email = email,
             password = HashedPassword.encode(password),

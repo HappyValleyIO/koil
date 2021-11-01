@@ -7,7 +7,7 @@
 <table class="table is-striped">
     <thead>
     <tr>
-        <th>Company {{ model.sortDirection("companyName") }}</th>
+        <th>Organization {{ model.sortDirection("organizationName") }}</th>
         <th><a href="{{ model.sortBy("fullName") }}">Full Name {{ model.sortDirection("fullName") }}</a></th>
         <th class="is-hidden-mobile"><a
                 href="{{ model.sortBy("handle") }}">Handle {{ model.sortDirection("handle") }}</a></th>
@@ -19,7 +19,7 @@
     <tbody>
             {% for enrichedAccount in model.accounts %}
         <tr data-test="account-row-{{ enrichedAccount.account.emailAddress }}">
-            <td>{{ enrichedAccount.companyName }}</td>
+            <td>{{ enrichedAccount.getOrganizationName }}</td>
             <td>{{ enrichedAccount.account.fullName }}</td>
             <td class="is-hidden-mobile">{{ enrichedAccount.account.handle }}</td>
             <td class="is-hidden-mobile">{{ enrichedAccount.account.emailAddress }}</td>

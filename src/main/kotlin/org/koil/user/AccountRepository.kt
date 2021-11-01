@@ -14,7 +14,7 @@ interface AccountRepository : PagingAndSortingRepository<Account, Long> {
 
     fun findAccountByEmailAddressIgnoreCase(email: String): Account?
 
-    fun findAccountsByCompanyId(companyId: Long, pageable: Pageable): Page<Account>
+    fun findAccountsByOrganizationId(organizationId: Long, pageable: Pageable): Page<Account>
 
     @Query(
         """

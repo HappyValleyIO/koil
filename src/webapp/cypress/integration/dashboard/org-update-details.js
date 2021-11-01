@@ -4,8 +4,7 @@ sizes.forEach(size => {
     describe(`Org Owner updating user details on ${size}`, () => {
         beforeEach(() => {
             cy.viewport(size)
-            cy.createRandomCompanyAccount()
-            // Need to login/logout of the company account to login as the
+            cy.createRandomOrganizationAccount()
             cy.visit("/auth/login")
         })
 

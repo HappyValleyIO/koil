@@ -8,4 +8,4 @@ sealed class AdminAccountUpdateResult {
     object CouldNotFindAccount : AdminAccountUpdateResult()
 }
 
-data class AccountEnriched(val account: Account, val companyName: String)
+data class AccountEnriched(val account: Account, val organizationName: String)

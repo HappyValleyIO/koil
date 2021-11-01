@@ -2,7 +2,7 @@ import {sizes} from "../../support/sizes";
 
 sizes.forEach(size => {
 
-    describe(`Company User sign up flows on ${size}`, () => {
+    describe(`Organization User sign up flows on ${size}`, () => {
 
         beforeEach(() => {
             cy.viewport(size)
@@ -17,10 +17,10 @@ sizes.forEach(size => {
         });
 
         it(`should accept a new user sign up for valid email and password`, () => {
-            cy.visit("/auth/register/company")
+            cy.visit("/auth/register/organization")
             const slug = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
             cy.get('[data-test=register-form]').within(() => {
-                cy.get('input[name=companyName]').type('Test Company' + slug);
+                cy.get('input[name=organizationName]').type('Test Company' + slug);
                 cy.get('input[name=name]').type('Test User');
                 cy.get('input[name=handle]').type(slug);
                 cy.get('input[name=email]').type(`test+${slug}@getkoil.dev`);
@@ -32,7 +32,7 @@ sizes.forEach(size => {
         })
 
         it('should show password when toggled', () => {
-            cy.visit("/auth/register/company")
+            cy.visit("/auth/register/organization")
 
             cy.get('[data-test=register-form]').within(() => {
                 cy.get('input[name=password]').should('have.attr', 'type', 'password')
@@ -43,15 +43,15 @@ sizes.forEach(size => {
         })
 
         it(`should return an error when email already taken`, () => {
-            cy.createRandomAccount()
+            cy.createRandomOrganizationAccount()
             cy.clearCookies()
             cy.get('@account').then(account => {
-                cy.visit("/auth/register/company")
+                cy.visit("/auth/register/organization")
                 const slug = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
                 cy.get('[data-test=register-form]').within(() => {
                     cy.get('[data-test=email-error]').should('not.exist')
 
-                    cy.get('input[name=companyName]').type('Test Company' + slug);
+                    cy.get('input[name=organizationName]').type('Test Company' + slug);
                     cy.get('input[name=name]').type('Test User');
                     cy.get('input[name=handle]').type(slug);
                     cy.get('input[name=email]').type(account.email);

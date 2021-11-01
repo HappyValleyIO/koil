@@ -53,7 +53,7 @@
             <details open>
                 <summary>My Account</summary>
                 <ul>
-                    {% if global.isCompanyOwner and not global.isAdmin %}
+                    {% if global.isOrganizationOwner and not global.isAdmin %}
                         <li><a href="/dashboard/org" data-test="navbar-org-link">Manage Org</a></li>
                     {% endif %}
                     {% if global.isAdmin %}

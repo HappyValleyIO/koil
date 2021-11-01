@@ -10,8 +10,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class OrgControllerAuthTest : BaseIntegrationTest() {
 
     @Test
-    fun `GIVEN a COMPANY_OWNER user WHEN requesting the admin dashboard THEN return OK`() {
-        withTestSession(authorities = listOf(UserAuthority.COMPANY_OWNER)) { admin ->
+    fun `GIVEN a ORG_OWNER user WHEN requesting the admin dashboard THEN return OK`() {
+        withTestSession(authorities = listOf(UserAuthority.ORG_OWNER)) { admin ->
             mockMvc.perform(get("/dashboard/org").with(user(admin)))
                 .andExpect(status().isOk)
         }

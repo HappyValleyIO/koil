@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test
 import org.koil.BaseIntegrationTest
 import org.koil.admin.accounts.UpdateAccountRequest
 import org.koil.auth.UserAuthority
-import org.koil.company.CompanyCreationResult
-import org.koil.company.CompanyRepository
-import org.koil.company.CompanySetupRequest
+import org.koil.org.OrganizationCreatedResult
+import org.koil.org.OrganizationRepository
+import org.koil.org.OrganizationSetupRequest
 import org.koil.user.Account
 import org.koil.user.UserCreationRequest
 import org.koil.user.UserCreationResult
@@ -27,37 +27,37 @@ class AdminServiceTest : BaseIntegrationTest() {
     lateinit var adminService: AdminService
 
     @Autowired
-    lateinit var companyRepository: CompanyRepository
+    lateinit var organizationRepository: OrganizationRepository
 
     val password = HashedPassword.encode("SecurePass123!")
 
     @Test
-    fun `GIVEN existing accounts WHEN querying for all accounts a COMPANY_OWNER THEN an illegal argument exception is thrown`() {
-        val createdCompany = createDummyTestCompany()
+    fun `GIVEN existing accounts WHEN querying for all accounts an ORG_OWNER THEN an illegal argument exception is thrown`() {
+        val createdOrg = createDummyTestOrganization()
 
         assertThrows(IllegalArgumentException::class.java) {
-            adminService.getAccounts(createdCompany.adminAccount.accountId!!, Pageable.unpaged())
+            adminService.getAccounts(createdOrg.adminAccount.accountId!!, Pageable.unpaged())
         }
     }
 
     @Test
     fun `GIVEN existing accounts WHEN querying for all accounts as an admin THEN return all accounts for all companies`() {
         val admin = getAdminUser()
-        createDummyTestCompany()
-        createDummyTestCompany()
+        createDummyTestOrganization()
+        createDummyTestOrganization()
 
         val result = adminService.getAccounts(admin.accountId!!, Pageable.unpaged())
 
-        val companies = companyService.getAllCompanies().associate { it.companyId to it.companyName }
+        val companies = organizationService.getAllOrganizations().associate { it.organizationId to it.organizationName }
         assertThat(result.get().toList().sortedBy { it.account.accountId }).isEqualTo(
             accountRepository.findAll().sortedBy { it.accountId }
-                .map { AccountEnriched(it, companies[it.companyId]!!) })
+                .map { AccountEnriched(it, companies[it.organizationId]!!) })
     }
 
     @Test
     fun `GIVEN existing accounts WHEN querying for all accounts as a non-admin THEN throw an error`() {
         val email = "user+${Random().nextInt()}@getkoil.dev"
-        val signupLink = createDummyTestCompany().company.signupLink
+        val signupLink = createDummyTestOrganization().organization.signupLink
 
         val nonAdmin = userService.createUser(
             UserCreationRequest(
@@ -180,16 +180,16 @@ class AdminServiceTest : BaseIntegrationTest() {
         return accountRepository.findAll().filter { it.isAdmin() }.first()!!
     }
 
-    private fun createDummyTestCompany(): CompanyCreationResult.CreatedCompany {
-        val companyCreationResult = companyService.setupCompany(
-            CompanySetupRequest(
-                companyName = "TestCompany",
+    private fun createDummyTestOrganization(): OrganizationCreatedResult.CreatedOrganization {
+        val organizationCreatedResult = organizationService.setupOrganization(
+            OrganizationSetupRequest(
+                organizationName = "TestCompany",
                 fullName = "User Main",
                 email = "user${RandomString.make()}@getkoil.dev",
                 password = HashedPassword.encode("Password123!"),
                 handle = RandomString.make()
             )
         )
-        return (companyCreationResult as CompanyCreationResult.CreatedCompany)
+        return (organizationCreatedResult as OrganizationCreatedResult.CreatedOrganization)
     }
 }

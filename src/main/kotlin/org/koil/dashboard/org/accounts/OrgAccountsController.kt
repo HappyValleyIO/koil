@@ -1,16 +1,12 @@
 package org.koil.dashboard.org.accounts
 
 import org.hibernate.validator.constraints.Length
-import org.koil.admin.AdminAccountDetailsViewModel
-import org.koil.admin.AdminAccountUpdateResult
-import org.koil.admin.AdminService
-import org.koil.admin.AdminViews
 import org.koil.auth.EnrichedUserDetails
 import org.koil.auth.UserAuthority
 import org.koil.dashboard.org.OrgAccountDetailsViewModel
-import org.koil.dashboard.org.OrgAccountUpdateResult
-import org.koil.dashboard.org.OrgService
 import org.koil.dashboard.org.OrgViews
+import org.koil.org.OrgAccountUpdateResult
+import org.koil.org.OrganizationService
 import org.koil.user.Account
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -41,7 +37,7 @@ data class UpdateAccountRequest(
 
 @Controller
 @RequestMapping("/dashboard/org")
-class OrgAccountsController(private val orgService: OrgService) {
+class OrgAccountsController(private val orgService: OrganizationService) {
     @GetMapping("/accounts/{accountId}")
     fun adminAccountDetails(
         @AuthenticationPrincipal user: EnrichedUserDetails,

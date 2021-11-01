@@ -51,15 +51,15 @@ Cypress.Commands.add('createAccount', (name, username, email, passwd, signupLink
         })
 })
 
-Cypress.Commands.add('createCompanyAccount', (companyName, name, username, email, passwd) => {
-    loadPageForCSRF('/auth/register/company')
+Cypress.Commands.add('createOrganizationAccount', (organizationName, name, username, email, passwd) => {
+    loadPageForCSRF('/auth/register/organization')
         .then(csrf => {
             cy.request({
-                url: '/auth/register/company',
+                url: '/auth/register/organization',
                 form: true,
                 method: 'POST',
                 body: {
-                    companyName: companyName,
+                    organizationName: organizationName,
                     name: name,
                     email: email,
                     handle: username,
@@ -80,7 +80,7 @@ Cypress.Commands.add('createRandomAccount', (requestedSignupLink) => {
     const passwd = 'SomeSecurePassword123!'
     const name = `Test User ${slug}`
 
-    cy.getCompanySignupLink(requestedSignupLink).then((signupLink) => {
+    cy.getOrganizationSignupLink(requestedSignupLink).then((signupLink) => {
         cy.createAccount(name, username, email, passwd, signupLink)
             .then(() => {
                 return {
@@ -94,7 +94,7 @@ Cypress.Commands.add('createRandomAccount', (requestedSignupLink) => {
     })
 })
 
-Cypress.Commands.add('createRandomCompanyAccount', () => {
+Cypress.Commands.add('createRandomOrganizationAccount', () => {
     const slug = Math.random()
         .toString(36)
         .substring(7)
@@ -103,9 +103,9 @@ Cypress.Commands.add('createRandomCompanyAccount', () => {
     const username = slug
     const passwd = 'SomeSecurePassword123!'
     const name = `Test User ${slug}`
-    const companyName = `Test Company ${slug}`
+    const orgName = `Test Company ${slug}`
 
-    cy.createCompanyAccount(companyName, name, username, email, passwd)
+    cy.createOrganizationAccount(orgName, name, username, email, passwd)
         .then(() => {
             return {
                 name: name,
@@ -143,10 +143,10 @@ Cypress.Commands.add('accountDetailsForEmail', (email) => {
     })
 })
 
-Cypress.Commands.add('getCompanySignupLink', (companyName) => {
-    const companyUrl = companyName ? `/dev/company/${companyName}` : '/dev/company'
+Cypress.Commands.add('getOrganizationSignupLink', (name) => {
+    const organizationUrl = name ? `/dev/organization/${name}` : '/dev/organization'
     return cy.request({
-        url: companyUrl,
+        url: organizationUrl,
         method: 'GET',
     }).then(response => {
         return response.body
