@@ -33,6 +33,10 @@ data class UpdateAccountRequest(
             .updateEmail(normalizedEmail)
             .updateName(fullName)
             .updateHandle(handle)
+
+    fun containsOnlyAllowedAuthorities(): Boolean {
+        return !authorities.contains(UserAuthority.ADMIN)
+    }
 }
 
 @Controller
