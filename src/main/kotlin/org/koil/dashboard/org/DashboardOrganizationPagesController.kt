@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView
 class DashboardOrganizationPagesController(private val organizationService: OrganizationService) {
 
     @GetMapping
-    fun adminHome(@AuthenticationPrincipal user: EnrichedUserDetails, pageable: Pageable): ModelAndView {
+    fun organizationManagementHomePage(@AuthenticationPrincipal user: EnrichedUserDetails, pageable: Pageable): ModelAndView {
         val accounts = organizationService.getAccounts(user.accountId, pageable)
         val organization = organizationService.getOrganizationDetails(user.accountId)
 
