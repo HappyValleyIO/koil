@@ -20,9 +20,6 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 interface AdminService {
-
-    fun createDefaultAdminOrganization(organizatioName: String): OrganizationCreatedResult
-
     fun getAccounts(queryingAsAccount: Long, pageable: Pageable): Page<AccountEnriched>
 
     fun getAccount(queryingAsAccount: Long, accountId: Long): Account?
@@ -47,11 +44,11 @@ class AdminServiceImpl(
         if ((adminEmailFromEnv.isNotEmpty() && adminPasswordFromEnv.isNotEmpty())
             && accountRepository.findAccountByEmailAddressIgnoreCase(adminEmailFromEnv) == null
         ) {
-            createDefaultAdminOrganization(adminOrganizationName)
+            createDefaultAdminOrganization()
         }
     }
 
-    override fun createDefaultAdminOrganization(organizatioName: String): OrganizationCreatedResult {
+    private fun createDefaultAdminOrganization(): OrganizationCreatedResult {
         val organizationCreatedResult = organizationService.setupOrganization(
             OrganizationSetupRequest(
                 organizationName = adminOrganizationName,
