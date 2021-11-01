@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class AdminControllerAuthTest : BaseIntegrationTest() {
 
     @Test
-    fun `GIVEN an ORG_OWNER user WHEN requesting the admin dashboard THEN return OK`() {
+    fun `GIVEN an ORG_OWNER user WHEN requesting the admin dashboard THEN return FORBIDDEN`() {
         withTestSession(authorities = listOf(UserAuthority.ORG_OWNER)) { admin ->
             mockMvc.perform(get("/admin").with(user(admin)))
                 .andExpect(status().isForbidden)

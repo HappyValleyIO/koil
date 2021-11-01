@@ -18,7 +18,7 @@ class OrgControllerAuthTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `GIVEN a USER user WHEN requesting the admin dashboard THEN return OK`() {
+    fun `GIVEN a USER user WHEN requesting the admin dashboard THEN return FORBIDDEN`() {
         withTestSession(authorities = listOf(UserAuthority.USER)) { admin ->
             mockMvc.perform(get("/dashboard/org").with(user(admin)))
                 .andExpect(status().isForbidden)
@@ -26,7 +26,7 @@ class OrgControllerAuthTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `GIVEN an ADMIN user WHEN requesting the admin dashboard THEN return OK`() {
+    fun `GIVEN an ADMIN user WHEN requesting the admin dashboard THEN return FORBIDDEN`() {
         withTestSession(authorities = listOf(UserAuthority.ADMIN)) { admin ->
             mockMvc.perform(get("/dashboard/org").with(user(admin)))
                 .andExpect(status().isForbidden)

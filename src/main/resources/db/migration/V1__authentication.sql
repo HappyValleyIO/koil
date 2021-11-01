@@ -13,7 +13,7 @@ CREATE TABLE organization
 CREATE TABLE accounts
 (
     account_id                BIGSERIAL PRIMARY KEY,
-    organization_id           BIGINT       NOT NULL,
+    organization_id           BIGINT       NOT NULL REFERENCES organization (organization_id) ON DELETE CASCADE,
     start_date                TIMESTAMP    NOT NULL DEFAULT NOW(),
     full_name                 varchar(64)  NOT NULL,
     handle                    VARCHAR(16)  NOT NULL,
@@ -23,8 +23,7 @@ CREATE TABLE accounts
     verification_requested_at TIMESTAMP    NOT NULL,
     verification_code         UUID UNIQUE  NOT NULL,
     verified_at               TIMESTAMP,
-    stop_date                 TIMESTAMP,
-    CONSTRAINT account_organization_fk0 FOREIGN KEY (organization_id) REFERENCES organization (organization_id) ON DELETE CASCADE
+    stop_date                 TIMESTAMP
 );
 
 CREATE INDEX ON accounts (email_address);

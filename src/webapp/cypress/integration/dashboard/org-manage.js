@@ -1,6 +1,6 @@
 describe(`Dashboard Org pages`, () => {
 
-    describe('an organi owner', () => {
+    describe('an organization owner', () => {
         it(`should be able to access the org pages`, () => {
             cy.createRandomOrganizationAccount()
             cy.visit('/dashboard')
