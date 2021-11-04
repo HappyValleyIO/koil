@@ -6,6 +6,7 @@ import assertk.assertions.isEqualTo
 import net.bytebuddy.utility.RandomString
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.parallel.Isolated
 import org.koil.BaseIntegrationTest
 import org.koil.admin.accounts.UpdateAccountRequest
 import org.koil.auth.UserAuthority
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Pageable
 import java.util.*
 import kotlin.streams.toList
 
+@Isolated("getAccounts cannot be updated between fetching and asserting on result")
 class AdminServiceTest : BaseIntegrationTest() {
 
     @Autowired
