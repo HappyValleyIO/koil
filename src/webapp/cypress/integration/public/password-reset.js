@@ -67,7 +67,9 @@ sizes.forEach(size => {
                         cy.get('button[type=submit]').click()
                     })
 
-                    cy.get('[data-test=reset-password]').contains("Passwords don't match!")
+                    cy.get('[data-test=reset-password]')
+                        .should("exist")
+                        .contains("Passwords don't match")
                 })
             })
         })
