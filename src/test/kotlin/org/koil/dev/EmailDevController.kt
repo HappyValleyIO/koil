@@ -5,16 +5,20 @@ import org.koil.notifications.EmailDefaults
 import org.koil.notifications.NotificationAlertSuccessModel
 import org.koil.notifications.PasswordResetViewModel
 import org.springframework.context.annotation.Profile
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.mail.MailSender
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
 import java.util.*
 
 @Controller
 @Profile("dev")
 @RequestMapping("dev/email")
-class EmailDevController {
+class EmailDevController(val loggingMailSender: MailSender) {
 
     @GetMapping("/alert-success")
     fun alertSuccessEmail(): ModelAndView {
@@ -73,5 +77,17 @@ class EmailDevController {
                 )
             )
         )
+    }
+
+    @GetMapping("/last-sent")
+    fun sentEmails(@RequestParam("to") to: String?): ResponseEntity<String> {
+        val matchingEmails = (loggingMailSender as LoggingMailSender).getEmails().filter { it.to == to || to == null}
+        val email = if (matchingEmails.size > 1) {
+            matchingEmails.last().body
+        } else {
+            matchingEmails.firstOrNull()?.body ?: ""
+        }
+
+        return ResponseEntity.ok().contentType(MediaType.TEXT_HTML).body(email)
     }
 }
