@@ -6,7 +6,6 @@ import assertk.assertions.isEqualTo
 import net.bytebuddy.utility.RandomString
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.parallel.Isolated
 import org.koil.BaseIntegrationTest
 import org.koil.admin.accounts.UpdateAccountRequest
 import org.koil.auth.UserAuthority
