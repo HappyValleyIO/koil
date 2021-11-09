@@ -14,13 +14,14 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
+@Transactional(isolation = Isolation.SERIALIZABLE)
 @ActiveProfiles("test")
 abstract class BaseIntegrationTest {
     @Autowired

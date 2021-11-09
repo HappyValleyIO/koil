@@ -3,7 +3,7 @@
     {% extends "layouts/dashboard-layout" %}
     {% block title %} Home {% endblock %}
 {% block content %}
-<div data-test="dashboard-index">
+<div data-test="dashboard-index"></div>
 <hgroup>
     <h1>Welcome to koil!</h1>
     <h3>Easy SaaS on the JVM</h3>
@@ -42,6 +42,5 @@
         have
         your frontend live reload without restarting the JVM.
     </p>
-</div>
 </div>
 {% endblock %}

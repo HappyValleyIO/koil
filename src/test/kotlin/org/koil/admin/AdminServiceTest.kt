@@ -22,7 +22,6 @@ import org.springframework.data.domain.Pageable
 import java.util.*
 import kotlin.streams.toList
 
-@Isolated("getAccounts cannot be updated between fetching and asserting on result")
 class AdminServiceTest : BaseIntegrationTest() {
 
     @Autowired

@@ -30,7 +30,7 @@ sizes.forEach(size => {
                         cy.get('button[type=submit]').click()
                     })
 
-                    cy.get('[data-test=dashboard-index]').should('be.visible')
+                    cy.get('[data-test=dashboard-index]').should('exist')
                     cy.clearCookie('SESSION')
                     cy.visit('/auth/login')
                     cy.url().should('include', 'dashboard')
