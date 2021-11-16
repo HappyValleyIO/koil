@@ -6,6 +6,7 @@ import com.mitchellbosecke.pebble.template.PebbleTemplate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.InputStream
+import java.util.concurrent.ConcurrentHashMap
 
 data class MissingAssetResource(val name: String) : RuntimeException() {
     override val message: String = "Could not find asset [$name] in the resources"
@@ -16,9 +17,8 @@ internal class AssetHash {
         private val logger: Logger = LoggerFactory.getLogger(AssetHash::class.java)
     }
 
-    private val hashCache: MutableMap<String, String> = mutableMapOf()
+    private val hashCache: MutableMap<String, String> = ConcurrentHashMap()
 
-    @Synchronized
     internal operator fun invoke(path: String): String {
         require(path.startsWith("/")) {
             "Asset path must start with '/'. You passed $path."
@@ -33,7 +33,7 @@ internal class AssetHash {
             hashCache[path] = "$path?id=$hash"
         }
 
-        return hashCache[path] ?: throw RuntimeException("Unexpectedly missing resource after asset cache load")
+        return hashCache[path] ?: throw RuntimeException("Unexpectedly missing resource after asset cache load: [$path]")
     }
 }
 

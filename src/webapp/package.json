@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "An opinionated way to build monolithic spring-based web apps.",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "node esbuild.config.js & mix --no-progress",
-    "prod": "node esbuild.config.js & mix --production --no-progress",
+    "dev": "node esbuild.config.js",
+    "prod": "NODE_ENV=production node esbuild.config.js",
     "cy:open": "cypress open"
   },
   "repository": {
@@ -15,6 +16,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@chialab/esbuild-plugin-postcss": "^0.12.37",
+    "@deanc/esbuild-plugin-postcss": "^1.0.2",
     "@fullhuman/postcss-purgecss": "^4.0.3",
     "@snowpack/plugin-postcss": "^1.4.3",
     "autoprefixer": "^9.0.0",

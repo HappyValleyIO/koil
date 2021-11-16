@@ -1,9 +1,11 @@
-@import "_visibility.css";
-@import "_typography.css";
+@import "./_visibility.css";
+@import "./_typography.css";
 
 .is-clickable {
     cursor: pointer;
 }
+
+.is-helped {}
 
 .btn-slim {
     margin: 0;
