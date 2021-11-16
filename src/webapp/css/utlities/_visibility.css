@@ -1,0 +1,19 @@
+/* Visibility modifiers*/
+.is-hidden {
+    display: none !important;
+}
+
+/*  Hidden only on mobile screens */
+/* TODO enable postcss env variables */
+@media screen and (max-width: 576px) {
+    .is-hidden-mobile {
+        display: none;
+    }
+}
+
+/*Hidden on everything larger than a mobile screen*/
+@media screen and (min-width: 576px) {
+    .is-hidden-tablet {
+        display: none;
+    }
+}

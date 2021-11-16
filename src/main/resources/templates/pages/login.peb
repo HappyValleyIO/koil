@@ -1,6 +1,6 @@
 {# @pebvariable name="model" type="org.koil.user.login.LoginViewModel" #}
 
-    {% extends "layouts/single-form" %}
+    {% extends "layouts/public" %}
     {% block title %} Login {% endblock %}
 
 {% block content %}

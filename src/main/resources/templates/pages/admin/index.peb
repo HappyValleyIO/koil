@@ -3,7 +3,7 @@
     {% block title %} Home {% endblock %}
 
 {% block content %}
-<h3>All User Accounts</h3>
+<h2>All User Accounts</h2>
 <table class="table is-striped">
     <thead>
     <tr>

@@ -1,0 +1,34 @@
+@import "_visibility.css";
+@import "_typography.css";
+
+.is-clickable {
+    cursor: pointer;
+}
+
+.btn-slim {
+    margin: 0;
+    padding: 0.5em;
+}
+
+.without-padding {
+    padding: 0;
+}
+
+.without-margin {
+    margin: 0;
+}
+
+.profile-image {
+    height: var(--profile-image-size, 3rem);
+    width: var(--profile-image-size, 3rem);
+    border-radius: 50%;
+}
+
+/*Gives some spacing to a span with text after the image*/
+.profile-image + span {
+    padding-left: 1rem;
+}
+
+.profile-image.large {
+    --profile-image-size: 6rem;
+}

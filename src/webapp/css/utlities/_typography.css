@@ -1,0 +1,16 @@
+
+.has-text-right {
+    text-align: right;
+}
+
+.has-text-centered {
+    text-align: center;
+}
+
+.is-justify-centered {
+    justify-items: center;
+}
+
+.warning {
+    color: var(--warning-color);
+}

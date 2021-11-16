@@ -9,6 +9,7 @@ import org.koil.user.verification.AccountVerification
 import org.koil.user.verification.AccountVerificationViolations
 import org.springframework.context.ApplicationEvent
 import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.LastModifiedBy
 import org.springframework.data.domain.AbstractAggregateRoot
 import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.MappedCollection
@@ -33,7 +34,8 @@ data class Account(
     @Embedded.Empty val accountVerification: AccountVerification,
     @MappedCollection(idColumn = "account_id") val authorities: List<AccountAuthority>,
     @MappedCollection(idColumn = "account_id") val accountPasswordReset: AccountPasswordReset? = null,
-    val stopDate: Instant? = null
+    val stopDate: Instant? = null,
+    @LastModifiedBy val lastModifiedBy: Long? = null
 ) : AbstractAggregateRoot<Account>() {
     companion object {
         fun create(
@@ -55,7 +57,8 @@ data class Account(
             stopDate = null,
             notificationSettings = NotificationSettings.default,
             authorities = listOf(),
-            accountVerification = AccountVerification.create()
+            accountVerification = AccountVerification.create(),
+            lastModifiedBy = null
         ).withAuthorities(authorities)
     }
 

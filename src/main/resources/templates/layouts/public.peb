@@ -1,11 +1,7 @@
     {% extends 'layouts/base' %}
-        {% block layoutStyle %}
-        <link rel="stylesheet" type="text/css" href="{{  mix("/css/packs/public.css") }}">
-        {% endblock %}
-
 
     {% block body %}
-    <body>
+    <body data-layout="public">
     <nav class="container-fluid" data-controller="toggle">
         <ul>
             <li><h1>Koil.</h1></li>

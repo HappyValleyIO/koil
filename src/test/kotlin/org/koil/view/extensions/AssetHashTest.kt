@@ -5,8 +5,8 @@ import assertk.assertions.contains
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class MixManifestTest {
-    private val mix = MixManifest()
+internal class AssetHashTest {
+    private val mix = AssetHash()
 
     @Test
     internal fun `successfully return asset file from the manifest`() {
@@ -17,7 +17,7 @@ internal class MixManifestTest {
 
     @Test
     internal fun `throw exception if the asset doesn't exist`() {
-        assertThrows<MissingMixAsset> {
+        assertThrows<MissingAssetResource> {
             mix("/js/packs/missing.js")
         }
     }

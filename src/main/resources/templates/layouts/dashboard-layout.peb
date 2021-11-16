@@ -1,12 +1,9 @@
 {# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
 
     {% extends 'layouts/base' %}
-    {% block layoutStyle %}
-    <link rel="stylesheet" type="text/css" href="{{  mix("/css/packs/dashboard.css") }}">
-    {% endblock %}
 
 {% block body %}
-<body class="dashboard-grid">
+<body class="dashboard-grid" data-layout="dashboard">
     {% include 'components/navbar' %}
     {% include 'components/dashboard-menu' %}
 

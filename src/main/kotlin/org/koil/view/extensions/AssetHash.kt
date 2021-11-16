@@ -1,41 +1,39 @@
 package org.koil.view.extensions
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.mitchellbosecke.pebble.extension.Function
 import com.mitchellbosecke.pebble.template.EvaluationContext
 import com.mitchellbosecke.pebble.template.PebbleTemplate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.io.InputStream
 
-data class MissingMixAsset(val name: String) : RuntimeException() {
-    override val message: String = "Could not find $name in the manifest file"
+data class MissingAssetResource(val name: String) : RuntimeException() {
+    override val message: String = "Could not find asset [$name] in the resources"
 }
 
-internal class MixManifest {
+internal class AssetHash {
     companion object {
-        const val manifestFile = "/static/assets/mix-manifest.json"
-        private val logger: Logger = LoggerFactory.getLogger(MixManifest::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(AssetHash::class.java)
     }
 
-    private val manifestMap by lazy { loadManifestMap() }
+    private val hashCache: MutableMap<String, String> = mutableMapOf()
 
     @Synchronized
     internal operator fun invoke(path: String): String {
         require(path.startsWith("/")) {
             "Asset path must start with '/'. You passed $path."
         }
-        val manifest = manifestMap[path] ?: throw MissingMixAsset(path)
-        logger.debug("Loading mix file {}", manifest)
 
-        return manifest
-    }
+        if (hashCache[path] == null) {
+            val file: InputStream =
+                this::class.java.getResourceAsStream("/static/assets$path") ?: throw MissingAssetResource(path)
+            val hash = file.readAllBytes().contentHashCode()
 
-    private fun loadManifestMap(): Map<String, String> {
-        val text: String = this::class.java.getResource(manifestFile)?.readText()
-            ?: throw RuntimeException("Mix manifestMap file doesn't exist! This error is completely unexpected and likely indicates and issue with the build")
+            logger.debug("Caching asset [$path] hash value as [$hash]")
+            hashCache[path] = "$path?id=$hash"
+        }
 
-        return ObjectMapper().readValue(text)
+        return hashCache[path] ?: throw RuntimeException("Unexpectedly missing resource after asset cache load")
     }
 }
 
@@ -48,7 +46,7 @@ internal class MixManifest {
  *
  * <script type=module" src="/assets/js/packs/applications.js"></script>
  */
-internal class MixFunction(private val mix: MixManifest = MixManifest()) : Function {
+internal class MixFunction(private val mix: AssetHash = AssetHash()) : Function {
     override fun getArgumentNames(): List<String> {
         return listOf("name")
     }

@@ -1,0 +1,22 @@
+/* Full page mobile menu that slides in when active*/
+.slide-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateX(-100vw);
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background: var(--background-color);
+    padding: var(--menu-padding, 2em);
+}
+
+.slide-menu[data-active] {
+    transform: translateX(0);
+}
+
+.slide-menu .exit-button {
+    text-align: right;
+    padding-bottom: 2em;
+}
+

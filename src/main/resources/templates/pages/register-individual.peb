@@ -1,7 +1,7 @@
 {# @pebvariable name="model" type="org.koil.auth.RegistrationViewModel" #}
 {# @pebvariable name="submitted" type="org.koil.auth.RegistrationAttempt" #}
 
-    {% extends "layouts/single-form" %}
+    {% extends "layouts/public" %}
     {% block title %} Login {% endblock %}
 
 {% block content %}

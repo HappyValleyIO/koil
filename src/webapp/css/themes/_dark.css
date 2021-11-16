@@ -1,0 +1,9 @@
+/*Dark theme (Auto)*/
+/*Automatically enabled if user has Dark mode enabled*/
+/*Can be manually enabled by setting data-theme="dark"*/
+@media only screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]),
+    [data-theme="dark"] {
+        --example-variable: black;
+    }
+}
