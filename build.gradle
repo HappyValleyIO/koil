@@ -26,8 +26,8 @@ apply plugin: 'idea'
 
 group = "org.koil"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
-java.targetCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
 
 configurations {
     developmentOnly
@@ -75,7 +75,7 @@ dependencies {
     developmentOnly("io.github.kilmajster:ngrok-spring-boot-starter:0.1")
 
     runtimeOnly('org.postgresql:postgresql:42.2.24.jre7')
-    implementation(platform("org.testcontainers:testcontainers-bom:1.15.2"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.16.2"))
     testImplementation('org.testcontainers:postgresql:1.16.0')
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude group: "org.junit.vintage", module: "junit-vintage-engine"
@@ -119,8 +119,6 @@ sourceSets {
 }
 
 def buildAssetsDir = "${project.buildDir}/webapp"
-
-def webappDir = "${}"
 
 task copyAssets(type: Copy) {
     from("$projectDir/src/webapp") {

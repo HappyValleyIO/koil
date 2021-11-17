@@ -10,7 +10,7 @@ blocks:
       jobs:
         - name: Build
           commands:
-            - sem-version java 11
+            - sem-version java 17
             - sem-service start postgres
             - ./gradlew build --scan
       env_vars:
