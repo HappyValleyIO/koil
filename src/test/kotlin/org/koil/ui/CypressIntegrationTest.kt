@@ -15,7 +15,6 @@ import java.io.SequenceInputStream
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
-import kotlin.math.max
 import kotlin.streams.toList
 
 /**
@@ -35,38 +34,31 @@ class CypressIntegrationTest : BaseIntegrationTest() {
 
     @TestFactory
     fun runCypressTests(): Collection<DynamicTest> {
-        val threads = max(Runtime.getRuntime().availableProcessors() / 2, 1)
         // If this breaks then it's likely that there are multiple node installations in .gradle/nodejs for this project
         val nodeDirectory = Files.list(Paths.get("./.gradle/nodejs")).toList().last()
         val npx = Paths.get(nodeDirectory.toString(), "bin/npx").toAbsolutePath()
 
         val basePath = "./build/webapp/cypress/integration/"
 
-        val files = Files.walk(Paths.get(basePath))
+        return Files.walk(Paths.get(basePath))
             .filter { Files.isRegularFile(it) }
             .map { it.toString().substringAfter(basePath) }
-            .toList()
-
-        return files.windowed(4, 4, true)
-            .map { names ->
-                val spec = names.joinToString(",") { "cypress/integration/$it" }
-                DynamicTest.dynamicTest(spec) {
-                    val start = System.currentTimeMillis()
+            .map { name ->
+                DynamicTest.dynamicTest(name) {
                     val process = ProcessBuilder()
                         .directory(File("./build/webapp/"))
                         .command(
                             "/bin/bash",
                             "-c",
-                            """CYPRESS_BASE_URL=http://localhost:$port "$npx" cypress run --spec $spec"""
+                            """CYPRESS_BASE_URL=http://localhost:$port "$npx" cypress run --spec cypress/integration/$name"""
                         )
                         .start()
 
                     val streamOutput: InputStream = SequenceInputStream(process.inputStream, process.errorStream)
+                    streamOutput.transferTo(System.out)
 
                     process.waitFor(15, TimeUnit.MINUTES)
-//                    streamOutput.transferTo(System.out)
 
-                    logger.info("TIME TAKEN FOR [$spec] is [${System.currentTimeMillis() - start}ms]")
                     assertEquals(0, process.exitValue()) {
                         """
                                 PROCESS EXIT CODE: ${process.exitValue()}
