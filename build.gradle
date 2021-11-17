@@ -120,6 +120,8 @@ sourceSets {
 
 def buildAssetsDir = "${project.buildDir}/webapp"
 
+def webappDir = "${}"
+
 task copyAssets(type: Copy) {
     from("$projectDir/src/webapp") {
         exclude "node_modules"
@@ -166,7 +168,7 @@ task buildAssets(type: NpmTask) {
 
     inputs.files(fileTree("$buildAssetsDir/js"))
     inputs.files(fileTree("$buildAssetsDir/css"))
-    inputs.file("$buildAssetsDir/postcss.config.js")
+    inputs.file("$buildAssetsDir/postcss.config.cjs")
     inputs.file("$buildAssetsDir/webpack.mix.js")
     inputs.file("$buildAssetsDir/package.json")
     inputs.file("$buildAssetsDir/package-lock.json")
@@ -190,7 +192,7 @@ task buildProdAssets(type: NpmTask) {
 
     inputs.files(fileTree("$buildAssetsDir/js"))
     inputs.files(fileTree("$buildAssetsDir/css"))
-    inputs.file("$buildAssetsDir/postcss.config.js")
+    inputs.file("$buildAssetsDir/postcss.config.cjs")
     inputs.file("$buildAssetsDir/webpack.mix.js")
     inputs.file("$buildAssetsDir/package.json")
     inputs.file("$buildAssetsDir/package-lock.json")
