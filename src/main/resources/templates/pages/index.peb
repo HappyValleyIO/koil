@@ -1,63 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>koil App.</title>
-    <meta name="description"
-          content="koil starter app example.">
+    {% extends "layouts/public" %}
+        {% block title %} Home {% endblock %}
 
-    <link rel="stylesheet" type="text/css" href="{{ mix("/css/packs/public.css") }}">
-    {% include 'components/devtools' %}
-    {% include 'components/sentry' %}
-
-    <script type="module" src="{{ mix("/js/packs/application.js") }}" defer></script>
-</head>
-<body>
-<nav class="container-fluid" data-controller="toggle">
-    <ul>
-        <li><h1>Koil.</h1></li>
-    </ul>
-    <ul>
-        <li>
-            <a class="button is-primary" href="/auth/login">
-                Login
-            </a>
-        </li>
-        <li>
-            <a class="button is-primary" href="/auth/register/organization">
-                Sign up
-            </a>
-        </li>
-    </ul>
-</nav>
-<main class="container">
-    <article>
-        <div>
-            <hgroup>
-                <h2>
-                    Koil
-                </h2>
-                <h3>
-                    A starter template for Spring-based SaaS
-                </h3>
-            </hgroup>
-            <form action="/auth/register/organization">
-                <label>Sign up email address
-                    <input id="email-input" type="email" name="email"
-                           placeholder="jane.doe@example.com"
-                           data-test="sign-up-email" required>
-                </label>
-                <button class="button is-primary">Join</button>
-            </form>
-        </div>
-    </article>
-</main>
-<footer class="container-fluid">
-    <div class="hero-foot">
-        <div class="container has-text-centered">
-            <p>Built by <a href="https://www.happyvalley.io">Happy Valley IO</a>.</p>
-        </div>
-    </div>
-</footer>
-</body>
-</html>
+    {% block content %}
+    <hgroup>
+        <h2>
+            Koil
+        </h2>
+        <h3>
+            A starter template for Spring-based SaaS
+        </h3>
+    </hgroup>
+    <form action="/auth/register/organization">
+        <label>Sign up email address
+            <input id="email-input" type="email" name="email"
+                   placeholder="jane.doe@example.com"
+                   data-test="sign-up-email" required>
+        </label>
+        <button class="button is-primary">Join</button>
+    </form>
+    {% endblock %}

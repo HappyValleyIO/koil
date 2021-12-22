@@ -143,7 +143,7 @@ class AccountTest {
             AccountFixtures.existingAccount.password,
             NotificationSettings.default,
             AccountVerification.create(),
-            authorities.map { AccountAuthority(it, Instant.now()) },
+            authorities.map { AccountAuthority.new(it) },
         )
     }
 }

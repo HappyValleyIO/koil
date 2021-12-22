@@ -1,6 +1,6 @@
 {# @pebvariable name="global" type="org.koil.view.GlobalViewModel" #}
 
-    {% extends 'layouts/base-layout' %}
+    {% extends 'layouts/error-layout' %}
     {% block title %} {{ pageTitle }} {% endblock %}
     {% block meta %}
     <meta name="turbolinks-visit-control" content="reload">

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
 import org.koil.BaseIntegrationTest
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.boot.web.server.LocalServerPort
 import java.io.File
 import java.io.InputStream
@@ -23,6 +25,10 @@ import kotlin.streams.toList
  */
 @Execution(ExecutionMode.CONCURRENT)
 class CypressIntegrationTest : BaseIntegrationTest() {
+    companion object {
+        val logger: Logger = LoggerFactory.getLogger(CypressIntegrationTest::class.java)
+    }
+
     @LocalServerPort
     var port = 0
 
@@ -50,6 +56,7 @@ class CypressIntegrationTest : BaseIntegrationTest() {
 
                     val streamOutput: InputStream = SequenceInputStream(process.inputStream, process.errorStream)
                     streamOutput.transferTo(System.out)
+
                     process.waitFor(15, TimeUnit.MINUTES)
 
                     assertEquals(0, process.exitValue()) {

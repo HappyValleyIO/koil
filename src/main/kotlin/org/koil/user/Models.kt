@@ -9,15 +9,24 @@ import org.koil.user.verification.AccountVerification
 import org.koil.user.verification.AccountVerificationViolations
 import org.springframework.context.ApplicationEvent
 import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.LastModifiedBy
 import org.springframework.data.domain.AbstractAggregateRoot
 import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 @Table("account_authorities")
-data class AccountAuthority(val authority: UserAuthority, val authorityGranted: Instant)
+data class AccountAuthority(val authority: UserAuthority, val authorityGranted: Instant) {
+    companion object {
+        fun new(authority: UserAuthority): AccountAuthority = AccountAuthority(
+            authority = authority,
+            authorityGranted = Instant.now().truncatedTo(ChronoUnit.MILLIS)
+        )
+    }
+}
 
 @Table("accounts")
 data class Account(
@@ -33,7 +42,8 @@ data class Account(
     @Embedded.Empty val accountVerification: AccountVerification,
     @MappedCollection(idColumn = "account_id") val authorities: List<AccountAuthority>,
     @MappedCollection(idColumn = "account_id") val accountPasswordReset: AccountPasswordReset? = null,
-    val stopDate: Instant? = null
+    val stopDate: Instant? = null,
+    @LastModifiedBy val lastModifiedBy: Long? = null
 ) : AbstractAggregateRoot<Account>() {
     companion object {
         fun create(
@@ -46,7 +56,7 @@ data class Account(
         ): Account = Account(
             accountId = null,
             organizationId = organizationId,
-            startDate = Instant.now(),
+            startDate = Instant.now().truncatedTo(ChronoUnit.MILLIS),
             fullName = fullName,
             handle = handle,
             publicAccountId = UUID.randomUUID(),
@@ -55,14 +65,12 @@ data class Account(
             stopDate = null,
             notificationSettings = NotificationSettings.default,
             authorities = listOf(),
-            accountVerification = AccountVerification.create()
+            accountVerification = AccountVerification.create(),
+            lastModifiedBy = null
         ).withAuthorities(authorities)
-    }
-
-    init {
-        if (accountId == null) {
-            registerEvent(AccountCreationEvent(this, this))
-        }
+            .also {
+                it.registerEvent(AccountCreationEvent(this, it))
+            }
     }
 
     fun isVerified(): Boolean =
@@ -111,7 +119,7 @@ data class Account(
         if (this.authorities.map { it.authority }.contains(authority)) {
             this
         } else {
-            this.copy(authorities = this.authorities + AccountAuthority(authority, Instant.now()))
+            this.copy(authorities = this.authorities + AccountAuthority.new(authority))
                 .andEventsFrom(this)
         }
 
@@ -127,7 +135,7 @@ data class Account(
         }
     }
 
-    fun belongsTo(organizationId: Long): Boolean{
+    fun belongsTo(organizationId: Long): Boolean {
         return this.organizationId == organizationId
     }
 }

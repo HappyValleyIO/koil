@@ -1,11 +1,6 @@
 import {sizes} from "../support/sizes";
 
-
 sizes.forEach(size => {
-    function isDesktopStyle() {
-        return ['ipad-mini', 'macbook-13'].includes(size)
-    }
-
     describe(`Error pages on ${size}`, () => {
 
         beforeEach(() => {

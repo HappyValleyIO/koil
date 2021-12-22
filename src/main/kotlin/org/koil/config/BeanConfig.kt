@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
+import org.springframework.data.jdbc.repository.config.EnableJdbcAuditing
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
@@ -23,6 +24,7 @@ import org.springframework.security.web.authentication.switchuser.SwitchUserFilt
 
 @Configuration
 @EnableAsync
+@EnableJdbcAuditing
 class BeanConfig {
     @Bean
     fun passwordEncoder(): PasswordEncoder {

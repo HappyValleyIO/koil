@@ -2,7 +2,7 @@
   "baseUrl": "http://localhost:8080",
   "video": false,
   "chromeWebSecurity": false,
-  "trashAssetsBeforeRuns": true,
+  "trashAssetsBeforeRuns": false,
   "defaultCommandTimeout": 5000,
   "retries": {
     "runMode": 3,

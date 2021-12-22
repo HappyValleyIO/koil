@@ -7,6 +7,7 @@ import org.koil.user.Account
 import org.springframework.context.ApplicationEvent
 import org.springframework.data.annotation.Transient
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 data class AccountVerification(
@@ -16,7 +17,11 @@ data class AccountVerification(
 ) {
     companion object {
         fun create(): AccountVerification =
-            AccountVerification(UUID.randomUUID(), verificationRequestedAt = Instant.now(), verifiedAt = null)
+            AccountVerification(
+                UUID.randomUUID(),
+                verificationRequestedAt = Instant.now().truncatedTo(ChronoUnit.MILLIS),
+                verifiedAt = null
+            )
     }
 
     @Transient
@@ -26,7 +31,7 @@ data class AccountVerification(
         when {
             isVerified -> AccountVerificationViolations.AccountAlreadyVerified.toFailure()
             code != verificationCode -> AccountVerificationViolations.IncorrectCode.toFailure()
-            else -> this.copy(verifiedAt = Instant.now()).toSuccess()
+            else -> this.copy(verifiedAt = Instant.now().truncatedTo(ChronoUnit.MILLIS)).toSuccess()
         }
 }
 

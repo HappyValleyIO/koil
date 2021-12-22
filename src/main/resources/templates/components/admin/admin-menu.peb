@@ -3,14 +3,14 @@
         <details open>
             <summary>Admin Panel</summary>
             <ul>
-                <li><a href="/admin" data-controller="nav-link">Accounts</a></li>
+                <li><a href="/admin" data-controller="nav">Accounts</a></li>
             </ul>
         </details>
 
         <details open>
             <summary>Other</summary>
             <ul>
-                <li><a href="/dashboard" data-controller="nav-link">User Dashboard</a></li>
+                <li><a href="/dashboard" data-controller="nav">User Dashboard</a></li>
             </ul>
         </details>
     </nav>

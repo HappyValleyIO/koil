@@ -151,7 +151,7 @@ Now let's walk through adding a little javascript. We want to add a button that 
 First, let's take a look at `base.peb` again to see if there's something that helps us here. We notice the line:
 
 ```html
-    <script type="text/javascript" src="/js/index.js" defer data-turbolinks-track="reload"></script>
+    <script type="text/javascript" src="/js/index.cjs" defer data-turbolinks-track="reload"></script>
 ```
 
 Navigating to this file like before, we see that it's a fairly standard ES5 file pulling in the dependencies we need. The one we're interested in is `import './application.js`.
