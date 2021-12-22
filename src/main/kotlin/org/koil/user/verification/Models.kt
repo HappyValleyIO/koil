@@ -31,7 +31,7 @@ data class AccountVerification(
         when {
             isVerified -> AccountVerificationViolations.AccountAlreadyVerified.toFailure()
             code != verificationCode -> AccountVerificationViolations.IncorrectCode.toFailure()
-            else -> this.copy(verifiedAt = Instant.now()).toSuccess()
+            else -> this.copy(verifiedAt = Instant.now().truncatedTo(ChronoUnit.MILLIS)).toSuccess()
         }
 }
 
