@@ -19,7 +19,14 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 
 @Table("account_authorities")
-data class AccountAuthority(val authority: UserAuthority, val authorityGranted: Instant)
+data class AccountAuthority(val authority: UserAuthority, val authorityGranted: Instant) {
+    companion object {
+        fun new(authority: UserAuthority): AccountAuthority = AccountAuthority(
+            authority = authority,
+            authorityGranted = Instant.now().truncatedTo(ChronoUnit.MILLIS)
+        )
+    }
+}
 
 @Table("accounts")
 data class Account(
@@ -112,7 +119,7 @@ data class Account(
         if (this.authorities.map { it.authority }.contains(authority)) {
             this
         } else {
-            this.copy(authorities = this.authorities + AccountAuthority(authority, Instant.now()))
+            this.copy(authorities = this.authorities + AccountAuthority.new(authority))
                 .andEventsFrom(this)
         }
 
