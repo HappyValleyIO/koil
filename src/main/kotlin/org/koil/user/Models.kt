@@ -49,7 +49,7 @@ data class Account(
         ): Account = Account(
             accountId = null,
             organizationId = organizationId,
-            startDate = Instant.now().truncatedTo(ChronoUnit.SECONDS),
+            startDate = Instant.now().truncatedTo(ChronoUnit.MILLIS),
             fullName = fullName,
             handle = handle,
             publicAccountId = UUID.randomUUID(),
