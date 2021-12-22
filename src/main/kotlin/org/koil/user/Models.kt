@@ -15,6 +15,7 @@ import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 @Table("account_authorities")
@@ -48,7 +49,7 @@ data class Account(
         ): Account = Account(
             accountId = null,
             organizationId = organizationId,
-            startDate = Instant.now(),
+            startDate = Instant.now().truncatedTo(ChronoUnit.SECONDS),
             fullName = fullName,
             handle = handle,
             publicAccountId = UUID.randomUUID(),
@@ -130,7 +131,7 @@ data class Account(
         }
     }
 
-    fun belongsTo(organizationId: Long): Boolean{
+    fun belongsTo(organizationId: Long): Boolean {
         return this.organizationId == organizationId
     }
 }

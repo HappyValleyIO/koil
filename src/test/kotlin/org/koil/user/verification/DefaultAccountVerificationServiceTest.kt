@@ -13,7 +13,6 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.test.context.event.ApplicationEvents
 import org.springframework.test.context.event.RecordApplicationEvents
 import java.util.*
-import kotlin.streams.toList
 
 @RecordApplicationEvents
 internal class DefaultAccountVerificationServiceTest : BaseIntegrationTest() {
@@ -38,11 +37,14 @@ internal class DefaultAccountVerificationServiceTest : BaseIntegrationTest() {
 
             assertTrue(updated.isVerified())
 
-            val event = applicationEvents.stream().toList().mapNotNull {
-                it as? AccountVerifiedEvent
-            }.first()
+            val event = applicationEvents.stream().toList()
+                .mapNotNull {
+                    it as? AccountVerifiedEvent
+                }.find {
+                    it.account.accountId == account.accountId
+                }
 
-            assertThat(event.account).isEqualTo(updated)
+            assertThat(event?.account).isEqualTo(updated)
         }
     }
 
