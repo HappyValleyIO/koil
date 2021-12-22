@@ -61,12 +61,9 @@ data class Account(
             accountVerification = AccountVerification.create(),
             lastModifiedBy = null
         ).withAuthorities(authorities)
-    }
-
-    init {
-        if (accountId == null) {
-            registerEvent(AccountCreationEvent(this, this))
-        }
+            .also {
+                it.registerEvent(AccountCreationEvent(this, it))
+            }
     }
 
     fun isVerified(): Boolean =
