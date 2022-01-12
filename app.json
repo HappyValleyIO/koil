@@ -41,12 +41,12 @@
         "description": "Password user by prometheus for http basic auth when scraping",
         "value": "prometheus"
       }
-    },
-    "formation": {
-      "web": {
-        "quantity": 1,
-        "size": "free"
-      }
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
     }
   }
 }
