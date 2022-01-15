@@ -47,7 +47,7 @@ class BeanConfig {
     fun s3Client(
         @Value("\${cloud.aws.credentials.access-key}") s3AccessKey: String,
         @Value("\${cloud.aws.credentials.secret-key}") s3SecretKey: String,
-        @Value("\${s3.endpoint}") s3Endpoint: String?,
+        @Value("\${s3.endpoint:#{null}}") s3Endpoint: String? = null,
         @Value("\${s3.region}") s3Region: String,
     ): AmazonS3 {
         val credentials: AWSCredentials = BasicAWSCredentials(s3AccessKey, s3SecretKey)
