@@ -27,5 +27,7 @@ blocks:
       epilogue:
         always:
           commands:
+            - test-results publish build/test-results/test
+            - test-results gen-pipeline-report
             - cache store $(checksum build.gradle) $HOME/.gradle
             - cache store $(checksum src/webapp/package-lock.json) $HOME/.npm
