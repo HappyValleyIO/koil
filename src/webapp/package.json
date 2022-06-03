@@ -39,7 +39,7 @@
     "@hotwired/turbo": "7.0.0-rc.1",
     "@picocss/pico": "^1.2.1",
     "esbuild-plugin-stimulus": "^0.1.2",
-    "semver-regex": "^3.1.3",
+    "semver-regex": "^3.1.4",
     "stimulus": "^2.0.0"
   }
 }
