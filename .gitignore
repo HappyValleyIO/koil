@@ -38,3 +38,5 @@ src/test/resources/regression/**/*.diff
 .cache
 
 docs/site
+.direnv/
+.envrc.local
